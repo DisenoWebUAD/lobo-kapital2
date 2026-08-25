@@ -1,0 +1,87 @@
+<section class="lead-form" id="contacto" aria-labelledby="lead-form-title">
+	<div class="lead-form__inner">
+		<h2 id="lead-form-title">Obtén tu aprobación en minutos</h2>
+		<form id="quote-form" novalidate>
+			<div class="form-field">
+				<label for="name">Tu nombre</label>
+				<input id="name" name="name" type="text" autocomplete="name" placeholder="Nombre y apellido" required aria-describedby="name-error" />
+				<p class="form-error" id="name-error" aria-live="polite"></p>
+			</div>
+
+			<div class="form-field">
+				<label for="company">Empresa o actividad</label>
+				<input id="company" name="company" type="text" autocomplete="organization" placeholder="Nombre de tu empresa y actividad" required aria-describedby="company-error" />
+				<p class="form-error" id="company-error" aria-live="polite"></p>
+			</div>
+
+			<div class="form-field">
+				<label for="product">Producto de interés</label>
+				<select id="product" name="product" required aria-describedby="product-error">
+					<option value="">Selecciona una opción</option>
+					<option>Préstamos Personales</option>
+					<option>Créditos PyMEs</option>
+					<option>Arrendamiento</option>
+					<option>Factoraje</option>
+					<option>Tarjeta de Crédito</option>
+				</select>
+				<p class="form-error" id="product-error" aria-live="polite"></p>
+			</div>
+
+			<div class="privacy-field">
+				<input id="privacy" name="privacy" type="checkbox" required aria-describedby="privacy-error" />
+				<label for="privacy">He leído el aviso de privacidad aplicable a esta solicitud de contacto.</label>
+				<p class="form-error" id="privacy-error" aria-live="polite"></p>
+			</div>
+
+			<button class="button button--light lead-form__submit" type="submit">Cotiza tu Arrendamiento</button>
+			<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+		</form>
+
+		<p class="lead-form__privacy">Tus datos están protegidos por nuestra <span aria-disabled="true">Política de Privacidad.</span></p>
+	</div>
+</section>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('#quote-form');
+	const productSelect = document.querySelector<HTMLSelectElement>('#product');
+	const status = document.querySelector<HTMLElement>('#form-status');
+	const messages: Record<string, string> = {
+		name: 'Escribe tu nombre y apellido.',
+		company: 'Escribe el nombre de tu empresa o actividad.',
+		product: 'Selecciona un producto de interés.',
+		privacy: 'Debes aceptar el aviso de privacidad para continuar.',
+	};
+
+	const setFieldState = (field: HTMLInputElement | HTMLSelectElement) => {
+		const error = document.querySelector<HTMLElement>(`#${field.id}-error`);
+		const invalid = !field.validity.valid;
+		field.setAttribute('aria-invalid', String(invalid));
+		if (error) error.textContent = invalid ? messages[field.name] ?? 'Revisa este campo.' : '';
+		return !invalid;
+	};
+
+	form?.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select').forEach((field) => {
+		field.addEventListener('input', () => setFieldState(field));
+		field.addEventListener('change', () => setFieldState(field));
+	});
+
+	document.querySelectorAll<HTMLElement>('[data-product]').forEach((cta) => {
+		cta.addEventListener('click', () => {
+			if (!productSelect) return;
+			productSelect.value = cta.dataset.product ?? '';
+			setFieldState(productSelect);
+		});
+	});
+
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+		if (status) status.textContent = '';
+		const fields = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
+		const firstInvalid = fields.find((field) => !setFieldState(field));
+		if (firstInvalid) {
+			firstInvalid.focus();
+			return;
+		}
+		if (status) status.textContent = 'Formulario validado correctamente. El envío de datos estará disponible próximamente.';
+	});
+</script>

@@ -1,0 +1,61 @@
+---
+import pymesIcon from '../assets/home/pymes-icon.svg';
+import walletIcon from '../assets/home/cartera-icon.svg';
+import leaseIcon from '../assets/home/arrendamiento-icon.svg';
+import factoringIcon from '../assets/home/factoraje-icon.svg';
+
+const products = [
+	{
+		id: 'prestamos-personales',
+		title: 'Préstamos Personales',
+		description: 'Líneas de crédito flexibles para tus proyectos personales. Proceso ágil, transparente y con atención personalizada.',
+		cta: 'Explorar condiciones',
+		value: 'Préstamos Personales',
+		icon: pymesIcon,
+	},
+	{
+		id: 'creditos-pymes',
+		title: 'Créditos PyMEs',
+		description: 'Capital de trabajo y financiamiento para expansión. Tasas competitivas para impulsar tu empresa hacia el siguiente nivel.',
+		cta: 'Solicitar evaluación',
+		value: 'Créditos PyMEs',
+		icon: walletIcon,
+	},
+	{
+		id: 'arrendamiento',
+		title: 'Arrendamiento',
+		description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+		cta: 'Ver catálogo de esquemas',
+		value: 'Arrendamiento',
+		icon: leaseIcon,
+	},
+	{
+		id: 'factoraje',
+		title: 'Factoraje',
+		description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+		cta: 'Explorar condiciones',
+		value: 'Factoraje',
+		icon: factoringIcon,
+	},
+];
+---
+
+<section class="solutions" id="soluciones" aria-labelledby="solutions-title">
+	<div class="section-heading">
+		<h2 id="solutions-title"><span>Soluciones</span> a tu medida</h2>
+		<p>Experiencia y solidez financiera respaldando cada etapa de tu crecimiento personal y empresarial.</p>
+	</div>
+
+	<div class="solutions__grid">
+		{products.map((product) => (
+			<article class="product-card" id={product.id}>
+				<div class="product-card__icon">
+					<img src={product.icon.src} alt="" width="56" height="56" />
+				</div>
+				<h3>{product.title}</h3>
+				<p>{product.description}</p>
+				<a href="#contacto" data-product={product.value}>{product.cta} <span aria-hidden="true">→</span></a>
+			</article>
+		))}
+	</div>
+</section>

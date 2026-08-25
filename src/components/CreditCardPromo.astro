@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import cardPromo from '../assets/home/tarjeta-cinta.png';
+import underline from '../assets/home/subrayado.svg';
+---
+
+<section class="card-promo" aria-labelledby="card-promo-title">
+	<div class="card-promo__inner">
+		<div class="card-promo__copy">
+			<h2 id="card-promo-title">La tarjeta de crédito<br />para tu futuro</h2>
+			<a class="button button--primary" href="#contacto" data-product="Tarjeta de Crédito">
+				Solicitar ahora <span aria-hidden="true">→</span>
+			</a>
+		</div>
+		<div class="card-promo__visual">
+			<Image
+				src={cardPromo}
+				alt="Tarjeta de crédito Lobo Kapital sobre un pedestal y una cinta roja"
+				class="card-promo__image"
+				width={1007}
+				height={1280}
+				loading="eager"
+			/>
+		</div>
+		<div class="no-fee">
+			<p>Y SIN ANUALIDAD</p>
+			<img src={underline.src} alt="" width="366" height="13" />
+			<small>*Aplican restricciones</small>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,58 @@
+---
+import logoWordmark from '../assets/home/logo-wordmark.svg';
+---
+
+<header class="site-header" aria-label="Encabezado principal">
+	<a class="site-header__brand" href="#inicio" aria-label="Lobo Kapital, ir al inicio">
+		<img src={logoWordmark.src} alt="Lobo Kapital" width="187" height="19" />
+	</a>
+
+	<nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
+		<a href="#prestamos-personales">Personal</a>
+		<a href="#creditos-pymes">PyMEs</a>
+		<a href="#confianza">Conócenos</a>
+		<span class="site-nav__disabled" aria-disabled="true" title="Disponible próximamente">FAQ</span>
+		<a class="site-nav__client" href="#contacto">Hazte Cliente</a>
+		<span class="site-nav__login" aria-disabled="true" title="Disponible próximamente">Ingresar</span>
+	</nav>
+
+	<button
+		class="menu-toggle"
+		type="button"
+		aria-expanded="false"
+		aria-controls="site-navigation"
+		aria-label="Abrir menú"
+	>
+		<span></span>
+		<span></span>
+		<span></span>
+	</button>
+</header>
+
+<script>
+	const menuButton = document.querySelector<HTMLButtonElement>('.menu-toggle');
+	const navigation = document.querySelector<HTMLElement>('#site-navigation');
+
+	const closeMenu = () => {
+		if (!menuButton || !navigation) return;
+		menuButton.setAttribute('aria-expanded', 'false');
+		menuButton.setAttribute('aria-label', 'Abrir menú');
+		navigation.removeAttribute('data-open');
+	};
+
+	menuButton?.addEventListener('click', () => {
+		if (!navigation) return;
+		const willOpen = menuButton.getAttribute('aria-expanded') !== 'true';
+		menuButton.setAttribute('aria-expanded', String(willOpen));
+		menuButton.setAttribute('aria-label', willOpen ? 'Cerrar menú' : 'Abrir menú');
+		navigation.toggleAttribute('data-open', willOpen);
+	});
+
+	navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape' && menuButton?.getAttribute('aria-expanded') === 'true') {
+			closeMenu();
+			menuButton.focus();
+		}
+	});
+</script>

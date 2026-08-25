@@ -1,0 +1,32 @@
+---
+import { Picture } from 'astro:assets';
+import heroImage from '../assets/home/hero.jpg';
+---
+
+<section class="hero" id="inicio" aria-labelledby="hero-title">
+	<Picture
+		src={heroImage}
+		formats={['avif', 'webp']}
+		widths={[768, 1280, 1920, 2400]}
+		sizes="100vw"
+		alt=""
+		class="hero__media"
+		loading="eager"
+		fetchpriority="high"
+	/>
+	<div class="hero__shade" aria-hidden="true"></div>
+	<div class="hero__content">
+		<h1 id="hero-title">Impulsa tu futuro con<br />financiamiento inteligente.</h1>
+		<p>Créditos a tu medida con la transparencia que mereces. Soluciones financieras diseñadas<br class="desktop-only" /> para hacer crecer tu patrimonio y tu negocio.</p>
+		<div class="hero__actions">
+			<a class="button button--primary" href="#contacto">Solicitar ahora <span aria-hidden="true">→</span></a>
+			<a class="button button--light" href="#soluciones">Conocer más</a>
+		</div>
+	</div>
+	<div class="brand-tab" aria-hidden="true">
+		<svg class="brand-tab__shape" viewBox="0 0 806 220" preserveAspectRatio="none">
+			<path d="M0 0h806L458 206c-15 9-30 14-48 14h-14c-18 0-33-5-48-14L0 0Z" />
+		</svg>
+		<div class="brand-tab__logo"><span>LOBO</span><span>KAPITAL</span></div>
+	</div>
+</section>
