@@ -12,6 +12,7 @@ const products = [
 		cta: 'Explorar condiciones',
 		value: 'Préstamos Personales',
 		icon: pymesIcon,
+		href: '/credito-personal/',
 	},
 	{
 		id: 'creditos-pymes',
@@ -20,6 +21,7 @@ const products = [
 		cta: 'Solicitar evaluación',
 		value: 'Créditos PyMEs',
 		icon: walletIcon,
+		href: '#contacto',
 	},
 	{
 		id: 'arrendamiento',
@@ -28,6 +30,7 @@ const products = [
 		cta: 'Ver catálogo de esquemas',
 		value: 'Arrendamiento',
 		icon: leaseIcon,
+		href: '#contacto',
 	},
 	{
 		id: 'factoraje',
@@ -36,6 +39,7 @@ const products = [
 		cta: 'Explorar condiciones',
 		value: 'Factoraje',
 		icon: factoringIcon,
+		href: '#contacto',
 	},
 ];
 ---
@@ -54,7 +58,7 @@ const products = [
 				</div>
 				<h3>{product.title}</h3>
 				<p>{product.description}</p>
-				<a href="#contacto" data-product={product.value}>{product.cta} <span aria-hidden="true">→</span></a>
+				<a href={product.href} data-product={product.href === '#contacto' ? product.value : undefined}>{product.cta} <span aria-hidden="true">→</span></a>
 			</article>
 		))}
 	</div>
