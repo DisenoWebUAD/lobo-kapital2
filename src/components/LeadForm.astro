@@ -60,6 +60,12 @@
 		return !invalid;
 	};
 
+	const requestedProduct = new URLSearchParams(window.location.search).get('producto');
+	if (productSelect && requestedProduct && [...productSelect.options].some((option) => option.value === requestedProduct)) {
+		productSelect.value = requestedProduct;
+		setFieldState(productSelect);
+	}
+
 	form?.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select').forEach((field) => {
 		field.addEventListener('input', () => setFieldState(field));
 		field.addEventListener('change', () => setFieldState(field));
