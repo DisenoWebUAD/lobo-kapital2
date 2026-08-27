@@ -2,6 +2,9 @@
 import logoWordmark from '../assets/home/logo-wordmark.svg';
 
 const isPersonalPage = Astro.url.pathname.startsWith('/credito-personal');
+const isPymesPage = Astro.url.pathname.startsWith('/creditos-pymes');
+const isLeasePage = Astro.url.pathname.startsWith('/arrendamiento');
+const clientHref = isPymesPage || isLeasePage ? '#solicitud' : '/#contacto';
 ---
 
 <header class="site-header" aria-label="Encabezado principal">
@@ -11,10 +14,17 @@ const isPersonalPage = Astro.url.pathname.startsWith('/credito-personal');
 
 	<nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
 		<a href="/credito-personal/" aria-current={isPersonalPage ? 'page' : undefined}>Personal</a>
-		<a href="/#creditos-pymes">PyMEs</a>
+		<details class="site-nav__pymes">
+			<summary>PyMEs</summary>
+			<div class="site-nav__pymes-menu" aria-label="Soluciones para PyMEs">
+				<a href="/creditos-pymes/" aria-current={isPymesPage ? 'page' : undefined}>Créditos PyMEs</a>
+				<a href="/arrendamiento/" aria-current={isLeasePage ? 'page' : undefined}>Arrendamiento</a>
+				<a href="/?producto=Factoraje#contacto">Factoraje</a>
+			</div>
+		</details>
 		<a href="/#confianza">Conócenos</a>
 		<span class="site-nav__disabled" aria-disabled="true" title="Disponible próximamente">FAQ</span>
-		<a class="site-nav__client" href="/#contacto">Hazte Cliente</a>
+		<a class="site-nav__client" href={clientHref}>Hazte Cliente</a>
 		<span class="site-nav__login" aria-disabled="true" title="Disponible próximamente">Ingresar</span>
 	</nav>
 
@@ -36,10 +46,13 @@ const isPersonalPage = Astro.url.pathname.startsWith('/credito-personal');
 	const navigation = document.querySelector<HTMLElement>('#site-navigation');
 
 	const closeMenu = () => {
-		if (!menuButton || !navigation) return;
+	if (!menuButton || !navigation) return;
 		menuButton.setAttribute('aria-expanded', 'false');
 		menuButton.setAttribute('aria-label', 'Abrir menú');
-		navigation.removeAttribute('data-open');
+	navigation.removeAttribute('data-open');
+	navigation.querySelectorAll<HTMLDetailsElement>('details[open]').forEach((menu) => {
+		menu.open = false;
+	});
 	};
 
 	menuButton?.addEventListener('click', () => {
