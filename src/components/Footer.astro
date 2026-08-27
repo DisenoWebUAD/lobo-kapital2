@@ -2,8 +2,10 @@
 import logoMark from '../assets/home/logo-mark.svg';
 import condusefLogo from '../assets/home/condusef-sipres.webp';
 import cnbvLogo from '../assets/home/cnbv-logo.svg';
+import institutionalLogo from '../assets/lobos-gestion-empresarial-logo.svg';
 
 const year = new Date().getFullYear();
+const isHomePage = Astro.url.pathname === '/';
 ---
 
 <footer class="site-footer">
@@ -15,10 +17,22 @@ const year = new Date().getFullYear();
 			<a class="site-footer__phone" href="tel:+526181296093">+52 618 129 6093</a>
 			<a class="site-footer__email" href="mailto:contacto@lobokapital.mx">contacto@lobokapital.mx</a>
 			<address>Avenida Universidad Autónoma de Durango #300.<br />Colonia Jardines de Durango. Durango, Durango, México.</address>
-			<div class="regulatory-logos" aria-label="Instituciones regulatorias">
-				<img src={condusefLogo.src} alt="CONDUSEF SIPRES" width="82" height="82" />
-				<img src={cnbvLogo.src} alt="Comisión Nacional Bancaria y de Valores, CNBV" width="88" height="50" />
-			</div>
+			{
+				isHomePage ? (
+					<div class="regulatory-logos" aria-label="Instituciones regulatorias">
+						<img src={condusefLogo.src} alt="CONDUSEF SIPRES" width="82" height="82" />
+						<img src={cnbvLogo.src} alt="Comisión Nacional Bancaria y de Valores, CNBV" width="88" height="50" />
+					</div>
+				) : (
+					<img
+						class="site-footer__institutional-logo"
+						src={institutionalLogo.src}
+						alt="Lobos Gestión Empresarial, S.A. de C.V., SOFOM, E.N.R."
+						width="261"
+						height="55"
+					/>
+				)
+			}
 		</div>
 
 		<div class="site-footer__social">

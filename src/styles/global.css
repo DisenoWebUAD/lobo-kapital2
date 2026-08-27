@@ -800,6 +800,13 @@ input {
 	object-fit: contain;
 }
 
+.site-footer__institutional-logo {
+	display: block;
+	width: 261px;
+	height: auto;
+	margin-top: 75px;
+}
+
 .site-footer__social {
 	padding-top: 238px;
 	text-align: right;
@@ -1353,6 +1360,10 @@ input {
 	.site-footer__mark img {
 		width: 104px;
 		height: auto;
+	}
+
+	.site-footer__institutional-logo {
+		width: min(261px, 100%);
 	}
 
 	.site-footer__phone {
