@@ -1,0 +1,81 @@
+---
+import advisorIcon from '../assets/pymes/asesorias.svg';
+---
+
+<section class="pymes-lead" id="solicitud" aria-labelledby="pymes-lead-title">
+	<div class="pymes-lead__inner">
+		<div class="pymes-lead__copy">
+			<h2 id="pymes-lead-title">Inicia tu Solicitud de<br />Credito PyMEs</h2>
+			<p>Nuestro equipo de asesores especializados está listo para estructurar el plan de crédito que mejor se adapte a las necesidades operativas y fiscales de tu negocio.</p>
+			<div class="pymes-lead__advisor">
+				<img src={advisorIcon.src} alt="" width="38" height="38" />
+				<div><strong>Asesoría Institucional</strong><span>Atención personalizada y confidencial.</span></div>
+			</div>
+		</div>
+
+		<form class="pymes-lead__form" data-pymes-form novalidate>
+			<div class="pymes-lead__field">
+				<label for="pymes-name">Tu nombre</label>
+				<input id="pymes-name" name="name" type="text" autocomplete="name" placeholder="Nombre y apellido" required aria-describedby="pymes-name-error" />
+				<p class="pymes-lead__error" id="pymes-name-error" aria-live="polite"></p>
+			</div>
+			<div class="pymes-lead__field">
+				<label for="pymes-company">Empresa o actividad</label>
+				<input id="pymes-company" name="company" type="text" autocomplete="organization" placeholder="Nombre de tu empresa y actividad" required aria-describedby="pymes-company-error" />
+				<p class="pymes-lead__error" id="pymes-company-error" aria-live="polite"></p>
+			</div>
+			<div class="pymes-lead__field">
+				<label for="pymes-product">Producto de interés</label>
+				<select id="pymes-product" name="product" required aria-describedby="pymes-product-error">
+					<option value="">Selecciona una opción</option>
+					<option>Créditos PyMEs</option>
+					<option>Arrendamiento</option>
+					<option>Factoraje</option>
+				</select>
+				<p class="pymes-lead__error" id="pymes-product-error" aria-live="polite"></p>
+			</div>
+			<div class="pymes-lead__privacy">
+				<input id="pymes-privacy" name="privacy" type="checkbox" required aria-describedby="pymes-privacy-error" />
+				<label for="pymes-privacy">He leído el aviso de privacidad aplicable a esta solicitud de contacto.</label>
+				<p class="pymes-lead__error" id="pymes-privacy-error" aria-live="polite"></p>
+			</div>
+			<button class="button button--light button--form" type="submit">Cotiza tu Arrendamiento</button>
+			<p class="pymes-lead__status" role="status" aria-live="polite"></p>
+			<p class="pymes-lead__privacy-note">Tus datos están protegidos por nuestra <span>Política de Privacidad.</span></p>
+		</form>
+	</div>
+</section>
+
+<script>
+	const messages: Record<string, string> = {
+		name: 'Escribe tu nombre y apellido.',
+		company: 'Escribe el nombre de tu empresa o actividad.',
+		product: 'Selecciona un producto de interés.',
+		privacy: 'Debes aceptar el aviso de privacidad para continuar.',
+	};
+
+	document.querySelectorAll<HTMLFormElement>('[data-pymes-form]').forEach((form) => {
+		const status = form.querySelector<HTMLElement>('.pymes-lead__status');
+		const setFieldState = (field: HTMLInputElement | HTMLSelectElement) => {
+			const error = form.querySelector<HTMLElement>(`#${field.id}-error`);
+			const invalid = !field.validity.valid;
+			field.setAttribute('aria-invalid', String(invalid));
+			if (error) error.textContent = invalid ? messages[field.name] ?? 'Revisa este campo.' : '';
+			return !invalid;
+		};
+
+		form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select').forEach((field) => {
+			field.addEventListener('input', () => setFieldState(field));
+			field.addEventListener('change', () => setFieldState(field));
+		});
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			if (status) status.textContent = '';
+			const fields = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
+			const firstInvalid = fields.find((field) => !setFieldState(field));
+			if (firstInvalid) return firstInvalid.focus();
+			if (status) status.textContent = 'Formulario validado correctamente. El envío de datos estará disponible próximamente.';
+		});
+	});
+</script>
