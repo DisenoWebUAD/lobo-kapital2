@@ -1,0 +1,39 @@
+---
+import '@fontsource-variable/figtree/wght.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FactoringHero from '../components/FactoringHero.astro';
+import FactoringProcess from '../components/FactoringProcess.astro';
+import FactoringAdvantages from '../components/FactoringAdvantages.astro';
+import FactoringCta from '../components/FactoringCta.astro';
+import logoMark from '../assets/home/logo-mark.svg';
+import '../styles/global.css';
+import '../styles/factoraje.css';
+
+const title = 'Factoraje | Lobo Kapital';
+const description = 'Convierte tus cuentas por cobrar en liquidez inmediata con factoraje para empresas.';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#c10230" />
+		<link rel="icon" type="image/svg+xml" href={logoMark.src} />
+		<title>{title}</title>
+	</head>
+	<body class="factoraje-page">
+		<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+		<Header />
+		<main id="main-content" tabindex="-1">
+			<FactoringHero />
+			<FactoringProcess />
+			<FactoringAdvantages />
+			<FactoringCta />
+		</main>
+		<Footer />
+	</body>
+</html>

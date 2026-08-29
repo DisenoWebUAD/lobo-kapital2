@@ -1,0 +1,29 @@
+---
+import uploadIcon from '../assets/factoraje/sube-factura.svg';
+import approvalIcon from '../assets/factoraje/aprobacion-rapida.svg';
+import advanceIcon from '../assets/factoraje/anticipo-capital.svg';
+import collectionIcon from '../assets/factoraje/cobranza.svg';
+
+const steps = [
+	{ title: '1. Sube tu Factura', description: 'Ingresa a nuestro portal seguro y carga las facturas (CFDI) que deseas anticipar.', icon: uploadIcon },
+	{ title: '2. Aprobación Rápida', description: 'Nuestro sistema evalúa el riesgo corporativo y aprueba la operación en horas.', icon: approvalIcon },
+	{ title: '3. Anticipo de Capital', description: 'Recibes hasta el 90% del valor de la factura directamente en tu cuenta bancaria.', icon: advanceIcon },
+	{ title: '4. Cobranza', description: 'Al vencimiento, tu cliente nos paga el total y te depositamos el remanente menos la comisión.', icon: collectionIcon },
+];
+---
+
+<section class="factoring-process" aria-labelledby="factoring-process-title">
+	<header class="factoring-section-heading">
+		<h2 id="factoring-process-title">El Proceso de <span>Factoraje</span></h2>
+		<p>Un flujo transparente y eficiente diseñado para brindar liquidez en 48 horas.</p>
+	</header>
+	<ol class="factoring-process__grid">
+		{steps.map((step) => (
+			<li class="factoring-process__card">
+				<img src={step.icon.src} alt="" width="112" height="114" />
+				<h3>{step.title}</h3>
+				<p>{step.description}</p>
+			</li>
+		))}
+	</ol>
+</section>

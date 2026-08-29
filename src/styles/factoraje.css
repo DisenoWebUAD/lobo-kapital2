@@ -1,0 +1,406 @@
+.factoraje-page {
+	background: var(--color-white);
+}
+
+.factoring-hero {
+	position: relative;
+	min-height: 1000px;
+	overflow: hidden;
+	background: var(--color-white);
+}
+
+.factoring-hero__inner {
+	position: relative;
+	max-width: 1920px;
+	min-height: inherit;
+	margin: 0 auto;
+}
+
+.factoring-hero__copy {
+	position: absolute;
+	top: 356px;
+	left: max(72px, calc((100vw - 1270px) / 2));
+	z-index: 1;
+	width: min(40vw, 510px);
+}
+
+.factoring-hero h1 {
+	font-size: clamp(42px, 2.5vw, 48px);
+	font-weight: 700;
+	line-height: .98;
+	letter-spacing: -1.1px;
+	color: var(--color-text);
+}
+
+.factoring-hero h1 .factoring-hero__highlight,
+.factoring-section-heading h2 span {
+	color: var(--color-primary);
+}
+
+.factoring-hero h1 .factoring-hero__muted {
+	color: var(--color-muted);
+}
+
+.factoring-hero__copy > p {
+	margin-top: 19px;
+	font-size: 18px;
+	line-height: 1.12;
+	color: var(--color-muted);
+}
+
+.factoring-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px;
+	margin-top: 25px;
+}
+
+.factoring-hero__actions .button {
+	min-height: 45px;
+	padding-inline: 21px;
+	font-size: 14px;
+}
+
+.factoring-hero__actions .button--primary {
+	min-width: 161px;
+}
+
+.factoring-hero__actions .button--light {
+	min-width: 194px;
+}
+
+.factoring-hero__image {
+	position: absolute;
+	top: 140px;
+	right: 0;
+	width: min(50.16vw, 963px);
+	height: 859px;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 55px 0 0 55px;
+	box-shadow: 0 8px 18px rgb(0 0 0 / 8%);
+}
+
+.factoring-process {
+	min-height: 1015px;
+	padding: 285px 24px 160px;
+	background: var(--color-surface);
+}
+
+.factoring-section-heading {
+	text-align: center;
+}
+
+.factoring-section-heading h2 {
+	font-size: clamp(36px, 2.35vw, 45px);
+	font-weight: 700;
+	line-height: 1.05;
+	letter-spacing: -.9px;
+	color: #000;
+}
+
+.factoring-section-heading p {
+	margin-top: 10px;
+	font-size: 17px;
+	line-height: 1.2;
+	color: var(--color-muted);
+}
+
+.factoring-process__grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 30px;
+	width: min(100%, 1270px);
+	padding: 0;
+	margin: 82px auto 0;
+	list-style: none;
+}
+
+.factoring-process__card {
+	min-height: 326px;
+	padding: 48px 40px 31px;
+	border-radius: 16px;
+	background: var(--color-white);
+	box-shadow: 0 6px 11px rgb(0 0 0 / 12%);
+}
+
+.factoring-process__card img {
+	display: block;
+	width: 95px;
+	height: 101px;
+	margin: 0 auto 25px;
+	object-fit: contain;
+}
+
+.factoring-process__card h3,
+.factoring-advantage-card h3 {
+	font-size: 17px;
+	font-weight: 700;
+	line-height: 1.1;
+	color: var(--color-text);
+}
+
+.factoring-process__card p,
+.factoring-advantage-card > p {
+	margin-top: 14px;
+	font-size: 13px;
+	line-height: 1.17;
+	color: var(--color-muted);
+}
+
+.factoring-advantages {
+	min-height: 985px;
+	padding: 177px 24px 150px;
+	border-top: 1px solid var(--color-soft);
+	background: var(--color-white);
+}
+
+.factoring-advantages__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 33px;
+	width: min(100%, 1060px);
+	margin: 84px auto 0;
+}
+
+.factoring-advantage-card {
+	min-height: 198px;
+	padding: 39px 31px 30px;
+	border-radius: 16px;
+	background: var(--color-white);
+	box-shadow: 0 5px 11px rgb(0 0 0 / 12%);
+}
+
+.factoring-advantage-card > p {
+	margin-top: 8px;
+}
+
+.factoring-advantage-card--profile {
+	grid-column: 1 / -1;
+	justify-self: center;
+	width: min(100%, 650px);
+	min-height: 224px;
+	padding-top: 25px;
+}
+
+.factoring-profile-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 32px;
+	padding: 6px 12px;
+	margin: 0 0 15px !important;
+	border-radius: 7px;
+	font-size: 12px !important;
+	font-weight: 700;
+	line-height: 1 !important;
+	color: var(--color-white) !important;
+	background: var(--color-primary);
+}
+
+.factoring-profile-tag svg {
+	width: 16px;
+	height: 16px;
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.7;
+}
+
+.factoring-cta {
+	display: grid;
+	min-height: 560px;
+	place-items: center;
+	padding: 80px 24px;
+	background: var(--color-dark);
+}
+
+.factoring-cta__inner {
+	text-align: center;
+}
+
+.factoring-cta h2 {
+	font-size: clamp(36px, 2.35vw, 45px);
+	font-weight: 700;
+	line-height: 1.06;
+	letter-spacing: -.9px;
+	color: var(--color-white);
+}
+
+.factoring-cta p {
+	margin-top: 15px;
+	font-size: 17px;
+	line-height: 1.2;
+	color: var(--color-white);
+}
+
+.factoring-cta .button {
+	min-width: 208px;
+	min-height: 47px;
+	margin-top: 70px;
+	font-size: 14px;
+}
+
+@media (max-width: 1250px) {
+	.factoring-hero {
+		min-height: 900px;
+	}
+
+	.factoring-hero__copy {
+		top: 320px;
+		left: 8vw;
+	}
+
+	.factoring-hero__image {
+		top: 130px;
+		height: 720px;
+	}
+
+	.factoring-process {
+		min-height: auto;
+		padding-top: 200px;
+	}
+}
+
+@media (max-width: 1023px) {
+	.factoring-hero {
+		min-height: 0;
+		padding: 148px 48px 88px;
+	}
+
+	.factoring-hero__inner {
+		display: flex;
+		min-height: 0;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.factoring-hero__copy {
+		position: static;
+		width: min(100%, 580px);
+		text-align: center;
+	}
+
+	.factoring-hero__actions {
+		justify-content: center;
+	}
+
+	.factoring-hero__image {
+		position: static;
+		width: min(100%, 680px);
+		height: auto;
+		max-height: 620px;
+		margin-top: 62px;
+		border-radius: 46px;
+	}
+
+	.factoring-process,
+	.factoring-advantages {
+		padding-top: 120px;
+		padding-bottom: 110px;
+	}
+
+	.factoring-process__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		max-width: 680px;
+		margin-top: 60px;
+	}
+
+	.factoring-process__card {
+		min-height: 280px;
+	}
+
+	.factoring-advantages__grid {
+		max-width: 760px;
+	}
+
+	.factoring-cta {
+		min-height: 470px;
+	}
+}
+
+@media (max-width: 640px) {
+	.factoring-hero {
+		padding: 122px 24px 64px;
+	}
+
+	.factoring-hero h1 {
+		font-size: clamp(36px, 10.3vw, 46px);
+		letter-spacing: -.8px;
+	}
+
+	.factoring-hero__copy > p {
+		font-size: 16px;
+	}
+
+	.factoring-hero__copy br {
+		display: none;
+	}
+
+	.factoring-hero__actions {
+		gap: 12px;
+	}
+
+	.factoring-hero__actions .button {
+		min-width: 0;
+		min-height: 44px;
+		padding-inline: 17px;
+		font-size: 13px;
+	}
+
+	.factoring-hero__image {
+		margin-top: 46px;
+		border-radius: 30px;
+	}
+
+	.factoring-process,
+	.factoring-advantages {
+		padding: 86px 24px;
+	}
+
+	.factoring-section-heading h2,
+	.factoring-cta h2 {
+		font-size: 34px;
+	}
+
+	.factoring-section-heading p,
+	.factoring-cta p {
+		font-size: 16px;
+	}
+
+	.factoring-process__grid,
+	.factoring-advantages__grid {
+		grid-template-columns: 1fr;
+		gap: 20px;
+		margin-top: 45px;
+	}
+
+	.factoring-process__card {
+		min-height: 0;
+		padding: 35px 28px;
+	}
+
+	.factoring-process__card img {
+		width: 82px;
+		height: 88px;
+		margin-bottom: 20px;
+	}
+
+	.factoring-advantage-card,
+	.factoring-advantage-card--profile {
+		grid-column: auto;
+		width: auto;
+		min-height: 0;
+		padding: 29px 24px;
+	}
+
+	.factoring-cta {
+		min-height: 430px;
+		padding: 70px 24px;
+	}
+
+	.factoring-cta .button {
+		margin-top: 46px;
+	}
+}

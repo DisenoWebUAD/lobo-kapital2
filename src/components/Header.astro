@@ -4,7 +4,9 @@ import logoWordmark from '../assets/home/logo-wordmark.svg';
 const isPersonalPage = Astro.url.pathname.startsWith('/credito-personal');
 const isPymesPage = Astro.url.pathname.startsWith('/creditos-pymes');
 const isLeasePage = Astro.url.pathname.startsWith('/arrendamiento');
-const clientHref = isPymesPage || isLeasePage ? '#solicitud' : '/#contacto';
+const isFactoringPage = Astro.url.pathname.startsWith('/factoraje');
+const isPymesSection = isPymesPage || isLeasePage || isFactoringPage;
+const clientHref = isPymesPage || isLeasePage ? '#solicitud' : isFactoringPage ? '/?producto=Factoraje#contacto' : '/#contacto';
 ---
 
 <header class="site-header" aria-label="Encabezado principal">
@@ -14,15 +16,23 @@ const clientHref = isPymesPage || isLeasePage ? '#solicitud' : '/#contacto';
 
 	<nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
 		<a href="/credito-personal/" aria-current={isPersonalPage ? 'page' : undefined}>Personal</a>
-		<details class="site-nav__pymes">
-			<summary>PyMEs</summary>
-			<div class="site-nav__pymes-menu" aria-label="Soluciones para PyMEs">
+		<div class="site-nav__pymes" data-active={isPymesSection ? '' : undefined}>
+			<button
+				class="site-nav__pymes-trigger"
+				type="button"
+				aria-controls="pymes-navigation"
+				aria-expanded="false"
+				aria-current={isPymesSection ? 'page' : undefined}
+			>
+				PyMEs
+			</button>
+			<div class="site-nav__pymes-menu" id="pymes-navigation" aria-label="Soluciones para PyMEs" aria-hidden="true">
 				<a href="/creditos-pymes/" aria-current={isPymesPage ? 'page' : undefined}>Créditos PyMEs</a>
 				<a href="/arrendamiento/" aria-current={isLeasePage ? 'page' : undefined}>Arrendamiento</a>
-				<a href="/?producto=Factoraje#contacto">Factoraje</a>
+				<a href="/factoraje/" aria-current={isFactoringPage ? 'page' : undefined}>Factoraje</a>
 			</div>
-		</details>
-		<a href="/#confianza">Conócenos</a>
+		</div>
+		<a class="site-nav__section-link" href="/#confianza">Conócenos</a>
 		<span class="site-nav__disabled" aria-disabled="true" title="Disponible próximamente">FAQ</span>
 		<a class="site-nav__client" href={clientHref}>Hazte Cliente</a>
 		<span class="site-nav__login" aria-disabled="true" title="Disponible próximamente">Ingresar</span>
@@ -44,15 +54,32 @@ const clientHref = isPymesPage || isLeasePage ? '#solicitud' : '/#contacto';
 <script>
 	const menuButton = document.querySelector<HTMLButtonElement>('.menu-toggle');
 	const navigation = document.querySelector<HTMLElement>('#site-navigation');
+	const pymesGroup = document.querySelector<HTMLElement>('.site-nav__pymes');
+	const pymesTrigger = document.querySelector<HTMLButtonElement>('.site-nav__pymes-trigger');
+	const pymesMenu = document.querySelector<HTMLElement>('#pymes-navigation');
+	const pymesLinks = pymesMenu?.querySelectorAll<HTMLAnchorElement>('a');
+	const desktopNavigation = window.matchMedia('(min-width: 1200px)');
+	let pymesCloseTimer: number | undefined;
+
+	const setPymesOpen = (isOpen: boolean) => {
+		if (!pymesGroup || !pymesTrigger || !pymesMenu) return;
+		window.clearTimeout(pymesCloseTimer);
+		pymesGroup.toggleAttribute('data-open', isOpen);
+		pymesTrigger.setAttribute('aria-expanded', String(isOpen));
+		pymesMenu.setAttribute('aria-hidden', String(!isOpen));
+	};
+
+	const schedulePymesClose = () => {
+		window.clearTimeout(pymesCloseTimer);
+		pymesCloseTimer = window.setTimeout(() => setPymesOpen(false), 140);
+	};
 
 	const closeMenu = () => {
-	if (!menuButton || !navigation) return;
+		if (!menuButton || !navigation) return;
 		menuButton.setAttribute('aria-expanded', 'false');
 		menuButton.setAttribute('aria-label', 'Abrir menú');
-	navigation.removeAttribute('data-open');
-	navigation.querySelectorAll<HTMLDetailsElement>('details[open]').forEach((menu) => {
-		menu.open = false;
-	});
+		navigation.removeAttribute('data-open');
+		setPymesOpen(false);
 	};
 
 	menuButton?.addEventListener('click', () => {
@@ -64,10 +91,53 @@ const clientHref = isPymesPage || isLeasePage ? '#solicitud' : '/#contacto';
 	});
 
 	navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+	pymesTrigger?.addEventListener('click', () => {
+		setPymesOpen(pymesTrigger.getAttribute('aria-expanded') !== 'true');
+	});
+
+	pymesTrigger?.addEventListener('keydown', (event) => {
+		if (event.key === 'ArrowDown') {
+			event.preventDefault();
+			setPymesOpen(true);
+			pymesLinks?.[0]?.focus();
+		}
+	});
+
+	pymesGroup?.addEventListener('pointerenter', () => {
+		if (desktopNavigation.matches) setPymesOpen(true);
+	});
+	pymesGroup?.addEventListener('pointerleave', () => {
+		if (desktopNavigation.matches) schedulePymesClose();
+	});
+	pymesGroup?.addEventListener('focusin', () => window.clearTimeout(pymesCloseTimer));
+	pymesGroup?.addEventListener('focusout', () => {
+		window.setTimeout(() => {
+			if (desktopNavigation.matches && pymesGroup && !pymesGroup.contains(document.activeElement)) schedulePymesClose();
+		});
+	});
+
+	document.addEventListener('pointerdown', (event) => {
+		if (pymesGroup && !pymesGroup.contains(event.target as Node)) setPymesOpen(false);
+	});
 	document.addEventListener('keydown', (event) => {
-		if (event.key === 'Escape' && menuButton?.getAttribute('aria-expanded') === 'true') {
+		if (event.key !== 'Escape') return;
+		if (pymesTrigger?.getAttribute('aria-expanded') === 'true') {
+			setPymesOpen(false);
+			pymesTrigger.focus();
+			return;
+		}
+		if (menuButton?.getAttribute('aria-expanded') === 'true') {
 			closeMenu();
 			menuButton.focus();
 		}
 	});
+
+	const aboutLink = document.querySelector<HTMLAnchorElement>('.site-nav__section-link');
+	const aboutSection = document.querySelector<HTMLElement>('#confianza');
+	if (aboutLink && aboutSection) {
+		const setAboutActive = (isActive: boolean) => {
+			aboutLink.toggleAttribute('aria-current', isActive);
+		};
+		new IntersectionObserver(([entry]) => setAboutActive(entry.isIntersecting), { threshold: .25 }).observe(aboutSection);
+	}
 </script>
