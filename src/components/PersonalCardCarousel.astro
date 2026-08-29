@@ -75,7 +75,9 @@ const slides = [
 </section>
 
 <script>
-	document.querySelectorAll<HTMLElement>('[data-card-carousel]').forEach((carousel) => {
+	const initializeCarousels = () => document.querySelectorAll<HTMLElement>('[data-card-carousel]').forEach((carousel) => {
+		if (carousel.dataset.initialized) return;
+		carousel.dataset.initialized = 'true';
 		const slides = [...carousel.querySelectorAll<HTMLElement>('[data-card-slide]')];
 		const dots = [...carousel.querySelectorAll<HTMLButtonElement>('[data-card-dot]')];
 		let activeIndex = 1;
@@ -113,4 +115,7 @@ const slides = [
 			if (Math.abs(distance) >= 48) showSlide(activeIndex + (distance < 0 ? 1 : -1));
 		});
 	});
+
+	initializeCarousels();
+	document.addEventListener('astro:page-load', initializeCarousels);
 </script>

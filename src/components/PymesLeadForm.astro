@@ -54,7 +54,9 @@ import advisorIcon from '../assets/pymes/asesorias.svg';
 		privacy: 'Debes aceptar el aviso de privacidad para continuar.',
 	};
 
-	document.querySelectorAll<HTMLFormElement>('[data-pymes-form]').forEach((form) => {
+	const initializePymesForms = () => document.querySelectorAll<HTMLFormElement>('[data-pymes-form]').forEach((form) => {
+		if (form.dataset.initialized) return;
+		form.dataset.initialized = 'true';
 		const status = form.querySelector<HTMLElement>('.pymes-lead__status');
 		const setFieldState = (field: HTMLInputElement | HTMLSelectElement) => {
 			const error = form.querySelector<HTMLElement>(`#${field.id}-error`);
@@ -78,4 +80,7 @@ import advisorIcon from '../assets/pymes/asesorias.svg';
 			if (status) status.textContent = 'Formulario validado correctamente. El envío de datos estará disponible próximamente.';
 		});
 	});
+
+	initializePymesForms();
+	document.addEventListener('astro:page-load', initializePymesForms);
 </script>

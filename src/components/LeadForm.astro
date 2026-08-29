@@ -42,7 +42,10 @@
 </section>
 
 <script>
+	const initializeLeadForm = () => {
 	const form = document.querySelector<HTMLFormElement>('#quote-form');
+	if (form?.dataset.initialized) return;
+	if (form) form.dataset.initialized = 'true';
 	const productSelect = document.querySelector<HTMLSelectElement>('#product');
 	const status = document.querySelector<HTMLElement>('#form-status');
 	const messages: Record<string, string> = {
@@ -90,4 +93,8 @@
 		}
 		if (status) status.textContent = 'Formulario validado correctamente. El envío de datos estará disponible próximamente.';
 	});
+	};
+
+	initializeLeadForm();
+	document.addEventListener('astro:page-load', initializeLeadForm);
 </script>
