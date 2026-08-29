@@ -9,7 +9,7 @@ const isPymesSection = isPymesPage || isLeasePage || isFactoringPage;
 const clientHref = isPymesPage || isLeasePage ? '#solicitud' : isFactoringPage ? '/?producto=Factoraje#contacto' : '/#contacto';
 ---
 
-<header class="site-header" aria-label="Encabezado principal">
+<header class="site-header" aria-label="Encabezado principal" transition:name="site-header" transition:animate="none">
 	<a class="site-header__brand" href="/" aria-label="Lobo Kapital, ir al inicio">
 		<img src={logoWordmark.src} alt="Lobo Kapital" width="187" height="19" />
 	</a>
@@ -52,92 +52,102 @@ const clientHref = isPymesPage || isLeasePage ? '#solicitud' : isFactoringPage ?
 </header>
 
 <script>
-	const menuButton = document.querySelector<HTMLButtonElement>('.menu-toggle');
-	const navigation = document.querySelector<HTMLElement>('#site-navigation');
-	const pymesGroup = document.querySelector<HTMLElement>('.site-nav__pymes');
-	const pymesTrigger = document.querySelector<HTMLButtonElement>('.site-nav__pymes-trigger');
-	const pymesMenu = document.querySelector<HTMLElement>('#pymes-navigation');
-	const pymesLinks = pymesMenu?.querySelectorAll<HTMLAnchorElement>('a');
-	const desktopNavigation = window.matchMedia('(min-width: 1200px)');
-	let pymesCloseTimer: number | undefined;
+	let headerController: AbortController | undefined;
 
-	const setPymesOpen = (isOpen: boolean) => {
-		if (!pymesGroup || !pymesTrigger || !pymesMenu) return;
-		window.clearTimeout(pymesCloseTimer);
-		pymesGroup.toggleAttribute('data-open', isOpen);
-		pymesTrigger.setAttribute('aria-expanded', String(isOpen));
-		pymesMenu.setAttribute('aria-hidden', String(!isOpen));
-	};
+	const initializeHeader = () => {
+		headerController?.abort();
+		headerController = new AbortController();
+		const { signal } = headerController;
+		const menuButton = document.querySelector<HTMLButtonElement>('.menu-toggle');
+		const navigation = document.querySelector<HTMLElement>('#site-navigation');
+		const pymesGroup = document.querySelector<HTMLElement>('.site-nav__pymes');
+		const pymesTrigger = document.querySelector<HTMLButtonElement>('.site-nav__pymes-trigger');
+		const pymesMenu = document.querySelector<HTMLElement>('#pymes-navigation');
+		const pymesLinks = pymesMenu?.querySelectorAll<HTMLAnchorElement>('a');
+		const desktopNavigation = window.matchMedia('(min-width: 1200px)');
+		let pymesCloseTimer: number | undefined;
 
-	const schedulePymesClose = () => {
-		window.clearTimeout(pymesCloseTimer);
-		pymesCloseTimer = window.setTimeout(() => setPymesOpen(false), 140);
-	};
-
-	const closeMenu = () => {
-		if (!menuButton || !navigation) return;
-		menuButton.setAttribute('aria-expanded', 'false');
-		menuButton.setAttribute('aria-label', 'Abrir menú');
-		navigation.removeAttribute('data-open');
-		setPymesOpen(false);
-	};
-
-	menuButton?.addEventListener('click', () => {
-		if (!navigation) return;
-		const willOpen = menuButton.getAttribute('aria-expanded') !== 'true';
-		menuButton.setAttribute('aria-expanded', String(willOpen));
-		menuButton.setAttribute('aria-label', willOpen ? 'Cerrar menú' : 'Abrir menú');
-		navigation.toggleAttribute('data-open', willOpen);
-	});
-
-	navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
-	pymesTrigger?.addEventListener('click', () => {
-		setPymesOpen(pymesTrigger.getAttribute('aria-expanded') !== 'true');
-	});
-
-	pymesTrigger?.addEventListener('keydown', (event) => {
-		if (event.key === 'ArrowDown') {
-			event.preventDefault();
-			setPymesOpen(true);
-			pymesLinks?.[0]?.focus();
-		}
-	});
-
-	pymesGroup?.addEventListener('pointerenter', () => {
-		if (desktopNavigation.matches) setPymesOpen(true);
-	});
-	pymesGroup?.addEventListener('pointerleave', () => {
-		if (desktopNavigation.matches) schedulePymesClose();
-	});
-	pymesGroup?.addEventListener('focusin', () => window.clearTimeout(pymesCloseTimer));
-	pymesGroup?.addEventListener('focusout', () => {
-		window.setTimeout(() => {
-			if (desktopNavigation.matches && pymesGroup && !pymesGroup.contains(document.activeElement)) schedulePymesClose();
-		});
-	});
-
-	document.addEventListener('pointerdown', (event) => {
-		if (pymesGroup && !pymesGroup.contains(event.target as Node)) setPymesOpen(false);
-	});
-	document.addEventListener('keydown', (event) => {
-		if (event.key !== 'Escape') return;
-		if (pymesTrigger?.getAttribute('aria-expanded') === 'true') {
-			setPymesOpen(false);
-			pymesTrigger.focus();
-			return;
-		}
-		if (menuButton?.getAttribute('aria-expanded') === 'true') {
-			closeMenu();
-			menuButton.focus();
-		}
-	});
-
-	const aboutLink = document.querySelector<HTMLAnchorElement>('.site-nav__section-link');
-	const aboutSection = document.querySelector<HTMLElement>('#confianza');
-	if (aboutLink && aboutSection) {
-		const setAboutActive = (isActive: boolean) => {
-			aboutLink.toggleAttribute('aria-current', isActive);
+		const setPymesOpen = (isOpen: boolean) => {
+			if (!pymesGroup || !pymesTrigger || !pymesMenu) return;
+			window.clearTimeout(pymesCloseTimer);
+			pymesGroup.toggleAttribute('data-open', isOpen);
+			pymesTrigger.setAttribute('aria-expanded', String(isOpen));
+			pymesMenu.setAttribute('aria-hidden', String(!isOpen));
 		};
-		new IntersectionObserver(([entry]) => setAboutActive(entry.isIntersecting), { threshold: .25 }).observe(aboutSection);
-	}
+
+		const schedulePymesClose = () => {
+			window.clearTimeout(pymesCloseTimer);
+			pymesCloseTimer = window.setTimeout(() => setPymesOpen(false), 140);
+		};
+
+		const closeMenu = () => {
+			if (!menuButton || !navigation) return;
+			menuButton.setAttribute('aria-expanded', 'false');
+			menuButton.setAttribute('aria-label', 'Abrir menú');
+			navigation.removeAttribute('data-open');
+			setPymesOpen(false);
+		};
+
+		menuButton?.addEventListener('click', () => {
+			if (!navigation) return;
+			const willOpen = menuButton.getAttribute('aria-expanded') !== 'true';
+			menuButton.setAttribute('aria-expanded', String(willOpen));
+			menuButton.setAttribute('aria-label', willOpen ? 'Cerrar menú' : 'Abrir menú');
+			navigation.toggleAttribute('data-open', willOpen);
+		}, { signal });
+
+		navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu, { signal }));
+		pymesTrigger?.addEventListener('click', () => {
+			setPymesOpen(pymesTrigger.getAttribute('aria-expanded') !== 'true');
+		}, { signal });
+
+		pymesTrigger?.addEventListener('keydown', (event) => {
+			if (event.key === 'ArrowDown') {
+				event.preventDefault();
+				setPymesOpen(true);
+				pymesLinks?.[0]?.focus();
+			}
+		}, { signal });
+
+		pymesGroup?.addEventListener('pointerenter', () => {
+			if (desktopNavigation.matches) setPymesOpen(true);
+		}, { signal });
+		pymesGroup?.addEventListener('pointerleave', () => {
+			if (desktopNavigation.matches) schedulePymesClose();
+		}, { signal });
+		pymesGroup?.addEventListener('focusin', () => window.clearTimeout(pymesCloseTimer), { signal });
+		pymesGroup?.addEventListener('focusout', () => {
+			window.setTimeout(() => {
+				if (desktopNavigation.matches && pymesGroup && !pymesGroup.contains(document.activeElement)) schedulePymesClose();
+			});
+		}, { signal });
+
+		document.addEventListener('pointerdown', (event) => {
+			if (pymesGroup && !pymesGroup.contains(event.target as Node)) setPymesOpen(false);
+		}, { signal });
+		document.addEventListener('keydown', (event) => {
+			if (event.key !== 'Escape') return;
+			if (pymesTrigger?.getAttribute('aria-expanded') === 'true') {
+				setPymesOpen(false);
+				pymesTrigger.focus();
+				return;
+			}
+			if (menuButton?.getAttribute('aria-expanded') === 'true') {
+				closeMenu();
+				menuButton.focus();
+			}
+		}, { signal });
+
+		const aboutLink = document.querySelector<HTMLAnchorElement>('.site-nav__section-link');
+		const aboutSection = document.querySelector<HTMLElement>('#confianza');
+		if (aboutLink && aboutSection) {
+			const setAboutActive = (isActive: boolean) => aboutLink.toggleAttribute('aria-current', isActive);
+			const observer = new IntersectionObserver(([entry]) => setAboutActive(entry.isIntersecting), { threshold: .25 });
+			observer.observe(aboutSection);
+			signal.addEventListener('abort', () => observer.disconnect(), { once: true });
+		}
+	};
+
+	initializeHeader();
+	document.addEventListener('astro:page-load', initializeHeader);
 </script>
