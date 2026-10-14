@@ -45,14 +45,14 @@ const products = [
 ---
 
 <section class="solutions" id="soluciones" aria-labelledby="solutions-title">
-	<div class="section-heading">
-		<h2 id="solutions-title"><span>Soluciones</span> a tu medida</h2>
-		<p>Experiencia y solidez financiera respaldando cada etapa de tu crecimiento personal y empresarial.</p>
+	<div class="section-heading" data-reveal-group="80">
+		<h2 id="solutions-title" data-reveal><span>Soluciones</span> a tu medida</h2>
+		<p data-reveal>Experiencia y solidez financiera respaldando cada etapa de tu crecimiento personal y empresarial.</p>
 	</div>
 
-	<div class="solutions__grid">
+	<div class="solutions__grid" data-reveal-group="80">
 		{products.map((product) => (
-			<article class="product-card" id={product.id}>
+			<article class="product-card" id={product.id} data-reveal data-spotlight>
 				<div class="product-card__icon">
 					<img src={product.icon.src} alt="" width="56" height="56" />
 				</div>

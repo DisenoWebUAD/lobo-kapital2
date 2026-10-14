@@ -8,6 +8,7 @@ import CreditCardPromo from '../components/CreditCardPromo.astro';
 import Trust from '../components/Trust.astro';
 import LeadForm from '../components/LeadForm.astro';
 import Footer from '../components/Footer.astro';
+import HomeMotion from '../components/HomeMotion.astro';
 import logoMark from '../assets/home/logo-mark.svg';
 import '../styles/global.css';
 
@@ -27,7 +28,7 @@ const description = 'Créditos, arrendamiento y soluciones financieras diseñada
 		<title>{title}</title>
 		<ClientRouter />
 	</head>
-	<body>
+	<body data-page="home">
 		<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 		<Header />
 		<main id="main-content" tabindex="-1" transition:name="page-main" transition:animate="fade">
@@ -38,5 +39,6 @@ const description = 'Créditos, arrendamiento y soluciones financieras diseñada
 			<LeadForm />
 		</main>
 		<Footer />
+		<HomeMotion />
 	</body>
 </html>

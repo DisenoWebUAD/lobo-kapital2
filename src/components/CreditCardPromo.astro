@@ -6,13 +6,13 @@ import underline from '../assets/home/subrayado.svg';
 
 <section class="card-promo" aria-labelledby="card-promo-title">
 	<div class="card-promo__inner">
-		<div class="card-promo__copy">
-			<h2 id="card-promo-title">La tarjeta de crédito<br />para tu futuro</h2>
-			<a class="button button--primary" href="#contacto" data-product="Tarjeta de Crédito">
+		<div class="card-promo__copy" data-reveal-group="90">
+			<h2 id="card-promo-title" data-reveal>La tarjeta de crédito<br />para tu futuro</h2>
+			<a class="button button--primary" href="#contacto" data-product="Tarjeta de Crédito" data-reveal>
 				Solicitar ahora <span aria-hidden="true">→</span>
 			</a>
 		</div>
-		<div class="card-promo__visual">
+		<div class="card-promo__visual" data-reveal="right">
 			<Image
 				src={cardPromo}
 				alt="Tarjeta de crédito Lobo Kapital sobre un pedestal y una cinta roja"
@@ -20,11 +20,12 @@ import underline from '../assets/home/subrayado.svg';
 				width={1007}
 				height={1280}
 				loading="eager"
+				data-parallax
 			/>
 		</div>
-		<div class="no-fee">
+		<div class="no-fee" data-reveal="underline" data-reveal-delay="120">
 			<p>Y SIN ANUALIDAD</p>
-			<img src={underline.src} alt="" width="366" height="13" />
+			<img class="no-fee__underline" src={underline.src} alt="" width="366" height="13" />
 			<small>*Aplican restricciones</small>
 		</div>
 	</div>
