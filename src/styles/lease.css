@@ -59,6 +59,10 @@
 	padding-inline: 20px;
 }
 
+.lease-hero__media-frame {
+	display: contents;
+}
+
 .lease-hero__media {
 	position: absolute;
 	top: min(29.6vw, 568px);
@@ -452,11 +456,19 @@
 	}
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1599px) {
 	.lease-hero {
-		height: clamp(620px, 68vw, 700px);
+		height: auto;
 	}
 
+	.lease-hero__media {
+		position: relative;
+		top: auto;
+		margin-top: 48px;
+	}
+}
+
+@media (max-width: 1199px) {
 	.lease-hero__copy {
 		padding-top: 156px;
 	}
@@ -467,10 +479,6 @@
 
 	.lease-hero__copy p {
 		font-size: 19px;
-	}
-
-	.lease-hero__media {
-		top: 340px;
 	}
 
 	.lease-benefits {
@@ -564,10 +572,6 @@
 		display: none;
 	}
 
-	.lease-hero {
-		height: 620px;
-	}
-
 	.lease-hero__copy {
 		width: calc(100% - 40px);
 		padding-top: 112px;
@@ -586,6 +590,7 @@
 	}
 
 	.lease-hero__actions {
+		flex-wrap: wrap;
 		gap: 14px;
 		margin-top: 20px;
 	}
@@ -606,9 +611,17 @@
 		padding-inline: 17px;
 	}
 
+	.lease-hero__media-frame {
+		display: block;
+		overflow: hidden;
+		margin-top: 36px;
+		border-radius: clamp(40px, 12vw, 90px) clamp(40px, 12vw, 90px) 0 0;
+	}
+
 	.lease-hero__media {
-		top: 404px;
 		width: 135%;
+		max-width: none;
+		margin-top: 0;
 		margin-left: -17.5%;
 	}
 

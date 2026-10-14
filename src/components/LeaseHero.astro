@@ -12,12 +12,14 @@ import heroImage from '../assets/arrendamiento/hero.jpg';
 		</div>
 	</div>
 
-	<svg class="lease-hero__media" viewBox="0 0 1920 532.39" role="img" aria-label="Panadero trabajando en su negocio">
-		<defs>
-			<clipPath id="lease-hero-clip">
-				<path d="M280.16 0H1639.84C1794.57 0 1920 125.43 1920 280.16V532.39H0V280.16C0 125.43 125.43 0 280.16 0Z" />
-			</clipPath>
-		</defs>
-		<image href={heroImage.src} x="-8.96" y="-225.41" width="1928.96" height="1285.97" preserveAspectRatio="none" clip-path="url(#lease-hero-clip)" />
-	</svg>
+	<div class="lease-hero__media-frame">
+		<svg class="lease-hero__media" viewBox="0 0 1920 532.39" role="img" aria-label="Panadero trabajando en su negocio">
+			<defs>
+				<clipPath id="lease-hero-clip">
+					<path d="M280.16 0H1639.84C1794.57 0 1920 125.43 1920 280.16V532.39H0V280.16C0 125.43 125.43 0 280.16 0Z" />
+				</clipPath>
+			</defs>
+			<image href={heroImage.src} x="-8.96" y="-225.41" width="1928.96" height="1285.97" preserveAspectRatio="none" clip-path="url(#lease-hero-clip)" />
+		</svg>
+	</div>
 </section>
