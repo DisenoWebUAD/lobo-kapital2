@@ -973,8 +973,7 @@ input {
 
 .site-footer {
 	position: relative;
-	height: 740px;
-	padding: 135px max(8vw, calc((100vw - 1616px) / 2)) 0;
+	padding: 135px max(8vw, calc((100vw - 1616px) / 2)) 30px;
 	color: #000;
 	background: var(--color-white);
 }
@@ -991,8 +990,8 @@ input {
 }
 
 .site-footer__mark img {
-	width: 130px;
-	height: 134px;
+	width: 100px;
+	height: 103px;
 }
 
 .site-footer__phone {
@@ -1013,6 +1012,7 @@ input {
 }
 
 .site-footer address {
+	max-width: 420px;
 	margin-top: 29px;
 	font-size: 14px;
 	font-style: normal;
@@ -1037,13 +1037,6 @@ input {
 	width: 88px;
 	height: 58px;
 	object-fit: contain;
-}
-
-.site-footer__institutional-logo {
-	display: block;
-	width: 261px;
-	height: auto;
-	margin-top: 75px;
 }
 
 .site-footer__social {
@@ -1080,20 +1073,20 @@ input {
 }
 
 .site-footer__legal {
-	position: absolute;
-	right: max(8vw, calc((100vw - 1616px) / 2));
-	bottom: 60px;
-	left: max(8vw, calc((100vw - 1616px) / 2));
 	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
 	align-items: center;
 	justify-content: space-between;
+	margin-top: 32px;
 	font-size: 14px;
 	color: var(--color-muted);
 }
 
 .site-footer__legal > div {
 	display: flex;
-	gap: 76px;
+	flex-wrap: wrap;
+	gap: 16px 40px;
 	align-items: center;
 }
 
@@ -1417,9 +1410,8 @@ input {
 	}
 
 	.site-footer__legal {
-		position: static;
 		gap: 32px;
-		margin-top: 70px;
+		margin-top: 32px;
 	}
 
 	.site-footer__legal > div {
@@ -1644,12 +1636,8 @@ input {
 	}
 
 	.site-footer__mark img {
-		width: 104px;
+		width: 90px;
 		height: auto;
-	}
-
-	.site-footer__institutional-logo {
-		width: min(261px, 100%);
 	}
 
 	.site-footer__phone {
@@ -1682,7 +1670,7 @@ input {
 	}
 
 	.site-footer__legal {
-		margin-top: 64px;
+		margin-top: 32px;
 	}
 
 	.site-footer__legal > div {
