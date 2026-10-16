@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 import LeaseHero from '../components/LeaseHero.astro';
 import LeaseBenefits from '../components/LeaseBenefits.astro';
 import LeaseAssets from '../components/LeaseAssets.astro';
-import LeaseLeadForm from '../components/LeaseLeadForm.astro';
+import LeadForm from '../components/LeadForm.astro';
 import logoMark from '../assets/home/logo-mark.svg';
 import '../styles/global.css';
 import '../styles/lease.css';
@@ -34,7 +34,7 @@ const description = 'Arrendamiento puro para adquirir maquinaria, equipo o vehí
 			<LeaseHero />
 			<LeaseBenefits />
 			<LeaseAssets />
-			<LeaseLeadForm />
+			<LeadForm product="lease" sectionId="solicitud" />
 		</main>
 		<Footer />
 	</body>

@@ -1,0 +1,341 @@
+---
+interface Props {
+	id: string;
+	name: string;
+	labelId: string;
+	options: readonly { value: string; label: string }[];
+	value?: string;
+	placeholder?: string;
+	required?: boolean;
+	describedBy?: string;
+}
+
+const { id, name, labelId, options, value = '', placeholder = 'Selecciona una opción', required = false, describedBy } = Astro.props;
+const selected = options.find((option) => option.value === value);
+---
+
+<lobo-select class="form-select">
+	<select class="form-select__native" id={id} name={name} required={required} aria-describedby={describedBy}>
+		<option value="" selected={!selected}>{placeholder}</option>
+		{options.map((option) => <option value={option.value} selected={option.value === value}>{option.label}</option>)}
+	</select>
+	<button
+		class="form-select__trigger"
+		type="button"
+		role="combobox"
+		aria-labelledby={`${labelId} ${id}-value`}
+		aria-describedby={describedBy}
+		aria-required={required || undefined}
+		aria-haspopup="listbox"
+		aria-controls={`${id}-options`}
+		aria-expanded="false"
+		data-placeholder={!selected || undefined}
+		hidden
+	>
+		<span id={`${id}-value`} data-select-value>{selected?.label ?? placeholder}</span>
+		<svg class="form-select__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+			<path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+		</svg>
+	</button>
+	<ul class="form-select__options" id={`${id}-options`} role="listbox" aria-labelledby={labelId} hidden>
+		{options.map((option, index) => (
+			<li class="form-select__option" id={`${id}-option-${index}`} role="option" aria-selected={option.value === value} data-value={option.value}>
+				<span>{option.label}</span>
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</li>
+		))}
+	</ul>
+</lobo-select>
+
+<script>
+	class LoboSelect extends HTMLElement {
+		private controller?: AbortController;
+		private observer?: MutationObserver;
+
+		connectedCallback() {
+			this.controller?.abort();
+			this.observer?.disconnect();
+			this.controller = new AbortController();
+			const { signal } = this.controller;
+			const select = this.querySelector('select');
+			const trigger = this.querySelector<HTMLButtonElement>('[role="combobox"]');
+			const list = this.querySelector<HTMLElement>('[role="listbox"]');
+			const value = this.querySelector<HTMLElement>('[data-select-value]');
+			const options = [...this.querySelectorAll<HTMLElement>('[role="option"]')];
+			if (!select || !trigger || !list || !value || !options.length) return;
+			let open = false;
+			let active = 0;
+			let search = '';
+			let lastSearch = 0;
+
+			const position = () => {
+				const bounds = trigger.getBoundingClientRect();
+				const below = innerHeight - bounds.bottom - 16;
+				const above = bounds.top - 96;
+				const upwards = below < Math.min(300, options.length * 44 + 12) && above > below;
+				this.dataset.placement = upwards ? 'top' : 'bottom';
+				list.style.maxHeight = `${Math.max(44, Math.min(300, upwards ? above : below))}px`;
+			};
+			const setActive = (index: number) => {
+				active = Math.max(0, Math.min(index, options.length - 1));
+				options.forEach((option, i) => option.toggleAttribute('data-active', i === active));
+				trigger.setAttribute('aria-activedescendant', options[active]!.id);
+				options[active]?.scrollIntoView({ block: 'nearest' });
+			};
+			const close = () => {
+				open = false;
+				list.hidden = true;
+				trigger.setAttribute('aria-expanded', 'false');
+				trigger.removeAttribute('aria-activedescendant');
+				this.removeAttribute('data-open');
+				search = '';
+			};
+			const sync = () => {
+				value.textContent = select.selectedOptions[0]?.textContent ?? '';
+				trigger.toggleAttribute('data-placeholder', !select.value);
+				trigger.disabled = select.disabled;
+				trigger.setAttribute('aria-invalid', select.getAttribute('aria-invalid') ?? 'false');
+				trigger.setAttribute('aria-required', String(select.required));
+				options.forEach((option) => option.setAttribute('aria-selected', String(option.dataset.value === select.value)));
+				if (select.disabled) close();
+			};
+			const show = () => {
+				if (select.disabled) return;
+				open = true;
+				list.hidden = false;
+				trigger.setAttribute('aria-expanded', 'true');
+				this.setAttribute('data-open', '');
+				position();
+				setActive(Math.max(0, options.findIndex((option) => option.dataset.value === select.value)));
+			};
+			const commit = () => {
+				const next = options[active]?.dataset.value;
+				if (next !== undefined && next !== select.value) {
+					select.value = next;
+					select.dispatchEvent(new Event('input', { bubbles: true }));
+					select.dispatchEvent(new Event('change', { bubbles: true }));
+				}
+				sync();
+				close();
+			};
+
+			trigger.addEventListener('click', () => open ? close() : show(), { signal });
+			trigger.addEventListener('keydown', (event) => {
+				if (event.key === 'Tab') {
+					if (open) commit();
+					return;
+				}
+				if (event.key === 'Escape') {
+					if (open) { event.preventDefault(); event.stopPropagation(); close(); }
+					return;
+				}
+				if (['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+					event.preventDefault();
+					const wasOpen = open;
+					if (!open) show();
+					if (event.key === 'Home') setActive(0);
+					else if (event.key === 'End') setActive(options.length - 1);
+					else if (wasOpen && event.key === 'ArrowDown') setActive(active + 1);
+					else if (wasOpen && event.key === 'ArrowUp') setActive(active - 1);
+					else if (wasOpen && (event.key === 'Enter' || event.key === ' ')) commit();
+					return;
+				}
+				if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+					event.preventDefault();
+					if (!open) show();
+					const now = Date.now();
+					search = (now - lastSearch > 700 ? '' : search) + event.key.toLocaleLowerCase('es');
+					lastSearch = now;
+					const normalize = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('es');
+					const repeated = [...search].every((letter) => letter === search[0]);
+					const term = repeated ? search[0]! : search;
+					const start = repeated ? active + 1 : active;
+					const order = [...options.slice(start), ...options.slice(0, start)];
+					const match = order.find((option) => normalize(option.textContent?.trim() ?? '').startsWith(normalize(term)));
+					if (match) setActive(options.indexOf(match));
+				}
+			}, { signal });
+			list.addEventListener('pointerdown', (event) => {
+				// Keep focus on the combobox until the option's click commits the value.
+				event.preventDefault();
+			}, { signal });
+			list.addEventListener('click', (event) => {
+				const option = (event.target as Element).closest<HTMLElement>('[role="option"]');
+				if (!option || !options.includes(option)) return;
+				active = options.indexOf(option);
+				commit();
+				trigger.focus({ preventScroll: true });
+			}, { signal });
+			this.addEventListener('focusout', (event) => {
+				if (!this.contains(event.relatedTarget as Node | null)) close();
+			}, { signal });
+			document.addEventListener('pointerdown', (event) => {
+				if (!this.contains(event.target as Node)) close();
+			}, { signal });
+			window.addEventListener('resize', () => { if (open) position(); }, { signal });
+			window.addEventListener('scroll', () => { if (open) position(); }, { signal, capture: true, passive: true });
+			select.addEventListener('focus', () => trigger.focus({ preventScroll: true }), { signal });
+			trigger.addEventListener('blur', () => select.dispatchEvent(new Event('blur')), { signal });
+			select.addEventListener('change', sync, { signal });
+			select.addEventListener('input', sync, { signal });
+			select.form?.addEventListener('reset', () => queueMicrotask(() => {
+				close();
+				sync();
+				select.dispatchEvent(new Event('change', { bubbles: true }));
+			}), { signal });
+			this.observer = new MutationObserver(sync);
+			this.observer.observe(select, { attributes: true, attributeFilter: ['aria-invalid', 'disabled', 'required'] });
+			select.tabIndex = -1;
+			select.setAttribute('aria-hidden', 'true');
+			trigger.hidden = false;
+			this.setAttribute('data-enhanced', '');
+			close();
+			sync();
+		}
+
+		disconnectedCallback() {
+			this.controller?.abort();
+			this.observer?.disconnect();
+		}
+	}
+
+	if (!customElements.get('lobo-select')) customElements.define('lobo-select', LoboSelect);
+</script>
+
+<style>
+	.form-select {
+		position: relative;
+		display: block;
+	}
+
+	.form-select[data-enhanced] .form-select__native {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		min-height: 0;
+		padding: 0;
+		border: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	.form-select__trigger {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		width: 100%;
+		min-height: 46px;
+		padding: 12px 0 8px;
+		border: 0;
+		border-bottom: 1px solid #707070;
+		color: var(--color-soft);
+		background: transparent;
+		font: inherit;
+		font-size: 16px;
+		line-height: 1.5;
+		text-align: left;
+		cursor: pointer;
+		transition: border-color 160ms ease, box-shadow 160ms ease;
+	}
+
+	.form-select__trigger[hidden],
+	.form-select__options[hidden] {
+		display: none;
+	}
+
+	.form-select__trigger[data-placeholder] {
+		color: #a8a8a8;
+	}
+
+	.form-select__trigger:hover,
+	.form-select__trigger:focus-visible,
+	.form-select__trigger[aria-expanded='true'] {
+		border-bottom-color: var(--color-white);
+	}
+
+	.form-select__trigger:focus-visible {
+		outline: none;
+		box-shadow: 0 1px 0 var(--color-white);
+	}
+
+	.form-select__trigger[aria-invalid='true'] {
+		border-bottom-color: #ff9ab3;
+	}
+
+	.form-select__chevron {
+		flex-shrink: 0;
+		transition: transform 180ms ease;
+	}
+
+	.form-select__trigger[aria-expanded='true'] .form-select__chevron {
+		transform: rotate(180deg);
+	}
+
+	.form-select__options {
+		position: absolute;
+		top: calc(100% + 8px);
+		z-index: 10;
+		width: 100%;
+		margin: 0;
+		padding: 6px;
+		border: 1px solid #4a4a4a;
+		border-radius: 12px;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		list-style: none;
+		color: var(--color-soft);
+		background: #262626;
+		box-shadow: 0 16px 40px rgb(0 0 0 / 30%);
+		scroll-padding-block: 6px;
+		scrollbar-width: thin;
+		scrollbar-color: #686868 transparent;
+	}
+
+	.form-select[data-placement='top'] .form-select__options {
+		top: auto;
+		bottom: calc(100% + 8px);
+	}
+
+	.form-select__option {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		min-height: 44px;
+		padding: 10px 12px;
+		border-radius: 7px;
+		font-size: 15px;
+		font-weight: 400;
+		line-height: 1.5;
+		cursor: pointer;
+	}
+
+	.form-select__option svg {
+		flex-shrink: 0;
+		color: #ff83a1;
+		opacity: 0;
+	}
+
+	.form-select__option[data-active],
+	.form-select__option:hover {
+		background: #353535;
+	}
+
+	.form-select__option[aria-selected='true'] {
+		background: rgb(193 2 48 / 20%);
+	}
+
+	.form-select__option[aria-selected='true'] svg {
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.form-select__trigger,
+		.form-select__chevron {
+			transition: none;
+		}
+	}
+</style>

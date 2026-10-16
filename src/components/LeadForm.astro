@@ -1,100 +1,190 @@
-<section class="lead-form" id="contacto" aria-labelledby="lead-form-title">
+---
+import FormSelect from './FormSelect.astro';
+import {
+	contactProducts,
+	defaultContactCopy,
+	privacyUrl,
+	contactEmail,
+	type ContactProduct,
+} from '../data/contact';
+
+interface Props {
+	product?: ContactProduct;
+	sectionId?: string;
+}
+
+const { product, sectionId = 'contacto' } = Astro.props;
+const selectedProduct = contactProducts.find((item) => item.id === product);
+const copy = selectedProduct ?? defaultContactCopy;
+const fieldId = (name: string) => `${sectionId}-${name}`;
+---
+
+<section class="lead-form" id={sectionId} aria-labelledby={fieldId('title')}>
 	<div class="lead-form__inner">
-		<h2 id="lead-form-title">Obtén tu aprobación en minutos</h2>
-		<form id="quote-form" novalidate>
-			<div class="form-field">
-				<label for="name">Tu nombre</label>
-				<input id="name" name="name" type="text" autocomplete="name" placeholder="Nombre y apellido" required aria-describedby="name-error" />
-				<p class="form-error" id="name-error" aria-live="polite"></p>
+		<header class="lead-form__heading">
+			<h2 id={fieldId('title')} data-contact-title>{copy.title}</h2>
+			<p data-contact-description>{copy.description}</p>
+		</header>
+
+		<form data-contact-form novalidate method="post">
+			<div class="lead-form__fields" data-contact-fields data-no-amount={!copy.showAmount || undefined}>
+				<div class="form-field">
+					<label for={fieldId('name')}>Nombre</label>
+					<input id={fieldId('name')} name="name" type="text" autocomplete="name" placeholder="Nombre y apellido" required minlength="2" maxlength="100" aria-describedby={fieldId('name-error')} />
+					<p class="form-error" id={fieldId('name-error')}></p>
+				</div>
+				<div class="form-field">
+					<label for={fieldId('email')}>Correo</label>
+					<input id={fieldId('email')} name="email" type="email" autocomplete="email" placeholder="tu@correo.com" required maxlength="254" aria-describedby={fieldId('email-error')} />
+					<p class="form-error" id={fieldId('email-error')}></p>
+				</div>
+				<div class="form-field">
+					<label id={fieldId('product-label')} for={fieldId('product')}>Producto de interés</label>
+					<FormSelect
+						id={fieldId('product')}
+						name="product"
+						labelId={fieldId('product-label')}
+						options={contactProducts}
+						value={selectedProduct?.value}
+						required
+						describedBy={fieldId('product-error')}
+					/>
+					<p class="form-error" id={fieldId('product-error')}></p>
+				</div>
+				<div class="form-field">
+					<label for={fieldId('company')} data-contact-activity-label>{copy.activityLabel}</label>
+					<input id={fieldId('company')} name="company" type="text" autocomplete="organization" placeholder={copy.activityPlaceholder} maxlength="120" aria-describedby={fieldId('company-error')} />
+					<p class="form-error" id={fieldId('company-error')}></p>
+				</div>
+				<div class="form-field form-field--phone">
+					<label for={fieldId('phone')}>Teléfono <span>(opcional)</span></label>
+					<input id={fieldId('phone')} name="phone" type="tel" autocomplete="tel" placeholder="Número con lada" maxlength="40" aria-describedby={fieldId('phone-error')} />
+					<p class="form-error" id={fieldId('phone-error')}></p>
+				</div>
+				<div class="form-field" data-contact-amount hidden={!copy.showAmount}>
+					<label for={fieldId('amount')}>Monto estimado en MXN <span>(opcional)</span></label>
+					<input id={fieldId('amount')} name="amount" type="number" inputmode="decimal" min="1" max="999999999.99" step="0.01" placeholder="Monto que tienes en mente" disabled={!copy.showAmount} aria-describedby={fieldId('amount-error')} />
+					<p class="form-error" id={fieldId('amount-error')}></p>
+				</div>
+				<div class="form-field form-field--wide">
+					<label for={fieldId('message')} data-contact-message-label>{copy.messageLabel}</label>
+					<textarea id={fieldId('message')} name="message" rows="3" maxlength="800" placeholder={copy.messagePlaceholder} aria-describedby={`${fieldId('message-help')} ${fieldId('message-error')}`}></textarea>
+					<p class="form-error" id={fieldId('message-error')}></p>
+				</div>
 			</div>
 
-			<div class="form-field">
-				<label for="company">Empresa o actividad</label>
-				<input id="company" name="company" type="text" autocomplete="organization" placeholder="Nombre de tu empresa y actividad" required aria-describedby="company-error" />
-				<p class="form-error" id="company-error" aria-live="polite"></p>
+			<div class="lead-form__privacy" id={fieldId('notice')}>
+				<p>
+					Lobos Gestión Empresarial, S.A. de C.V., SOFOM, E.N.R., con domicilio en Calle Valentín Gómez Farías No. 16, Piso 2, Col. Tabacalera, Cuauhtémoc, C.P. 06030, Ciudad de México, usará los datos que compartas para responder y dar seguimiento a tu consulta. Consulta la conservación de tus datos y los medios para ejercer tus derechos en el <a href={privacyUrl} target="_blank" rel="noopener noreferrer">aviso de privacidad</a>.
+				</p>
 			</div>
-
-			<div class="form-field">
-				<label for="product">Producto de interés</label>
-				<select id="product" name="product" required aria-describedby="product-error">
-					<option value="">Selecciona una opción</option>
-					<option>Préstamos Personales</option>
-					<option>Créditos PyMEs</option>
-					<option>Arrendamiento</option>
-					<option>Factoraje</option>
-					<option>Tarjeta de Crédito</option>
-				</select>
-				<p class="form-error" id="product-error" aria-live="polite"></p>
-			</div>
-
 			<div class="privacy-field">
-				<input id="privacy" name="privacy" type="checkbox" required aria-describedby="privacy-error" />
-				<label for="privacy">He leído el aviso de privacidad aplicable a esta solicitud de contacto.</label>
-				<p class="form-error" id="privacy-error" aria-live="polite"></p>
+				<input id={fieldId('privacy')} name="privacy" type="checkbox" required aria-describedby={`${fieldId('notice')} ${fieldId('privacy-error')}`} />
+				<label for={fieldId('privacy')}>He leído el <a href={privacyUrl} target="_blank" rel="noopener noreferrer">aviso de privacidad</a> y acepto el tratamiento de mis datos para responder y dar seguimiento a esta consulta.</label>
+				<p class="form-error" id={fieldId('privacy-error')}></p>
 			</div>
-
-			<button class="button button--light button--form lead-form__submit" type="submit">Cotiza tu Arrendamiento</button>
-			<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+			<div class="lead-form__actions">
+				<button class="button button--light button--form lead-form__submit" type="submit" disabled>Enviar consulta</button>
+			</div>
+			<p class="form-status" role="status" aria-live="polite" data-contact-status></p>
+			<noscript><p class="form-help">Para preparar la consulta, activa JavaScript o escríbenos a <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p></noscript>
 		</form>
-
-		<p class="lead-form__privacy">Tus datos están protegidos por nuestra <span aria-disabled="true">Política de Privacidad.</span></p>
 	</div>
 </section>
 
 <script>
-	const initializeLeadForm = () => {
-	const form = document.querySelector<HTMLFormElement>('#quote-form');
-	if (form?.dataset.initialized) return;
-	if (form) form.dataset.initialized = 'true';
-	const productSelect = document.querySelector<HTMLSelectElement>('#product');
-	const status = document.querySelector<HTMLElement>('#form-status');
-	const messages: Record<string, string> = {
-		name: 'Escribe tu nombre y apellido.',
-		company: 'Escribe el nombre de tu empresa o actividad.',
-		product: 'Selecciona un producto de interés.',
-		privacy: 'Debes aceptar el aviso de privacidad para continuar.',
-	};
+	import { contactProducts, defaultContactCopy } from '../data/contact';
+	import { buildContactMailto, resolveContactProduct, validateContactField, type ContactDraft } from '../lib/contact-form';
 
-	const setFieldState = (field: HTMLInputElement | HTMLSelectElement) => {
-		const error = document.querySelector<HTMLElement>(`#${field.id}-error`);
-		const invalid = !field.validity.valid;
-		field.setAttribute('aria-invalid', String(invalid));
-		if (error) error.textContent = invalid ? messages[field.name] ?? 'Revisa este campo.' : '';
-		return !invalid;
-	};
+	type Field = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
-	const requestedProduct = new URLSearchParams(window.location.search).get('producto');
-	if (productSelect && requestedProduct && [...productSelect.options].some((option) => option.value === requestedProduct)) {
-		productSelect.value = requestedProduct;
-		setFieldState(productSelect);
-	}
+	const initializeLeadForms = () => {
+		document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+			if (form.dataset.initialized) return;
+			const section = form.closest<HTMLElement>('.lead-form');
+			const product = form.querySelector<HTMLSelectElement>('[name="product"]');
+			const status = form.querySelector<HTMLElement>('[data-contact-status]');
+			const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
+			if (!section || !product || !status || !submit) return;
+			form.dataset.initialized = 'true';
+			const fields = [...form.querySelectorAll<Field>('input, select, textarea')];
 
-	form?.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select').forEach((field) => {
-		field.addEventListener('input', () => setFieldState(field));
-		field.addEventListener('change', () => setFieldState(field));
-	});
+			const setFieldState = (field: Field) => {
+				const value = field instanceof HTMLInputElement && field.type === 'checkbox' ? field.checked : field.value;
+				let message = field.disabled ? '' : validateContactField(field.name, value);
+				if (!message && !field.disabled && !field.validity.valid) {
+					message = field.type === 'email' ? 'Escribe un correo válido.' : 'Revisa este campo.';
+				}
+				field.setAttribute('aria-invalid', String(Boolean(message)));
+				const error = document.getElementById(`${field.id}-error`);
+				if (error) error.textContent = message;
+				return !message;
+			};
 
-	document.querySelectorAll<HTMLElement>('[data-product]').forEach((cta) => {
-		cta.addEventListener('click', () => {
-			if (!productSelect) return;
-			productSelect.value = cta.dataset.product ?? '';
-			setFieldState(productSelect);
+			const updateProduct = () => {
+				const id = resolveContactProduct(product.value);
+				const copy = contactProducts.find((item) => item.id === id) ?? defaultContactCopy;
+				const title = section.querySelector('[data-contact-title]');
+				const description = section.querySelector('[data-contact-description]');
+				const activityLabel = form.querySelector('[data-contact-activity-label]');
+				const activity = form.querySelector<HTMLInputElement>('[name="company"]');
+				const messageLabel = form.querySelector('[data-contact-message-label]');
+				const message = form.querySelector<HTMLTextAreaElement>('[name="message"]');
+				const amount = form.querySelector<HTMLInputElement>('[name="amount"]');
+				const amountField = form.querySelector<HTMLElement>('[data-contact-amount]');
+				const grid = form.querySelector<HTMLElement>('[data-contact-fields]');
+				if (title) title.textContent = copy.title;
+				if (description) description.textContent = copy.description;
+				if (activityLabel) activityLabel.textContent = copy.activityLabel;
+				if (activity) activity.placeholder = copy.activityPlaceholder;
+				if (messageLabel) messageLabel.textContent = copy.messageLabel;
+				if (message) message.placeholder = copy.messagePlaceholder;
+				if (amountField) amountField.hidden = !copy.showAmount;
+				if (grid) grid.toggleAttribute('data-no-amount', !copy.showAmount);
+				if (amount) {
+					amount.disabled = !copy.showAmount;
+					if (amount.disabled) setFieldState(amount);
+				}
+			};
+
+			const requested = resolveContactProduct(new URLSearchParams(window.location.search).get('producto'));
+			const requestedProduct = contactProducts.find((item) => item.id === requested);
+			if (requestedProduct) {
+				product.value = requestedProduct.value;
+				product.dispatchEvent(new Event('change', { bubbles: true }));
+			}
+			updateProduct();
+			product.addEventListener('change', updateProduct);
+
+			fields.forEach((field) => {
+				field.addEventListener('blur', () => setFieldState(field));
+				field.addEventListener('input', () => {
+					status.textContent = '';
+					if (field.getAttribute('aria-invalid') === 'true') setFieldState(field);
+				});
+				field.addEventListener('change', () => setFieldState(field));
+			});
+
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+				status.textContent = '';
+				const invalid = fields.filter((field) => !setFieldState(field));
+				if (invalid.length) {
+					status.textContent = 'Revisa los campos indicados para continuar.';
+					invalid[0]?.focus();
+					return;
+				}
+				const data = new FormData(form);
+				const draft = Object.fromEntries(['name', 'email', 'product', 'company', 'phone', 'amount', 'message'].map((name) => [name, String(data.get(name) ?? '').trim()])) as ContactDraft;
+				// The static prototype uses email until its own contact service is connected.
+				const mailto = buildContactMailto(draft);
+				status.textContent = 'Consulta preparada. Revisa y envía el correo desde tu aplicación. Tus datos siguen disponibles aquí.';
+				window.location.href = mailto;
+			});
+			submit.disabled = false;
 		});
-	});
-
-	form?.addEventListener('submit', (event) => {
-		event.preventDefault();
-		if (status) status.textContent = '';
-		const fields = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
-		const firstInvalid = fields.find((field) => !setFieldState(field));
-		if (firstInvalid) {
-			firstInvalid.focus();
-			return;
-		}
-		if (status) status.textContent = 'Formulario validado correctamente. El envío de datos estará disponible próximamente.';
-	});
 	};
 
-	initializeLeadForm();
-	document.addEventListener('astro:page-load', initializeLeadForm);
+	initializeLeadForms();
+	document.addEventListener('astro:page-load', initializeLeadForms);
 </script>
