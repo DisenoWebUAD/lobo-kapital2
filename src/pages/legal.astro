@@ -1,0 +1,351 @@
+---
+import '@fontsource-variable/figtree/wght.css';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LegalText from '../components/LegalText.astro';
+import { legalEntity, legalLinks } from '../data/legal';
+import { privacySections } from '../data/privacy-notice';
+import logoMark from '../assets/home/logo-mark.svg';
+import '../styles/global.css';
+
+const contents = [
+	{ href: '#institucion', label: 'Información institucional' },
+	{ href: '#privacidad', label: 'Aviso de privacidad' },
+	{ href: '#arco', label: 'Derechos ARCO' },
+	{ href: '#sitio', label: 'Información sobre este sitio' },
+	{ href: '#condiciones', label: 'Condiciones generales' },
+	{ href: legalLinks.une, label: 'UNE · Atención a usuarios' },
+];
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="Información institucional, aviso de privacidad integral, condiciones generales y medios de atención a usuarios de Lobo Kapital." />
+		<meta name="theme-color" content="#c10230" />
+		<link rel="icon" type="image/svg+xml" href={logoMark.src} />
+		<title>Información legal | Lobo Kapital</title>
+		<ClientRouter />
+	</head>
+	<body>
+		<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+		<Header />
+		<main id="main-content" class="legal-page" tabindex="-1" transition:name="page-main" transition:animate="fade">
+			<header class="legal-page__heading">
+				<h1>Información <span>legal</span></h1>
+				<p>Consulta cómo protegemos tus datos, las condiciones generales del sitio y nuestros medios de atención.</p>
+			</header>
+
+			<div class="legal-page__layout">
+				<nav class="legal-index" aria-label="Contenido de la página legal">
+					<p>En esta página</p>
+					<ul>
+						{contents.map(({ href, label }) => <li><a href={href}>{label}</a></li>)}
+					</ul>
+				</nav>
+
+				<div class="legal-content">
+					<section id="institucion" class="legal-section" aria-labelledby="institution-title">
+						<h2 id="institution-title">Información institucional</h2>
+						<p><strong>{legalEntity.name}</strong> opera bajo la marca comercial Lobo Kapital y forma parte de Grupo Lobo.</p>
+						<p>Como Sociedad Financiera de Objeto Múltiple, Entidad No Regulada, no requiere autorización de la Secretaría de Hacienda y Crédito Público. Está sujeta a la supervisión de la Comisión Nacional Bancaria y de Valores únicamente para efectos de lo dispuesto por el artículo 95 Bis de la Ley General de Organizaciones y Actividades Auxiliares del Crédito.</p>
+						<p>No capta depósitos del público. Toda operación está sujeta a análisis, autorización, formalización y a las disposiciones aplicables.</p>
+						<div class="legal-address">
+							<p class="legal-label">Domicilio institucional y del responsable de los datos</p>
+							<address>{legalEntity.address}</address>
+						</div>
+					</section>
+
+					<section id="privacidad" class="legal-section" aria-labelledby="privacy-title">
+						<h2 id="privacy-title">Aviso de privacidad integral</h2>
+						<p class="legal-date">Última actualización del aviso: <time datetime={legalEntity.privacyUpdatedAt}>{legalEntity.privacyUpdatedLabel}</time>.</p>
+						<p>{legalEntity.name} (“Lobos”), con domicilio en {legalEntity.address.replace(/\.$/, '')}, es responsable del tratamiento y protección de los datos personales de sus prospectos, solicitantes, Clientes y Usuarios, así como de las personas físicas vinculadas con Personas Morales cuando su identificación resulte aplicable.</p>
+
+						{privacySections.map(({ id, title, blocks }, index) => (
+							<section id={id} class="privacy-section" aria-labelledby={`privacy-${id}-title`}>
+								<h3 id={`privacy-${id}-title`}><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>{title}</h3>
+								{blocks.map((block) => block.kind === 'paragraph' ? (
+									<p><LegalText text={block.text} /></p>
+								) : (
+									<ul>{block.items.map((item) => <li><LegalText text={item} /></li>)}</ul>
+								))}
+							</section>
+						))}
+					</section>
+
+					<section id="sitio" class="legal-section" aria-labelledby="site-title">
+						<h2 id="site-title">Información sobre este sitio</h2>
+						<p>Esta sección describe las funciones habilitadas en este sitio y complementa el aviso integral.</p>
+						<h3>Consultas de contacto</h3>
+						<p>El formulario permite pedir información. Los datos que compartas se utilizan para responder y dar seguimiento a tu consulta. Este contacto no inicia una solicitud formal de crédito, no autoriza consultas al Buró de Crédito ni comunicaciones publicitarias.</p>
+						<p>Al enviar el formulario se abre tu aplicación de correo con un borrador dirigido al correo institucional. Puedes revisarlo antes de enviarlo; completar el formulario por sí solo no envía la consulta.</p>
+						<p>No incluyas contraseñas, NIP, códigos de acceso, datos bancarios ni documentos personales en tu mensaje.</p>
+						<h3>Simuladores</h3>
+						<p>Los simuladores procesan los montos y las opciones en la memoria de tu navegador, sin enviarlos ni guardarlos. Sus resultados son estimaciones y no constituyen una decisión automatizada de crédito ni una autorización.</p>
+						<h3>Datos y conservación</h3>
+						<p>Este sitio no solicita geolocalización, biometría ni documentos para consultar información o utilizar los simuladores.</p>
+						<p>Para el seguimiento inicial, las solicitudes y correos de contacto se conservan durante 12 meses desde la última interacción, salvo que una relación jurídica u obligación aplicable requiera otro periodo conforme al aviso integral. Este plazo se administra en el buzón institucional.</p>
+					</section>
+
+					<section id="condiciones" class="legal-section" aria-labelledby="conditions-title">
+						<h2 id="conditions-title">Condiciones generales</h2>
+						<p>Este sitio es informativo y no constituye una oferta ni garantiza el otorgamiento de crédito. Pedir información no te obliga a contratar.</p>
+						<p>Los montos, plazos y condiciones publicados están sujetos a evaluación. Cada solicitud requiere la revisión de identidad, información y documentación, historial crediticio, capacidad de pago, riesgos y garantías que correspondan.</p>
+						<p>Los simuladores utilizan supuestos de referencia, indicados junto a cada cálculo. La tasa, las comisiones, los seguros y las condiciones definitivas deberán confirmarse en una propuesta individual. El CAT publicado corresponde a la modalidad y a los supuestos indicados en su propia descripción.</p>
+						<p>Antes de contratar, solicita una propuesta completa con monto, plazo, tasa, CAT, comisiones, garantías, calendario de pagos y costo total. Toda operación requiere autorización y formalización conforme a las disposiciones aplicables.</p>
+					</section>
+
+					<section id="atencion" class="legal-section" aria-labelledby="attention-title">
+						<h2 id="attention-title">Atención a usuarios</h2>
+						<p>Para consultas, aclaraciones y reclamaciones, consulta los medios de contacto de la <a href={legalLinks.une}>Unidad Especializada de Atención a Usuarios (UNE)</a>.</p>
+					</section>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.legal-page {
+		width: min(calc(100% - 96px), 1276px);
+		margin-inline: auto;
+		padding-block: 172px 112px;
+	}
+
+	.legal-page__heading {
+		max-width: 760px;
+		margin-bottom: 80px;
+	}
+
+	h1 {
+		margin-bottom: 24px;
+		color: #000;
+		font-size: clamp(40px, 4.5vw, 60px);
+		font-weight: 700;
+		line-height: 1.08;
+		letter-spacing: -0.035em;
+	}
+
+	h1 span {
+		color: var(--color-primary);
+	}
+
+	.legal-page__heading > p {
+		max-width: 620px;
+		color: var(--color-muted);
+		font-size: 19px;
+		line-height: 1.55;
+	}
+
+	.legal-page__layout {
+		display: grid;
+		grid-template-columns: 228px minmax(0, 1fr);
+		align-items: start;
+		gap: 80px;
+	}
+
+	.legal-index {
+		position: sticky;
+		top: 124px;
+		padding-block: 6px;
+		font-size: 15px;
+		line-height: 1.45;
+	}
+
+	.legal-index > p {
+		margin-bottom: 20px;
+		color: #000;
+		font-weight: 600;
+	}
+
+	.legal-index ul {
+		display: grid;
+		gap: 4px;
+		padding: 0;
+		list-style: none;
+	}
+
+	.legal-index a {
+		display: block;
+		padding: 9px 0 9px 16px;
+		border-left: 1px solid #dedede;
+		transition: color 150ms ease, border-color 150ms ease;
+	}
+
+	.legal-index a:hover,
+	.legal-index a:focus-visible {
+		border-color: var(--color-primary);
+		color: var(--color-primary);
+	}
+
+	.legal-content {
+		min-width: 0;
+		font-size: 16px;
+		line-height: 1.75;
+		overflow-wrap: anywhere;
+	}
+
+	.legal-section,
+	.privacy-section {
+		scroll-margin-top: 120px;
+	}
+
+	.legal-section + .legal-section {
+		margin-top: 64px;
+		padding-top: 56px;
+		border-top: 1px solid #dedede;
+	}
+
+	h2 {
+		margin-bottom: 24px;
+		color: #000;
+		font-size: 32px;
+		font-weight: 650;
+		line-height: 1.2;
+		letter-spacing: -0.025em;
+	}
+
+	h3 {
+		margin-block: 32px 16px;
+		color: var(--color-text);
+		font-size: 21px;
+		font-weight: 600;
+		line-height: 1.35;
+		letter-spacing: -0.015em;
+	}
+
+	.legal-content p + p {
+		margin-top: 16px;
+	}
+
+	.legal-content :global(a) {
+		text-decoration: underline;
+		text-decoration-color: #b8b8b8;
+		text-underline-offset: 4px;
+	}
+
+	.legal-content :global(a:hover) {
+		color: var(--color-primary);
+		text-decoration-color: currentColor;
+	}
+
+	.legal-address {
+		margin-top: 28px;
+		padding: 24px 28px;
+		border-radius: 16px;
+		background: var(--color-surface);
+	}
+
+	.legal-label {
+		margin-bottom: 10px;
+		color: #696967;
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 1.5;
+	}
+
+	address {
+		font-style: normal;
+	}
+
+	.legal-date {
+		margin-bottom: 24px;
+		color: #696967;
+		font-size: 14px;
+	}
+
+	.privacy-section {
+		margin-top: 36px;
+	}
+
+	.privacy-section h3 {
+		display: flex;
+		align-items: baseline;
+		gap: 16px;
+	}
+
+	.privacy-section h3 span {
+		flex-shrink: 0;
+		color: var(--color-primary);
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0;
+	}
+
+	.privacy-section ul {
+		padding-left: 22px;
+	}
+
+	.privacy-section li + li {
+		margin-top: 10px;
+	}
+
+	.privacy-section li::marker {
+		color: var(--color-primary);
+	}
+
+	.privacy-section ul + p,
+	.privacy-section p + ul {
+		margin-top: 16px;
+	}
+
+	@media (max-width: 1000px) {
+		.legal-page__layout {
+			grid-template-columns: 200px minmax(0, 1fr);
+			gap: 40px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.legal-page {
+			width: calc(100% - 40px);
+			padding-block: 140px 72px;
+		}
+
+		.legal-page__heading {
+			margin-bottom: 40px;
+		}
+
+		.legal-page__heading > p {
+			font-size: 17px;
+		}
+
+		.legal-page__layout {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 48px;
+		}
+
+		.legal-index {
+			position: static;
+			padding: 24px;
+			border-radius: 16px;
+			background: var(--color-surface);
+		}
+
+		.legal-index > p {
+			margin-bottom: 12px;
+		}
+
+		.legal-section + .legal-section {
+			margin-top: 48px;
+			padding-top: 40px;
+		}
+
+		h2 {
+			font-size: 28px;
+		}
+
+		h3 {
+			font-size: 20px;
+		}
+
+		.legal-address {
+			padding: 24px;
+		}
+	}
+</style>

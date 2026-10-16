@@ -1,3 +1,5 @@
+import { legalLinks } from './legal.ts';
+
 export type ContactProduct = 'personal' | 'business' | 'cards' | 'lease' | 'factoring';
 
 interface ContactCopy {
@@ -89,5 +91,5 @@ export const defaultContactCopy: ContactCopy = {
 	showAmount: true,
 };
 
-export const privacyUrl = 'https://www.lobokapital.mx/privacidad';
+export const privacyUrl = legalLinks.privacy;
 export const contactEmail = 'contacto@lobokapital.mx';
