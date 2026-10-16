@@ -5,66 +5,106 @@
 		homeMotionController?.abort();
 		homeMotionController = new AbortController();
 		const { signal } = homeMotionController;
-		const page = document.querySelector<HTMLElement>('body[data-page="home"]');
-		const header = document.querySelector<HTMLElement>('.site-header');
+		const page = document.querySelector<HTMLElement>(
+			'body[data-page="home"]',
+		);
+		const header = document.querySelector<HTMLElement>(".site-header");
 
 		if (!page) {
-			header?.removeAttribute('data-scrolled');
+			header?.removeAttribute("data-scrolled");
 			return;
 		}
 
-		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-		const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-		const revealElements = [...page.querySelectorAll<HTMLElement>('[data-reveal]')];
-		reducedMotion.addEventListener('change', initializeHomeMotion, { once: true, signal });
-
-		page.querySelectorAll<HTMLElement>('[data-reveal-group]').forEach((group) => {
-			const step = Number(group.dataset.revealGroup) || 80;
-			group.querySelectorAll<HTMLElement>(':scope > [data-reveal]').forEach((element, index) => {
-				if (!element.dataset.revealDelay) element.style.setProperty('--reveal-delay', `${index * step}ms`);
-			});
+		const reducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		);
+		const finePointer = window.matchMedia(
+			"(hover: hover) and (pointer: fine)",
+		);
+		const revealElements = [
+			...page.querySelectorAll<HTMLElement>("[data-reveal]"),
+		];
+		reducedMotion.addEventListener("change", initializeHomeMotion, {
+			once: true,
+			signal,
 		});
+
+		page.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach(
+			(group) => {
+				const step = Number(group.dataset.revealGroup) || 80;
+				group
+					.querySelectorAll<HTMLElement>(":scope > [data-reveal]")
+					.forEach((element, index) => {
+						if (!element.dataset.revealDelay)
+							element.style.setProperty(
+								"--reveal-delay",
+								`${index * step}ms`,
+							);
+					});
+			},
+		);
 
 		revealElements.forEach((element) => {
 			if (element.dataset.revealDelay) {
-				element.style.setProperty('--reveal-delay', `${Number(element.dataset.revealDelay) || 0}ms`);
+				element.style.setProperty(
+					"--reveal-delay",
+					`${Number(element.dataset.revealDelay) || 0}ms`,
+				);
 			}
 		});
 
 		if (reducedMotion.matches) {
-			page.dataset.motion = 'reduced';
-			revealElements.forEach((element) => element.toggleAttribute('data-revealed', true));
-			const updateReducedMotionHeader = () => header?.toggleAttribute('data-scrolled', window.scrollY > 24);
+			page.dataset.motion = "reduced";
+			revealElements.forEach((element) =>
+				element.toggleAttribute("data-revealed", true),
+			);
+			const updateReducedMotionHeader = () =>
+				header?.toggleAttribute("data-scrolled", window.scrollY > 24);
 			updateReducedMotionHeader();
-			window.addEventListener('scroll', updateReducedMotionHeader, { passive: true, signal });
+			window.addEventListener("scroll", updateReducedMotionHeader, {
+				passive: true,
+				signal,
+			});
 			return;
 		}
 
-		page.dataset.motion = 'ready';
-		const revealObserver = new IntersectionObserver((entries, observer) => {
-			entries.forEach((entry) => {
-				if (!entry.isIntersecting) return;
-				(entry.target as HTMLElement).toggleAttribute('data-revealed', true);
-				observer.unobserve(entry.target);
-			});
-		}, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+		page.dataset.motion = "ready";
+		const revealObserver = new IntersectionObserver(
+			(entries, observer) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
+					(entry.target as HTMLElement).toggleAttribute(
+						"data-revealed",
+						true,
+					);
+					observer.unobserve(entry.target);
+				});
+			},
+			{ threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+		);
 
 		revealElements.forEach((element) => revealObserver.observe(element));
-		signal.addEventListener('abort', () => revealObserver.disconnect(), { once: true });
+		signal.addEventListener("abort", () => revealObserver.disconnect(), {
+			once: true,
+		});
 
 		let headerFrame: number | undefined;
 		const updateHeader = () => {
 			headerFrame = undefined;
-			header?.toggleAttribute('data-scrolled', window.scrollY > 24);
+			header?.toggleAttribute("data-scrolled", window.scrollY > 24);
 		};
 		const scheduleHeaderUpdate = () => {
 			if (headerFrame !== undefined) return;
 			headerFrame = window.requestAnimationFrame(updateHeader);
 		};
 		updateHeader();
-		window.addEventListener('scroll', scheduleHeaderUpdate, { passive: true, signal });
+		window.addEventListener("scroll", scheduleHeaderUpdate, {
+			passive: true,
+			signal,
+		});
 
-		const parallaxElement = page.querySelector<HTMLElement>('[data-parallax]');
+		const parallaxElement =
+			page.querySelector<HTMLElement>("[data-parallax]");
 		let parallaxFrame: number | undefined;
 		let parallaxActive = false;
 		const updateParallax = () => {
@@ -73,9 +113,14 @@
 			const rect = parallaxElement.getBoundingClientRect();
 			const viewportCenter = window.innerHeight / 2;
 			const elementCenter = rect.top + rect.height / 2;
-			const progress = (viewportCenter - elementCenter) / ((window.innerHeight + rect.height) / 2);
+			const progress =
+				(viewportCenter - elementCenter) /
+				((window.innerHeight + rect.height) / 2);
 			const offset = Math.max(-18, Math.min(18, progress * 18));
-			parallaxElement.style.setProperty('--parallax-y', `${offset.toFixed(2)}px`);
+			parallaxElement.style.setProperty(
+				"--parallax-y",
+				`${offset.toFixed(2)}px`,
+			);
 		};
 		const scheduleParallaxUpdate = () => {
 			if (parallaxFrame !== undefined || !parallaxActive) return;
@@ -83,18 +128,36 @@
 		};
 
 		if (parallaxElement) {
-			const parallaxObserver = new IntersectionObserver(([entry]) => {
-				parallaxActive = entry.isIntersecting;
-				parallaxElement.toggleAttribute('data-parallax-active', parallaxActive);
-				if (parallaxActive) scheduleParallaxUpdate();
-			}, { rootMargin: '20% 0px' });
+			const parallaxObserver = new IntersectionObserver(
+				([entry]) => {
+					parallaxActive = entry.isIntersecting;
+					parallaxElement.toggleAttribute(
+						"data-parallax-active",
+						parallaxActive,
+					);
+					if (parallaxActive) scheduleParallaxUpdate();
+				},
+				{ rootMargin: "20% 0px" },
+			);
 			parallaxObserver.observe(parallaxElement);
-			window.addEventListener('scroll', scheduleParallaxUpdate, { passive: true, signal });
-			window.addEventListener('resize', scheduleParallaxUpdate, { passive: true, signal });
-			signal.addEventListener('abort', () => parallaxObserver.disconnect(), { once: true });
+			window.addEventListener("scroll", scheduleParallaxUpdate, {
+				passive: true,
+				signal,
+			});
+			window.addEventListener("resize", scheduleParallaxUpdate, {
+				passive: true,
+				signal,
+			});
+			signal.addEventListener(
+				"abort",
+				() => parallaxObserver.disconnect(),
+				{ once: true },
+			);
 		}
 
-		const spotlightCards = [...page.querySelectorAll<HTMLElement>('[data-spotlight]')];
+		const spotlightCards = [
+			...page.querySelectorAll<HTMLElement>("[data-spotlight]"),
+		];
 		if (finePointer.matches) {
 			spotlightCards.forEach((card) => {
 				let spotlightFrame: number | undefined;
@@ -102,27 +165,48 @@
 				let pointerY = 0;
 				const renderSpotlight = () => {
 					spotlightFrame = undefined;
-					card.style.setProperty('--spotlight-x', `${pointerX}px`);
-					card.style.setProperty('--spotlight-y', `${pointerY}px`);
+					card.style.setProperty("--spotlight-x", `${pointerX}px`);
+					card.style.setProperty("--spotlight-y", `${pointerY}px`);
 				};
-				card.addEventListener('pointerenter', () => card.toggleAttribute('data-spotlight-active', true), { signal });
-				card.addEventListener('pointermove', (event) => {
-					const rect = card.getBoundingClientRect();
-					pointerX = event.clientX - rect.left;
-					pointerY = event.clientY - rect.top;
-					if (spotlightFrame === undefined) spotlightFrame = window.requestAnimationFrame(renderSpotlight);
-				}, { signal });
-				card.addEventListener('pointerleave', () => card.removeAttribute('data-spotlight-active'), { signal });
+				card.addEventListener(
+					"pointerenter",
+					() => card.toggleAttribute("data-spotlight-active", true),
+					{ signal },
+				);
+				card.addEventListener(
+					"pointermove",
+					(event) => {
+						const rect = card.getBoundingClientRect();
+						pointerX = event.clientX - rect.left;
+						pointerY = event.clientY - rect.top;
+						if (spotlightFrame === undefined)
+							spotlightFrame =
+								window.requestAnimationFrame(renderSpotlight);
+					},
+					{ signal },
+				);
+				card.addEventListener(
+					"pointerleave",
+					() => card.removeAttribute("data-spotlight-active"),
+					{ signal },
+				);
 			});
 		}
 
-		const resetSpotlights = () => spotlightCards.forEach((card) => card.removeAttribute('data-spotlight-active'));
-		window.addEventListener('blur', resetSpotlights, { signal });
-		document.addEventListener('visibilitychange', () => {
-			if (document.visibilityState !== 'visible') resetSpotlights();
-		}, { signal });
+		const resetSpotlights = () =>
+			spotlightCards.forEach((card) =>
+				card.removeAttribute("data-spotlight-active"),
+			);
+		window.addEventListener("blur", resetSpotlights, { signal });
+		document.addEventListener(
+			"visibilitychange",
+			() => {
+				if (document.visibilityState !== "visible") resetSpotlights();
+			},
+			{ signal },
+		);
 	};
 
 	initializeHomeMotion();
-	document.addEventListener('astro:page-load', initializeHomeMotion);
+	document.addEventListener("astro:page-load", initializeHomeMotion);
 </script>

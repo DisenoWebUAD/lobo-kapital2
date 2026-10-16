@@ -1,12 +1,12 @@
 ---
-import { Picture } from 'astro:assets';
-import heroImage from '../assets/home/hero.jpg';
+import { Picture } from "astro:assets";
+import heroImage from "../assets/home/hero.jpg";
 ---
 
 <section class="hero" id="inicio" aria-labelledby="hero-title">
 	<Picture
 		src={heroImage}
-		formats={['avif', 'webp']}
+		formats={["avif", "webp"]}
 		widths={[768, 1280, 1920, 2400]}
 		sizes="100vw"
 		alt=""
@@ -16,16 +16,30 @@ import heroImage from '../assets/home/hero.jpg';
 	/>
 	<div class="hero__shade" aria-hidden="true"></div>
 	<div class="hero__content" data-reveal-group="90">
-		<h1 id="hero-title" data-reveal data-reveal-delay="80">Impulsa tu futuro con<br />financiamiento inteligente.</h1>
-		<p data-reveal>Créditos a tu medida con la transparencia que mereces. Soluciones financieras diseñadas<br class="desktop-only" /> para hacer crecer tu patrimonio y tu negocio.</p>
+		<h1 id="hero-title" data-reveal data-reveal-delay="80">
+			Impulsa tu futuro con<br />financiamiento inteligente.
+		</h1>
+		<p data-reveal>
+			Créditos a tu medida con la transparencia que mereces. Soluciones
+			financieras diseñadas<br class="desktop-only" /> para hacer crecer tu
+			patrimonio y tu negocio.
+		</p>
 		<div class="hero__actions" data-reveal>
-			<a class="button button--primary" href="#contacto">Solicitar ahora <span aria-hidden="true">→</span></a>
+			<a class="button button--primary" href="#contacto"
+				>Solicitar ahora <span aria-hidden="true">→</span></a
+			>
 			<a class="button button--light" href="#soluciones">Conocer más</a>
 		</div>
 	</div>
 	<div class="brand-tab" aria-hidden="true">
-		<svg class="brand-tab__shape" viewBox="0 0 806 220" preserveAspectRatio="none">
-			<path d="M0 0h806C689 71 541 160 458 206c-16 9-32 14-51 14h-8c-19 0-35-5-51-14C265 160 117 71 0 0Z" />
+		<svg
+			class="brand-tab__shape"
+			viewBox="0 0 806 220"
+			preserveAspectRatio="none"
+		>
+			<path
+				d="M0 0h806C689 71 541 160 458 206c-16 9-32 14-51 14h-8c-19 0-35-5-51-14C265 160 117 71 0 0Z"
+			></path>
 		</svg>
 		<div class="brand-tab__logo"><span>LOBO</span><span>KAPITAL</span></div>
 	</div>

@@ -1,30 +1,64 @@
 ---
-import fleetsIcon from '../assets/arrendamiento/flotas-vehiculares.svg';
-import medicalIcon from '../assets/arrendamiento/equipo-medico.svg';
-import machineryIcon from '../assets/arrendamiento/maquinaria-pesada.svg';
-import technologyIcon from '../assets/arrendamiento/tecnologia.svg';
+import fleetsIcon from "../assets/arrendamiento/flotas-vehiculares.svg";
+import medicalIcon from "../assets/arrendamiento/equipo-medico.svg";
+import machineryIcon from "../assets/arrendamiento/maquinaria-pesada.svg";
+import technologyIcon from "../assets/arrendamiento/tecnologia.svg";
 
 const assets = [
-	{ title: 'Flotas Vehiculares', description: 'Autos ejecutivos, utilitarios y vehículos de carga ligera.', icon: fleetsIcon },
-	{ title: 'Equipo Médico', description: 'Resonadores, equipo de diagnóstico y mobiliario clínico especializado.', icon: medicalIcon },
-	{ title: 'Maquinaria Pesada', description: 'Equipamiento para construcción, minería, agricultura y manufactura.', icon: machineryIcon },
-	{ title: 'Tecnología e IT', description: 'Servidores, redes, equipo de cómputo y sistemas de comunicación avanzados.', icon: technologyIcon },
+	{
+		title: "Flotas Vehiculares",
+		description:
+			"Autos ejecutivos, utilitarios y vehículos de carga ligera.",
+		icon: fleetsIcon,
+	},
+	{
+		title: "Equipo Médico",
+		description:
+			"Resonadores, equipo de diagnóstico y mobiliario clínico especializado.",
+		icon: medicalIcon,
+	},
+	{
+		title: "Maquinaria Pesada",
+		description:
+			"Equipamiento para construcción, minería, agricultura y manufactura.",
+		icon: machineryIcon,
+	},
+	{
+		title: "Tecnología e IT",
+		description:
+			"Servidores, redes, equipo de cómputo y sistemas de comunicación avanzados.",
+		icon: technologyIcon,
+	},
 ];
 ---
 
 <section class="lease-assets" aria-labelledby="lease-assets-title">
 	<header class="lease-section-heading">
-		<h2 id="lease-assets-title"><span>Activos</span> Disponibles para Arrendamiento</h2>
-		<p>Soluciones de financiamiento flexibles para una amplia gama de sectores industriales y comerciales.</p>
+		<h2 id="lease-assets-title">
+			<span>Activos</span> Disponibles para Arrendamiento
+		</h2>
+		<p>
+			Soluciones de financiamiento flexibles para una amplia gama de
+			sectores industriales y comerciales.
+		</p>
 	</header>
 
 	<div class="lease-assets__grid">
-		{assets.map((asset) => (
-			<article class="lease-asset-card">
-				<div class="lease-asset-card__icon"><img src={asset.icon.src} alt="" width="116" height="91" /></div>
-				<h3>{asset.title}</h3>
-				<p>{asset.description}</p>
-			</article>
-		))}
+		{
+			assets.map((asset) => (
+				<article class="lease-asset-card">
+					<div class="lease-asset-card__icon">
+						<img
+							src={asset.icon.src}
+							alt=""
+							width="116"
+							height="91"
+						/>
+					</div>
+					<h3>{asset.title}</h3>
+					<p>{asset.description}</p>
+				</article>
+			))
+		}
 	</div>
 </section>

@@ -1,40 +1,56 @@
 ---
-import deductibilityIcon from '../assets/arrendamiento/deducibilidad-fiscal.svg';
-import liquidityIcon from '../assets/arrendamiento/reloj.svg';
-import billsIcon from '../assets/arrendamiento/billetes.svg';
+import deductibilityIcon from "../assets/arrendamiento/deducibilidad-fiscal.svg";
+import liquidityIcon from "../assets/arrendamiento/reloj.svg";
+import billsIcon from "../assets/arrendamiento/billetes.svg";
 
 const benefits = [
 	{
-		title: 'Deducibilidad Fiscal al 100%',
-		description: 'Las rentas pagadas por concepto de arrendamiento puro son consideradas como un gasto operativo, permitiendo deducir hasta el 100% del pago mensual ante las autoridades fiscales, optimizando así tu carga tributaria.',
+		title: "Deducibilidad Fiscal al 100%",
+		description:
+			"Las rentas pagadas por concepto de arrendamiento puro son consideradas como un gasto operativo, permitiendo deducir hasta el 100% del pago mensual ante las autoridades fiscales, optimizando así tu carga tributaria.",
 		icon: deductibilityIcon,
 	},
 	{
-		title: 'Liquidez Mejorada',
-		description: 'Conserva tu capital de trabajo y tus líneas de crédito tradicionales intactas. El arrendamiento no requiere un fuerte desembolso inicial, permitiéndote dirigir tus recursos a inversiones clave para el crecimiento de tu negocio principal.',
+		title: "Liquidez Mejorada",
+		description:
+			"Conserva tu capital de trabajo y tus líneas de crédito tradicionales intactas. El arrendamiento no requiere un fuerte desembolso inicial, permitiéndote dirigir tus recursos a inversiones clave para el crecimiento de tu negocio principal.",
 		icon: liquidityIcon,
 	},
 	{
-		title: 'Liquidez Mejorada',
-		description: 'Conserva tu capital de trabajo y tus líneas de crédito tradicionales intactas. El arrendamiento no requiere un fuerte desembolso inicial, permitiéndote dirigir tus recursos a inversiones clave para el crecimiento de tu negocio principal.',
+		title: "Liquidez Mejorada",
+		description:
+			"Conserva tu capital de trabajo y tus líneas de crédito tradicionales intactas. El arrendamiento no requiere un fuerte desembolso inicial, permitiéndote dirigir tus recursos a inversiones clave para el crecimiento de tu negocio principal.",
 		icon: billsIcon,
 	},
 ];
 ---
 
-<section class="lease-benefits" id="beneficios" aria-labelledby="lease-benefits-title">
+<section
+	class="lease-benefits"
+	id="beneficios"
+	aria-labelledby="lease-benefits-title"
+>
 	<header class="lease-section-heading">
 		<h2 id="lease-benefits-title"><span>Beneficios</span> Financieros</h2>
 		<p>Estrategias inteligentes para el flujo de efectivo.</p>
 	</header>
 
 	<div class="lease-benefits__grid">
-		{benefits.map((benefit) => (
-			<article class="lease-benefit-card">
-				<div class="lease-benefit-card__icon"><img src={benefit.icon.src} alt="" width="49" height="49" /></div>
-				<h3>{benefit.title}</h3>
-				<p>{benefit.description}</p>
-			</article>
-		))}
+		{
+			benefits.map((benefit) => (
+				<article class="lease-benefit-card">
+					<div class="lease-benefit-card__icon">
+						<img
+							src={benefit.icon.src}
+							alt=""
+							width="49"
+							height="49"
+						/>
+					</div>
+					<h3>{benefit.title}</h3>
+					<p>{benefit.description}</p>
+				</article>
+			))
+		}
 	</div>
 </section>

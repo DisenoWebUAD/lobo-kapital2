@@ -1,40 +1,56 @@
 ---
-import workCapitalIcon from '../assets/pymes/capital-trabajo.svg';
-import equipmentIcon from '../assets/pymes/adquisicion-equipo.svg';
-import inventoryIcon from '../assets/pymes/inventario.svg';
+import workCapitalIcon from "../assets/pymes/capital-trabajo.svg";
+import equipmentIcon from "../assets/pymes/adquisicion-equipo.svg";
+import inventoryIcon from "../assets/pymes/inventario.svg";
 
 const solutions = [
 	{
-		title: 'Capital de Trabajo',
-		description: 'Mantén la liquidez de tu operación diaria, cubre nóminas, proveedores o aprovecha oportunidades inmediatas en el mercado.',
+		title: "Capital de Trabajo",
+		description:
+			"Mantén la liquidez de tu operación diaria, cubre nóminas, proveedores o aprovecha oportunidades inmediatas en el mercado.",
 		icon: workCapitalIcon,
 	},
 	{
-		title: 'Adquisición de Equipo',
-		description: 'Moderniza tu maquinaria, tecnología o flotilla vehicular para aumentar tu capacidad productiva y competitividad.',
+		title: "Adquisición de Equipo",
+		description:
+			"Moderniza tu maquinaria, tecnología o flotilla vehicular para aumentar tu capacidad productiva y competitividad.",
 		icon: equipmentIcon,
 	},
 	{
-		title: 'Financiamiento de Inventario',
-		description: 'Asegura el stock necesario para temporadas altas sin comprometer tu flujo de efectivo operativo.',
+		title: "Financiamiento de Inventario",
+		description:
+			"Asegura el stock necesario para temporadas altas sin comprometer tu flujo de efectivo operativo.",
 		icon: inventoryIcon,
 	},
 ];
 ---
 
-<section class="pymes-solutions" id="soluciones" aria-labelledby="pymes-solutions-title">
+<section
+	class="pymes-solutions"
+	id="soluciones"
+	aria-labelledby="pymes-solutions-title"
+>
 	<header class="pymes-solutions__heading">
 		<h2 id="pymes-solutions-title">Impulsa tu <span>Crecimiento</span></h2>
 		<p>Soluciones financieras adaptadas a cada etapa de tu negocio.</p>
 	</header>
 
 	<div class="pymes-solutions__grid">
-		{solutions.map((solution) => (
-			<article class="pymes-solution-card">
-				<div class="pymes-solution-card__icon"><img src={solution.icon.src} alt="" width="48" height="48" /></div>
-				<h3>{solution.title}</h3>
-				<p>{solution.description}</p>
-			</article>
-		))}
+		{
+			solutions.map((solution) => (
+				<article class="pymes-solution-card">
+					<div class="pymes-solution-card__icon">
+						<img
+							src={solution.icon.src}
+							alt=""
+							width="48"
+							height="48"
+						/>
+					</div>
+					<h3>{solution.title}</h3>
+					<p>{solution.description}</p>
+				</article>
+			))
+		}
 	</div>
 </section>

@@ -1,86 +1,174 @@
 ---
-import advisorIcon from '../assets/pymes/asesorias.svg';
+import advisorIcon from "../assets/pymes/asesorias.svg";
 ---
 
 <section class="lease-lead" id="solicitud" aria-labelledby="lease-lead-title">
 	<div class="lease-lead__inner">
 		<div class="lease-lead__copy">
-			<h2 id="lease-lead-title">Inicia tu Solicitud de<br />Arrendamiento</h2>
-			<p>Nuestro equipo de asesores especializados está listo para estructurar el plan de arrendamiento que mejor se adapte a las necesidades operativas y fiscales de tu negocio.</p>
+			<h2 id="lease-lead-title">
+				Inicia tu Solicitud de<br />Arrendamiento
+			</h2>
+			<p>
+				Nuestro equipo de asesores especializados está listo para
+				estructurar el plan de arrendamiento que mejor se adapte a las
+				necesidades operativas y fiscales de tu negocio.
+			</p>
 			<div class="lease-lead__advisor">
 				<img src={advisorIcon.src} alt="" width="38" height="38" />
-				<div><strong>Asesoría Institucional</strong><span>Atención personalizada y confidencial.</span></div>
+				<div>
+					<strong>Asesoría Institucional</strong><span
+						>Atención personalizada y confidencial.</span>
+				</div>
 			</div>
 		</div>
 
 		<form class="lease-lead__form" data-lease-form novalidate>
 			<div class="lease-lead__field">
 				<label for="lease-name">Tu nombre</label>
-				<input id="lease-name" name="name" type="text" autocomplete="name" placeholder="Nombre y apellido" required aria-describedby="lease-name-error" />
-				<p class="lease-lead__error" id="lease-name-error" aria-live="polite"></p>
+				<input
+					id="lease-name"
+					name="name"
+					type="text"
+					autocomplete="name"
+					placeholder="Nombre y apellido"
+					required
+					aria-describedby="lease-name-error"
+				/>
+				<p
+					class="lease-lead__error"
+					id="lease-name-error"
+					aria-live="polite"
+				>
+				</p>
 			</div>
 			<div class="lease-lead__field">
 				<label for="lease-company">Empresa o actividad</label>
-				<input id="lease-company" name="company" type="text" autocomplete="organization" placeholder="Nombre de tu empresa y actividad" required aria-describedby="lease-company-error" />
-				<p class="lease-lead__error" id="lease-company-error" aria-live="polite"></p>
+				<input
+					id="lease-company"
+					name="company"
+					type="text"
+					autocomplete="organization"
+					placeholder="Nombre de tu empresa y actividad"
+					required
+					aria-describedby="lease-company-error"
+				/>
+				<p
+					class="lease-lead__error"
+					id="lease-company-error"
+					aria-live="polite"
+				>
+				</p>
 			</div>
 			<div class="lease-lead__field">
 				<label for="lease-product">Producto de interés</label>
-				<select id="lease-product" name="product" required aria-describedby="lease-product-error">
+				<select
+					id="lease-product"
+					name="product"
+					required
+					aria-describedby="lease-product-error"
+				>
 					<option value="">Selecciona una opción</option>
 					<option>Arrendamiento</option>
 					<option>Créditos PyMEs</option>
 					<option>Factoraje</option>
 				</select>
-				<p class="lease-lead__error" id="lease-product-error" aria-live="polite"></p>
+				<p
+					class="lease-lead__error"
+					id="lease-product-error"
+					aria-live="polite"
+				>
+				</p>
 			</div>
 			<div class="lease-lead__privacy">
-				<input id="lease-privacy" name="privacy" type="checkbox" required aria-describedby="lease-privacy-error" />
-				<label for="lease-privacy">He leído el aviso de privacidad aplicable a esta solicitud de contacto.</label>
-				<p class="lease-lead__error" id="lease-privacy-error" aria-live="polite"></p>
+				<input
+					id="lease-privacy"
+					name="privacy"
+					type="checkbox"
+					required
+					aria-describedby="lease-privacy-error"
+				/>
+				<label for="lease-privacy"
+					>He leído el aviso de privacidad aplicable a esta solicitud
+					de contacto.</label
+				>
+				<p
+					class="lease-lead__error"
+					id="lease-privacy-error"
+					aria-live="polite"
+				>
+				</p>
 			</div>
-			<button class="button button--light button--form" type="submit">Cotiza tu Arrendamiento</button>
+			<button class="button button--light button--form" type="submit"
+				>Cotiza tu Arrendamiento</button
+			>
 			<p class="lease-lead__status" role="status" aria-live="polite"></p>
-			<p class="lease-lead__privacy-note">Tus datos están protegidos por nuestra <span>Política de Privacidad.</span></p>
+			<p class="lease-lead__privacy-note">
+				Tus datos están protegidos por nuestra <span
+					>Política de Privacidad.</span>
+			</p>
 		</form>
 	</div>
 </section>
 
 <script>
 	const messages: Record<string, string> = {
-		name: 'Escribe tu nombre y apellido.',
-		company: 'Escribe el nombre de tu empresa o actividad.',
-		product: 'Selecciona un producto de interés.',
-		privacy: 'Debes aceptar el aviso de privacidad para continuar.',
+		name: "Escribe tu nombre y apellido.",
+		company: "Escribe el nombre de tu empresa o actividad.",
+		product: "Selecciona un producto de interés.",
+		privacy: "Debes aceptar el aviso de privacidad para continuar.",
 	};
 
-	const initializeLeaseForms = () => document.querySelectorAll<HTMLFormElement>('[data-lease-form]').forEach((form) => {
-		if (form.dataset.initialized) return;
-		form.dataset.initialized = 'true';
-		const status = form.querySelector<HTMLElement>('.lease-lead__status');
-		const setFieldState = (field: HTMLInputElement | HTMLSelectElement) => {
-			const error = form.querySelector<HTMLElement>(`#${field.id}-error`);
-			const invalid = !field.validity.valid;
-			field.setAttribute('aria-invalid', String(invalid));
-			if (error) error.textContent = invalid ? messages[field.name] ?? 'Revisa este campo.' : '';
-			return !invalid;
-		};
+	const initializeLeaseForms = () =>
+		document
+			.querySelectorAll<HTMLFormElement>("[data-lease-form]")
+			.forEach((form) => {
+				if (form.dataset.initialized) return;
+				form.dataset.initialized = "true";
+				const status = form.querySelector<HTMLElement>(
+					".lease-lead__status",
+				);
+				const setFieldState = (
+					field: HTMLInputElement | HTMLSelectElement,
+				) => {
+					const error = form.querySelector<HTMLElement>(
+						`#${field.id}-error`,
+					);
+					const invalid = !field.validity.valid;
+					field.setAttribute("aria-invalid", String(invalid));
+					if (error)
+						error.textContent = invalid
+							? (messages[field.name] ?? "Revisa este campo.")
+							: "";
+					return !invalid;
+				};
 
-		form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select').forEach((field) => {
-			field.addEventListener('input', () => setFieldState(field));
-			field.addEventListener('change', () => setFieldState(field));
-		});
+				form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+					"input, select",
+				).forEach((field) => {
+					field.addEventListener("input", () => setFieldState(field));
+					field.addEventListener("change", () =>
+						setFieldState(field),
+					);
+				});
 
-		form.addEventListener('submit', (event) => {
-			event.preventDefault();
-			if (status) status.textContent = '';
-			const fields = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
-			const firstInvalid = fields.find((field) => !setFieldState(field));
-			if (firstInvalid) return firstInvalid.focus();
-			if (status) status.textContent = 'Formulario validado correctamente. El envío de datos estará disponible próximamente.';
-		});
-	});
+				form.addEventListener("submit", (event) => {
+					event.preventDefault();
+					if (status) status.textContent = "";
+					const fields = [
+						...form.querySelectorAll<
+							HTMLInputElement | HTMLSelectElement
+						>("input, select"),
+					];
+					const firstInvalid = fields.find(
+						(field) => !setFieldState(field),
+					);
+					if (firstInvalid) return firstInvalid.focus();
+					if (status)
+						status.textContent =
+							"Formulario validado correctamente. El envío de datos estará disponible próximamente.";
+				});
+			});
 
 	initializeLeaseForms();
-	document.addEventListener('astro:page-load', initializeLeaseForms);
+	document.addEventListener("astro:page-load", initializeLeaseForms);
 </script>
