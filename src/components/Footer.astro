@@ -1,27 +1,71 @@
 ---
-import logoMark from '../assets/home/logo-mark.svg';
-import condusefLogo from '../assets/home/condusef-sipres.webp';
-import cnbvLogo from '../assets/home/cnbv-logo.svg';
-import institutionalLogo from '../assets/lobos-gestion-empresarial-logo.svg';
+import logoMark from "../assets/home/logo-mark.svg";
+import condusefLogo from "../assets/home/condusef-sipres.webp";
+import cnbvLogo from "../assets/home/cnbv-logo.svg";
+import institutionalLogo from "../assets/lobos-gestion-empresarial-logo.svg";
+import { privacyUrl } from "../data/contact";
+// Reused from santander-live, preserving the original paths and view boxes.
+import FacebookIcon from "../assets/icons/social/facebook.svg";
+import InstagramIcon from "../assets/icons/social/instagram.svg";
+import XIcon from "../assets/icons/social/x.svg";
+import TiktokIcon from "../assets/icons/social/tiktok.svg";
+import WhatsappIcon from "../assets/icons/social/whatsapp.svg";
+
+const socialIcons = [
+	{ label: "Facebook", Icon: FacebookIcon },
+	{ label: "Instagram", Icon: InstagramIcon },
+	{ label: "X", Icon: XIcon },
+	{ label: "TikTok", Icon: TiktokIcon },
+	{ label: "WhatsApp", Icon: WhatsappIcon },
+];
 
 const year = new Date().getFullYear();
-const isHomePage = Astro.url.pathname === '/';
+const isHomePage = Astro.url.pathname === "/";
 ---
 
 <footer class="site-footer">
 	<div class="site-footer__main">
 		<div class="site-footer__contact">
-			<a class="site-footer__mark" href="/" aria-label="Lobo Kapital, volver al inicio">
-				<img src={logoMark.src} alt="Lobo Kapital" width="130" height="134" />
+			<a
+				class="site-footer__mark"
+				href="/"
+				aria-label="Lobo Kapital, volver al inicio"
+			>
+				<img
+					src={logoMark.src}
+					alt="Lobo Kapital"
+					width="130"
+					height="134"
+				/>
 			</a>
-			<a class="site-footer__phone" href="tel:+526181296093">+52 618 129 6093</a>
-			<a class="site-footer__email" href="mailto:contacto@lobokapital.mx">contacto@lobokapital.mx</a>
-			<address>Avenida Universidad Autónoma de Durango #300.<br />Colonia Jardines de Durango. Durango, Durango, México.</address>
+			<a class="site-footer__phone" href="tel:+526181296093"
+				>+52 618 129 6093</a
+			>
+			<a class="site-footer__email" href="mailto:contacto@lobokapital.mx"
+				>contacto@lobokapital.mx</a
+			>
+			<address>
+				Avenida Universidad Autónoma de Durango #300.<br />Colonia
+				Jardines de Durango. Durango, Durango, México.
+			</address>
 			{
 				isHomePage ? (
-					<div class="regulatory-logos" aria-label="Instituciones regulatorias">
-						<img src={condusefLogo.src} alt="CONDUSEF SIPRES" width="82" height="82" />
-						<img src={cnbvLogo.src} alt="Comisión Nacional Bancaria y de Valores, CNBV" width="88" height="50" />
+					<div
+						class="regulatory-logos"
+						aria-label="Instituciones regulatorias"
+					>
+						<img
+							src={condusefLogo.src}
+							alt="CONDUSEF SIPRES"
+							width="82"
+							height="82"
+						/>
+						<img
+							src={cnbvLogo.src}
+							alt="Comisión Nacional Bancaria y de Valores, CNBV"
+							width="88"
+							height="50"
+						/>
 					</div>
 				) : (
 					<img
@@ -36,23 +80,60 @@ const isHomePage = Astro.url.pathname === '/';
 		</div>
 
 		<div class="site-footer__social">
+			<nav class="site-footer__products" aria-label="Productos">
+				<a href="/credito-personal/">Crédito personal</a>
+				<a href="/creditos-pymes/">Crédito empresarial</a>
+				<a href="/tarjetas/">Tarjetas</a>
+			</nav>
 			<p>Síguenos</p>
-			<div class="social-icons" aria-label="Redes sociales disponibles próximamente">
-				<span role="img" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.7V6.8c0-.9.6-1.1 1-1.1h2.8V1.4L14 1.3c-4.2 0-5.2 3.2-5.2 5.2v2.2H6.3v4.8h2.5V23H14v-9.5h3.5l.6-4.8H14Z"/></svg></span>
-				<span role="img" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.2 4.8 1.7 5 5 .1 1.3.1 1.7.1 4.7s0 3.4-.1 4.7c-.2 3.3-1.7 4.8-5 5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-3.3-.2-4.8-1.7-5-5C2 15.4 2 15 2 12s0-3.4.1-4.7c.2-3.3 1.7-4.8 5-5C8.4 2.2 8.8 2.2 12 2.2Zm0 3.6A6.2 6.2 0 1 0 12 18a6.2 6.2 0 0 0 0-12.2Zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm7.9-10.5a1.45 1.45 0 1 1-2.9 0 1.45 1.45 0 0 1 2.9 0Z"/></svg></span>
-				<span role="img" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.2 2H22l-8.3 9.5L23.5 22h-7.7l-6-7.9L2.9 22H-.9l8.9-10.2L-1.4 2h7.9l5.4 7.2L18.2 2Zm-1.3 18h2.1L5.4 3.9H3.1L16.9 20Z"/></svg></span>
-				<span role="img" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 5.3A5.2 5.2 0 0 1 16.5 2H13v13.7a3 3 0 1 1-2.1-2.9V9.3a6.5 6.5 0 1 0 5.6 6.4v-7a8.7 8.7 0 0 0 5 1.6V6.9a5.1 5.1 0 0 1-1.9-.4V5.3Z"/></svg></span>
-				<span role="img" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0 11.9 11.9 0 0 0 1.8 17.8L.1 24l6.4-1.7A12 12 0 0 0 12.1 24h.1A11.9 11.9 0 0 0 20.5 3.5ZM12.2 22a9.9 9.9 0 0 1-5.1-1.4l-.4-.2-3.8 1 1-3.7-.3-.4A9.9 9.9 0 1 1 12.2 22Zm5.4-7.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.4.2-.7.1a8.1 8.1 0 0 1-2.4-1.5A9 9 0 0 1 9.1 12c-.2-.3 0-.5.1-.6l.5-.6.3-.5c.1-.2 0-.4 0-.6l-1-2.4c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.9 5.2.8.3 1.5.5 2 .6.8.3 1.6.2 2.2.1.7-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.4Z"/></svg></span>
+			<div
+				class="social-icons"
+				aria-label="Redes sociales disponibles próximamente"
+			>
+				{
+					socialIcons.map(({ label, Icon }) => (
+						<span role="img" aria-label={label}>
+							<Icon aria-hidden="true" focusable="false" />
+						</span>
+					))
+				}
 			</div>
 		</div>
 	</div>
 
 	<div class="site-footer__legal">
 		<div>
-			<span aria-disabled="true">Avisos de privacidad</span>
+			<a href={privacyUrl} target="_blank" rel="noopener noreferrer">Aviso de privacidad</a>
 			<span aria-disabled="true">Términos y condiciones</span>
 			<span>Lobos Gestión Empresarial, S.A. de C.V., SOFOM, E.N.R.</span>
 		</div>
 		<p>Copyright © {year}</p>
 	</div>
 </footer>
+
+<style>
+	.site-footer__legal a:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.site-footer__products {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 12px 24px;
+		margin-bottom: 40px;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.site-footer__products a:hover {
+		color: var(--color-primary);
+	}
+
+	@media (max-width: 767px) {
+		.site-footer__products {
+			justify-content: flex-start;
+		}
+	}
+</style>
