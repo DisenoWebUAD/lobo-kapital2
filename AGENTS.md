@@ -2,7 +2,7 @@
 
 Lobo Kapital is an Astro landing with shared product pages. Preserve its current Figtree typography, red/white/gray palette, rounded controls and existing animations when making focused changes.
 
-The current routes are `/`, `/credito-personal/`, `/creditos-pymes/`, `/tarjetas/`, `/arrendamiento/` and `/factoraje/`. Personal and business loans are the main credit products; cards retain their own page and homepage promotion. Preserve the existing product routes unless the requested task changes their scope.
+The current routes are `/`, `/credito-personal/`, `/creditos-pymes/`, `/tarjetas/`, `/arrendamiento/`, `/factoraje/`, `/legal/` and `/une/`. Personal and business loans are the main credit products; cards retain their own page and homepage promotion. Preserve the existing product routes unless the requested task changes their scope.
 
 ## Development
 
@@ -25,8 +25,9 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 ## Shared components
 
 - `LoanRequirements.astro`, `LoanConditions.astro` and `LoanCalculator.astro` share the presentation between personal and business credit. The `PersonalLoan*` wrappers preserve existing imports. Keep product-specific content and assumptions separate from shared layout and interaction.
-- `LeadForm.astro` is shared across all pages, with product preselection and contextual fields from `src/data/contact.ts`. Validation and email preparation live in `src/lib/contact-form.ts`. Contact currently opens a `mailto` draft; direct web delivery remains pending. A prepared draft or validated form does not confirm delivery.
+- `LeadForm.astro` is shared across the homepage and product pages, with product preselection and contextual fields from `src/data/contact.ts`. Validation and email preparation live in `src/lib/contact-form.ts`. Contact currently opens a `mailto` draft; direct web delivery remains pending. A prepared draft or validated form does not confirm delivery.
 - `FormSelect.astro` synchronizes its custom control with a native select for form values and validation. Preserve keyboard interaction, focus handling and the native fallback.
+- `/legal/` contains the privacy notice, institutional information and general conditions. `/une/` has the dedicated UNE, personal-data and integrity contacts. `src/data/legal.ts` centralizes legal links, institutional contacts and official transparency links shown in the shared footer; `privacy-notice.ts` contains the complete notice. Keep the legal page's current-site disclosure aligned with the actual contact and simulation behavior when those features change. `/privacidad` redirects to `/legal/`; the old `/legal/#atencion` anchor links to `/une/`.
 - Pages use Astro's `ClientRouter`. Initialize page scripts after `astro:page-load` without duplicate listeners, and clean up listeners/observers when components disconnect where applicable.
 
 ## Validation
