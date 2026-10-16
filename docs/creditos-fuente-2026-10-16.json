@@ -1,0 +1,412 @@
+{
+  "purpose": "Inventario de investigación para la migración a Astro; no es configuración de una oferta contractual",
+  "reviewed_on": "2026-10-16",
+  "timezone": "America/Mexico_City",
+  "currency": "MXN",
+  "rate_units": "Porcentajes expresados como fracciones decimales: 0.48 equivale a 48%",
+  "source_site_status": "Versión preliminar en construcción",
+  "method": {
+    "public_html_reviewed": true,
+    "public_javascript_reviewed": true,
+    "calculator_formula_reproduced": true,
+    "browser_interaction_verified": false,
+    "contact_get_available": true,
+    "contact_post_tested": false,
+    "external_institutional_registration_verified": false
+  },
+  "sources": {
+    "home": "https://www.lobokapital.mx/",
+    "personal": "https://www.lobokapital.mx/credito-personal",
+    "business": "https://www.lobokapital.mx/credito-empresarial",
+    "revolving": "https://www.lobokapital.mx/soluciones/credito-en-cuenta-corriente",
+    "privacy": "https://www.lobokapital.mx/privacidad",
+    "une": "https://www.lobokapital.mx/une",
+    "calculator_code": "https://www.lobokapital.mx/_next/static/chunks/product-navigation-DwkTpk9a.js",
+    "shared_code": "https://www.lobokapital.mx/_next/static/chunks/regulatory-links-Bf97-BPn.js",
+    "contact_status": "https://www.lobokapital.mx/api/contact"
+  },
+  "main_products": [
+    {
+      "id": "personal",
+      "display_name": "Crédito personal",
+      "source_product_name": "Crédito al consumo",
+      "source": "personal",
+      "amount": {
+        "min": 30000,
+        "max": 200000
+      },
+      "term": {
+        "base_months": 12,
+        "conditional_months": [
+          18,
+          24
+        ],
+        "condition": "Según perfil y sujeto a evaluación"
+      },
+      "coverage": [
+        "Durango"
+      ],
+      "profiles": [
+        "Personas asalariadas",
+        "Profesionistas",
+        "Personas con ingresos comprobables"
+      ],
+      "uses": [
+        "Educación",
+        "Salud",
+        "Mejoras al hogar",
+        "Consolidación de deudas",
+        "Proyectos personales contemplados en el producto"
+      ],
+      "requirements": {
+        "published_documents": [
+          "INE",
+          "Comprobante de ingresos"
+        ],
+        "minimum_credit_bureau_score": 600,
+        "payment_capacity_review": true,
+        "documents_requested_at_initial_contact": false,
+        "approval_guaranteed": false
+      },
+      "contractual_pricing": {
+        "annual_interest_rate": null,
+        "interest_rate_type": null,
+        "opening_fee_rate": null,
+        "status": "Pendiente de publicación",
+        "insurance_cost": null,
+        "payment_schedule": null
+      },
+      "published_cat": [
+        {
+          "modality": "Garantía solidaria",
+          "annual_rate": 0.7302,
+          "excludes_vat": true,
+          "status": "Informativo para comparación",
+          "reference_amount": 200000,
+          "reference_term_months": 24,
+          "validity_label": "Ejercicio 2026",
+          "valid_until": "2026-12-31",
+          "changes_with_simulation": false
+        }
+      ],
+      "simulation": {
+        "status": "Referencias ilustrativas; no oferta, aprobación o cálculo de CAT",
+        "modality": "Crédito al consumo",
+        "annual_reference_rate": 0.48,
+        "opening_fee_reference_rate": 0.03,
+        "vat_rate": 0.16,
+        "opening_fee_paid_separately": true,
+        "amount": {
+          "min": 30000,
+          "max": 200000,
+          "default": 200000
+        },
+        "term_months": {
+          "options": [
+            12,
+            18,
+            24
+          ],
+          "default": 12
+        },
+        "insurance": {
+          "default_total": 12000,
+          "minimum": 0,
+          "editable": true,
+          "period": "Todo el plazo",
+          "treatment": "Se divide entre los meses y se suma a la anualidad; no se aplica IVA adicional en el código",
+          "zero_means": "Concepto excluido del ejemplo, no gratuidad confirmada"
+        },
+        "output": "Mensualidad estimada; apertura con IVA por separado",
+        "cat_calculated": false,
+        "amortization_table_provided": false
+      }
+    },
+    {
+      "id": "business",
+      "display_name": "Crédito empresarial",
+      "source_product_name": "Crédito Simple PyME",
+      "source": "business",
+      "amount": {
+        "min": 250000,
+        "max": 10150000
+      },
+      "term_months": {
+        "min": 12,
+        "max": 36
+      },
+      "coverage": [
+        "Durango",
+        "Ciudad de México"
+      ],
+      "profiles": [
+        "Empresas con operación formal y flujo comprobable",
+        "Personas físicas con actividad empresarial",
+        "Personas morales"
+      ],
+      "uses": [
+        "Capital de trabajo",
+        "Inventario",
+        "Expansión o nuevas unidades",
+        "Maquinaria",
+        "Equipo",
+        "Tecnología",
+        "Consolidación de pasivos empresariales",
+        "Proyectos y contratos"
+      ],
+      "requirements": {
+        "minimum_operating_months": 24,
+        "published_documents": [
+          "Estados financieros",
+          "Constancia de situación fiscal"
+        ],
+        "credit_history_review": true,
+        "payment_capacity_review": true,
+        "guarantees_by_evaluation": [
+          "Hipotecaria",
+          "Prendaria",
+          "Fiduciaria",
+          "Obligado solidario"
+        ],
+        "documents_requested_at_initial_contact": false,
+        "approval_guaranteed": false
+      },
+      "contractual_pricing": {
+        "annual_interest_rate": null,
+        "interest_rate_type": null,
+        "opening_fee_rate": null,
+        "status": "Pendiente de publicación",
+        "insurance_cost": null,
+        "payment_schedule": null
+      },
+      "published_cat": [
+        {
+          "modality": "Garantía solidaria",
+          "annual_rate": 0.3793,
+          "excludes_vat": true,
+          "status": "Informativo para comparación",
+          "reference_amount": 300000,
+          "reference_term_months": 36,
+          "valid_from": "2026-10-01",
+          "valid_until": "2027-03-31",
+          "applies_to_mortgage_simulation": false,
+          "changes_with_simulation": false
+        },
+        {
+          "modality": "Garantía hipotecaria",
+          "annual_rate": null,
+          "status": "Pendiente de confirmación"
+        }
+      ],
+      "simulation": {
+        "status": "Referencias ilustrativas; no oferta, aprobación o cálculo de CAT",
+        "modality": "Crédito simple con garantía hipotecaria",
+        "applies_to_all_business_modalities": false,
+        "annual_reference_rate": 0.30,
+        "opening_fee_reference_rate": 0.025,
+        "vat_rate": 0.16,
+        "opening_fee_paid_separately": true,
+        "amount": {
+          "min": 250000,
+          "max": 10150000,
+          "default": 1000000
+        },
+        "term_months": {
+          "options": [
+            12,
+            18,
+            24,
+            36
+          ],
+          "default": 36
+        },
+        "insurance": {
+          "default_total": 12000,
+          "minimum": 0,
+          "editable": true,
+          "period": "Todo el plazo",
+          "treatment": "Se divide entre los meses y se suma a la anualidad; no se aplica IVA adicional en el código",
+          "zero_means": "Concepto excluido del ejemplo, no gratuidad confirmada"
+        },
+        "output": "Mensualidad estimada; apertura con IVA por separado",
+        "cat_calculated": false,
+        "amortization_table_provided": false
+      }
+    }
+  ],
+  "shared_simulation_model": {
+    "monthly_rate": "annual_reference_rate / 12 * (1 + vat_rate)",
+    "monthly_payment": "principal * monthly_rate / (1 - (1 + monthly_rate) ** (-months)) + insurance_total / months",
+    "opening_fee_with_vat": "principal * opening_fee_reference_rate * (1 + vat_rate)",
+    "display_decimal_places": 2,
+    "personal_internal_six_month_option_is_public": false,
+    "arithmetic_consistency_checked": true,
+    "contractual_financial_model_validated": false
+  },
+  "reproduced_examples": [
+    {
+      "product": "personal",
+      "amount": 200000,
+      "months": 12,
+      "insurance_total": 12000,
+      "monthly_payment_rounded": 23109.25,
+      "separate_opening_fee_with_vat": 6960
+    },
+    {
+      "product": "personal",
+      "amount": 200000,
+      "months": 24,
+      "insurance_total": 12000,
+      "monthly_payment_rounded": 14490.84,
+      "separate_opening_fee_with_vat": 6960
+    },
+    {
+      "product": "business",
+      "modality": "Garantía hipotecaria",
+      "amount": 1000000,
+      "months": 36,
+      "insurance_total": 12000,
+      "monthly_payment_rounded": 45456.25,
+      "separate_opening_fee_with_vat": 29000
+    }
+  ],
+  "additional_business_modality": {
+    "id": "revolving",
+    "name": "Crédito en cuenta corriente / Crédito Revolvente PyME",
+    "source": "revolving",
+    "included_in_proposed_main_offer": false,
+    "scope_status": "Pendiente de definir si se incluirá dentro de empresarial",
+    "coverage": [
+      "Durango",
+      "Ciudad de México"
+    ],
+    "commercial_line_amount_range": null,
+    "renewable_line_term_months": {
+      "min": 12,
+      "max": 36
+    },
+    "full_balance_repayment_required_every_months": 12,
+    "interest_basis": "Monto y periodo efectivamente dispuestos según contrato",
+    "published_cat": {
+      "modality": "Garantía hipotecaria",
+      "annual_rate": 0.591,
+      "excludes_vat": true,
+      "reference_draw_count": 3,
+      "reference_amount_per_draw": 500000,
+      "reference_days_per_draw": 120,
+      "reference_available_balance_restored": true,
+      "valid_from": "2026-10-01",
+      "valid_until": "2027-03-31"
+    },
+    "simulation_references": {
+      "annual_rate": 0.36,
+      "day_count": "Días reales / 360",
+      "principal_repayment": "Al vencimiento",
+      "opening_fee_rate_on_line": 0.025,
+      "draw_fee_rate_on_draw_amount": 0.01,
+      "vat_rate": 0.16,
+      "draw_count": 1,
+      "fixed_monthly_payment": false,
+      "default_draw_amount": 500000,
+      "default_line_amount": 1000000,
+      "default_draw_days": 120,
+      "default_line_months": 24,
+      "default_annual_insurance": 4000,
+      "default_start_date": null
+    }
+  },
+  "out_of_scope_catalog_products": [
+    "Arrendamiento financiero",
+    "Arrendamiento puro",
+    "Factoraje"
+  ],
+  "institution": {
+    "brand": "Lobo Kapital",
+    "legal_name": "Lobos Gestión Empresarial, S.A. de C.V., SOFOM, E.N.R.",
+    "group_as_published": "Grupo Lobo",
+    "address_as_published": "Calle Valentín Gómez Farías No. 16, Piso 2, Colonia Tabacalera, Alcaldía Cuauhtémoc, C.P. 06030, Ciudad de México",
+    "email": {
+      "commercial": "contacto@lobokapital.mx",
+      "une": "une.lobos@lobokapital.mx",
+      "privacy_arco": "datos.personales.lobos@lobokapital.mx",
+      "integrity": "integridad@lobokapital.mx"
+    },
+    "privacy_updated_on": "2026-09-24",
+    "public_deposits_accepted_as_published": false,
+    "supervision_scope_as_published": "CNBV únicamente para efectos del artículo 95 Bis de LGOAAC",
+    "prototype_details_not_corroborated_by_source": [
+      "Teléfono +52 618 129 6093",
+      "Domicilio Avenida Universidad Autónoma de Durango #300",
+      "Perfiles de redes sociales",
+      "Registro específico SIPRES"
+    ]
+  },
+  "contact": {
+    "endpoint": "/api/contact",
+    "availability_method": "GET",
+    "availability_response_observed": {
+      "available": true
+    },
+    "direct_submission_method_in_code": "POST",
+    "expected_success_status_in_code": 202,
+    "expected_success_fields_in_code": [
+      "ok",
+      "reference"
+    ],
+    "required_user_fields_direct_mode": [
+      "Nombre",
+      "Correo",
+      "Producto o producto fijo",
+      "Consentimiento para responder y dar seguimiento"
+    ],
+    "optional_user_fields": [
+      "Empresa o actividad",
+      "Teléfono",
+      "Monto estimado",
+      "Mensaje"
+    ],
+    "optional_field_validation": {
+      "phone": {
+        "minimum_characters": 7,
+        "maximum_characters": 40,
+        "minimum_digits": 7,
+        "maximum_digits": 15
+      },
+      "estimated_amount": {
+        "min": 1,
+        "max": 999999999.99,
+        "maximum_decimal_places": 2,
+        "is_loan_amount_range": false
+      },
+      "company_maximum_characters": 120,
+      "message_maximum_characters": 800
+    },
+    "hidden_anti_abuse_field": "website",
+    "fallback": "Preparar mailto y permitir copiar el mensaje",
+    "delivery_platform_declared_by_privacy_notice": "Microsoft 365",
+    "initial_retention_months_declared_by_privacy_notice": 12,
+    "retention_reference": "Desde la última interacción, salvo relación jurídica u obligación aplicable",
+    "initial_contact_authorizes": [
+      "Respuesta y seguimiento de la consulta"
+    ],
+    "initial_contact_does_not_authorize": [
+      "Publicidad",
+      "Consulta al Buró de Crédito",
+      "Contratación"
+    ],
+    "initial_contact_requests_documents_or_banking_data": false
+  },
+  "unresolved_for_implementation": [
+    "Tasas contractuales y tipo de tasa",
+    "Comisiones contractuales",
+    "CAT hipotecario",
+    "Costo y obligatoriedad del seguro",
+    "Modelo de IVA y amortización aplicable a los contratos",
+    "Otros cargos y calendario contractual de pagos",
+    "Inclusión o exclusión de crédito revolvente",
+    "Integración de envío de consultas y aviso de privacidad correspondiente",
+    "Vigencia de teléfono y domicilio de Durango del prototipo",
+    "Texto institucional y registro SIPRES",
+    "Renovación de CAT al vencer sus periodos publicados"
+  ]
+}
