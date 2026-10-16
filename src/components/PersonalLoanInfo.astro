@@ -1,0 +1,99 @@
+---
+const questions = [
+	{
+		question: "¿Qué sucede después del primer contacto?",
+		answer: "Se revisan tu perfil, historial y capacidad de pago. Si la evaluación es favorable, se presenta una propuesta con los montos, plazos y costos antes de formalizar el crédito. Cumplir los requisitos no garantiza la aprobación.",
+	},
+	{
+		question: "¿Cuándo conoceré la tasa y la comisión de apertura?",
+		answer: "La tasa y la comisión contractuales están pendientes de publicación. Si decides avanzar, solicita una propuesta con las condiciones completas antes de contratar. Pedir información no implica aprobación ni contratación.",
+	},
+];
+---
+
+<section
+	class="personal-loan-faq"
+	id="preguntas"
+	aria-labelledby="personal-loan-faq-title"
+>
+	<div class="personal-loan-faq__inner">
+		<h2 id="personal-loan-faq-title">Dudas frecuentes</h2>
+		<div>
+			{
+				questions.map((item) => (
+					<details>
+						<summary>{item.question}</summary>
+						<p>{item.answer}</p>
+					</details>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.personal-loan-faq {
+		padding: 40px 0 120px;
+	}
+
+	.personal-loan-faq__inner {
+		display: grid;
+		grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+		gap: clamp(40px, 6vw, 96px);
+		width: min(calc(100% - 96px), 1276px);
+		margin-inline: auto;
+	}
+
+	h2 {
+		font-size: 32px;
+		line-height: 1.2;
+		letter-spacing: -0.6px;
+		color: #000;
+	}
+
+	.personal-loan-faq p {
+		margin: 10px 0 0;
+		font-size: 16px;
+		line-height: 1.6;
+		color: #696967;
+	}
+
+	details {
+		padding-block: 20px;
+		border-top: 1px solid #e0e0de;
+	}
+
+	details:last-child {
+		border-bottom: 1px solid #e0e0de;
+	}
+
+	summary {
+		min-height: 44px;
+		align-content: center;
+		font-size: 18px;
+		font-weight: 600;
+		line-height: 1.4;
+		cursor: pointer;
+	}
+
+	@media (max-width: 900px) {
+		.personal-loan-faq__inner {
+			grid-template-columns: 1fr;
+			gap: 36px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		h2 {
+			font-size: 28px;
+		}
+
+		.personal-loan-faq {
+			padding: 48px 0 80px;
+		}
+
+		.personal-loan-faq__inner {
+			width: calc(100% - 40px);
+		}
+	}
+</style>

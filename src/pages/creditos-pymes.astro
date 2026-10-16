@@ -4,8 +4,12 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PymesHero from '../components/PymesHero.astro';
+import CreditDetails from '../components/CreditDetails.astro';
+import LoanRequirements from '../components/LoanRequirements.astro';
+import LoanConditions from '../components/LoanConditions.astro';
+import LoanCalculator from '../components/LoanCalculator.astro';
 import PymesSolutions from '../components/PymesSolutions.astro';
-import PymesLeadForm from '../components/PymesLeadForm.astro';
+import LeadForm from '../components/LeadForm.astro';
 import logoMark from '../assets/home/logo-mark.svg';
 import '../styles/global.css';
 import '../styles/pymes-credit.css';
@@ -31,8 +35,13 @@ const description = 'Financiamiento estratégico para impulsar el crecimiento de
 		<Header />
 		<main id="main-content" tabindex="-1" transition:name="page-main" transition:animate="fade">
 			<PymesHero />
+			<CreditDetails product="business">
+				<LoanRequirements slot="heading" product="business" />
+				<LoanConditions slot="conditions" product="business" />
+			</CreditDetails>
+			<LoanCalculator product="business" />
 			<PymesSolutions />
-			<PymesLeadForm />
+			<LeadForm product="business" sectionId="solicitud" />
 		</main>
 		<Footer />
 	</body>

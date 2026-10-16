@@ -45,6 +45,13 @@
 	font-size: 16px;
 }
 
+.pymes-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0 16px;
+}
+
 .pymes-hero__media-frame {
 	display: contents;
 }

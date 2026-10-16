@@ -1,0 +1,254 @@
+---
+import { credits, creditInformationNote } from "../data/credits";
+
+interface Props {
+	product: keyof typeof credits;
+}
+
+const { product: productId } = Astro.props;
+const product = credits[productId];
+const contactSection = productId === "business" ? "#solicitud" : "#contacto";
+const productPath = productId === "business" ? "/creditos-pymes" : "/credito-personal";
+const contactHref = Astro.url.pathname.replace(/\/$/, "") === productPath
+	? contactSection
+	: `${productPath}/${contactSection}`;
+---
+
+<section
+	class="credit-details"
+	id="condiciones"
+	aria-labelledby="credit-details-title"
+>
+	<div class="credit-details__inner">
+		<slot name="heading">
+			<header class="credit-details__heading">
+				<p class="credit-details__eyebrow">Montos y condiciones</p>
+				<h2 id="credit-details-title">
+					Crédito <span
+						>{
+							productId === "personal"
+								? "personal"
+								: "empresarial"
+						}</span>
+				</h2>
+				<p>{product.description}</p>
+				<a class="button button--primary" href={contactHref}
+					>Pedir información <span aria-hidden="true">→</span></a
+				>
+			</header>
+		</slot>
+
+		<slot name="conditions">
+			<div class="credit-details__conditions">
+				<dl class="credit-details__facts">
+					<div class="credit-details__amount">
+						<dt>Monto en MXN</dt>
+						<dd>{product.amount}</dd>
+					</div>
+					<div>
+						<dt>Plazo</dt>
+						<dd>{product.term}<small>{product.termNote}</small></dd>
+					</div>
+					<div>
+						<dt>Cobertura</dt>
+						<dd>{product.coverage}</dd>
+					</div>
+				</dl>
+
+				<div class="credit-details__references">
+					<h3>Tasa y apertura de referencia</h3>
+					<p>{product.referenceModality}</p>
+					<dl>
+						<div>
+							<dt>Tasa anual</dt><dd>{product.referenceRate}</dd>
+						</div>
+						<div>
+							<dt>Apertura</dt><dd>{product.referenceOpening}</dd>
+						</div>
+					</dl>
+				</div>
+
+				<details class="credit-details__cat">
+					<summary
+						>CAT informativo {product.cat} sin IVA<small
+							>Con garantía solidaria</small
+						></summary
+					>
+					<p>{product.catDisclosure}</p>
+				</details>
+				<p class="credit-details__note">{creditInformationNote}</p>
+			</div>
+		</slot>
+	</div>
+</section>
+
+<style>
+	.credit-details {
+		padding-block: 96px;
+	}
+
+	.credit-details__inner {
+		display: grid;
+		grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+		gap: clamp(40px, 6vw, 96px);
+		width: min(calc(100% - 96px), 1276px);
+		margin-inline: auto;
+	}
+
+	.credit-details__eyebrow {
+		margin-bottom: 14px;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--color-muted);
+	}
+
+	.credit-details__heading h2 {
+		font-size: clamp(32px, 3vw, 48px);
+		line-height: 1.1;
+		letter-spacing: -0.9px;
+		color: #000;
+	}
+
+	.credit-details__heading h2 span {
+		color: var(--color-primary);
+	}
+
+	.credit-details__heading > p:not(.credit-details__eyebrow) {
+		max-width: 38ch;
+		margin-top: 20px;
+		font-size: 18px;
+		line-height: 1.5;
+		color: var(--color-muted);
+	}
+
+	.credit-details__heading .button {
+		margin-top: 28px;
+	}
+
+	.credit-details__conditions {
+		min-width: 0;
+		padding: 36px;
+		border-radius: 16px;
+		background: var(--color-surface);
+	}
+
+	.credit-details__facts,
+	.credit-details__references dl {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 24px;
+		margin: 0;
+	}
+
+	.credit-details__amount {
+		grid-column: 1 / -1;
+	}
+
+	dt {
+		font-size: 13px;
+		line-height: 1.4;
+		color: #696967;
+	}
+
+	dd {
+		margin: 6px 0 0;
+		font-size: 19px;
+		font-weight: 600;
+		line-height: 1.3;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.credit-details__amount dd {
+		font-size: clamp(24px, 2.4vw, 32px);
+		letter-spacing: -0.5px;
+	}
+
+	dd small {
+		display: block;
+		margin-top: 5px;
+		font-size: 13px;
+		font-weight: 400;
+		line-height: 1.4;
+		color: #696967;
+	}
+
+	.credit-details__references {
+		margin-top: 26px;
+		padding-top: 22px;
+		border-top: 1px solid #e0e0de;
+	}
+
+	.credit-details__references h3 {
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 1.4;
+	}
+
+	.credit-details__references > p {
+		margin-top: 5px;
+		font-size: 12px;
+		line-height: 1.5;
+		color: #696967;
+	}
+
+	.credit-details__references dl {
+		margin-top: 16px;
+	}
+
+	.credit-details__cat {
+		margin-top: 24px;
+		padding-top: 18px;
+		border-top: 1px solid #e0e0de;
+	}
+
+	summary {
+		min-height: 44px;
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 1.6;
+		cursor: pointer;
+	}
+
+	summary small {
+		display: block;
+		padding-left: 16px;
+		font-size: 12px;
+		font-weight: 400;
+		color: #696967;
+	}
+
+	.credit-details__cat p,
+	.credit-details__note {
+		margin-top: 16px;
+		font-size: 12px;
+		line-height: 1.65;
+		color: #696967;
+	}
+
+	@media (max-width: 900px) {
+		.credit-details__inner {
+			grid-template-columns: 1fr;
+			gap: 36px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.credit-details {
+			padding-block: 64px;
+		}
+
+		.credit-details__inner {
+			width: calc(100% - 40px);
+		}
+
+		.credit-details__conditions {
+			padding: 26px;
+		}
+	}
+
+	@media (max-width: 420px) {
+		.credit-details__facts {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

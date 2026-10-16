@@ -1,65 +1,72 @@
 ---
-import pymesIcon from '../assets/home/pymes-icon.svg';
-import walletIcon from '../assets/home/cartera-icon.svg';
-import leaseIcon from '../assets/home/arrendamiento-icon.svg';
-import factoringIcon from '../assets/home/factoraje-icon.svg';
+import pymesIcon from "../assets/home/pymes-icon.svg";
+import walletIcon from "../assets/home/cartera-icon.svg";
+import { credits } from "../data/credits";
 
 const products = [
 	{
-		id: 'prestamos-personales',
-		title: 'Préstamos Personales',
-		description: 'Líneas de crédito flexibles para tus proyectos personales. Proceso ágil, transparente y con atención personalizada.',
-		cta: 'Explorar condiciones',
-		value: 'Préstamos Personales',
+		...credits.personal,
 		icon: pymesIcon,
-		href: '/credito-personal/',
 	},
 	{
-		id: 'creditos-pymes',
-		title: 'Créditos PyMEs',
-		description: 'Capital de trabajo y financiamiento para expansión. Tasas competitivas para impulsar tu empresa hacia el siguiente nivel.',
-		cta: 'Solicitar evaluación',
-		value: 'Créditos PyMEs',
+		...credits.business,
 		icon: walletIcon,
-		href: '/creditos-pymes/',
-	},
-	{
-		id: 'arrendamiento',
-		title: 'Arrendamiento',
-		description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-		cta: 'Ver catálogo de esquemas',
-		value: 'Arrendamiento',
-		icon: leaseIcon,
-		href: '#contacto',
-	},
-	{
-		id: 'factoraje',
-		title: 'Factoraje',
-		description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-		cta: 'Explorar condiciones',
-		value: 'Factoraje',
-		icon: factoringIcon,
-		href: '/factoraje/',
 	},
 ];
 ---
 
 <section class="solutions" id="soluciones" aria-labelledby="solutions-title">
 	<div class="section-heading" data-reveal-group="80">
-		<h2 id="solutions-title" data-reveal><span>Soluciones</span> a tu medida</h2>
-		<p data-reveal>Experiencia y solidez financiera respaldando cada etapa de tu crecimiento personal y empresarial.</p>
+		<h2 id="solutions-title" data-reveal>
+			<span>Soluciones</span> a tu medida
+		</h2>
+		<p data-reveal>
+			Experiencia y solidez financiera respaldando cada etapa de tu
+			crecimiento personal y empresarial.
+		</p>
 	</div>
 
 	<div class="solutions__grid" data-reveal-group="80">
-		{products.map((product) => (
-			<article class="product-card" id={product.id} data-reveal data-spotlight>
-				<div class="product-card__icon">
-					<img src={product.icon.src} alt="" width="56" height="56" />
-				</div>
-				<h3>{product.title}</h3>
-				<p>{product.description}</p>
-				<a href={product.href} data-product={product.href === '#contacto' ? product.value : undefined}>{product.cta} <span aria-hidden="true">→</span></a>
-			</article>
-		))}
+		{
+			products.map((product) => (
+				<article
+					class="product-card"
+					id={product.id}
+					data-reveal
+					data-spotlight
+				>
+					<div class="product-card__icon">
+						<img
+							src={product.icon.src}
+							alt=""
+							width="56"
+							height="56"
+						/>
+					</div>
+					<h3>{product.title}</h3>
+					<p>{product.summary}</p>
+					<dl class="product-card__summary">
+						<div>
+							<dt>Hasta</dt>
+							<dd>
+								{product.maxAmount}
+								<span class="product-card__currency"> MXN</span>
+							</dd>
+						</div>
+						<div>
+							<dt>Plazo</dt>
+							<dd>
+								{product.term}
+								<small>{product.termNote}</small>
+							</dd>
+						</div>
+					</dl>
+					<a href={product.href}>
+						Conocer el crédito <span aria-hidden="true">→</span>
+					</a>
+				</article>
+			))
+		}
 	</div>
+	<p class="solutions__note">Montos y plazos sujetos a evaluación.</p>
 </section>

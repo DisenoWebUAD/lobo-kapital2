@@ -1,0 +1,853 @@
+---
+import { calculateLoan, loanSimulations, type LoanProduct } from "../lib/loan-simulation";
+import { formatCurrencyInput } from "../lib/currency-input";
+
+interface Props {
+	product?: LoanProduct;
+}
+const { product = 'personal' } = Astro.props;
+const config = loanSimulations[product];
+const initial = calculateLoan(product, {
+	amount: config.amount.initial,
+	termMonths: config.term.initial,
+});
+const money = (value: number) =>
+	new Intl.NumberFormat("es-MX", {
+		style: "currency",
+		currency: "MXN",
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	}).format(value);
+const compactMoney = (value: number) =>
+	new Intl.NumberFormat("es-MX", {
+		style: "currency",
+		currency: "MXN",
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 2,
+	}).format(value);
+const percent = (value: number) =>
+	new Intl.NumberFormat("es-MX", { style: "percent", maximumFractionDigits: 2 }).format(value);
+---
+
+<section
+	class="loan-calculator"
+	id="simulador"
+	aria-labelledby="simulator-title"
+	data-loan-calculator
+	data-loan-product={product}
+	style={`--amount-width: ${formatCurrencyInput(config.amount.max).length}ch; --term-count: ${config.term.options.length};`}
+>
+	<div class="loan-calculator__inner">
+		<div class="loan-calculator__panel">
+			<header class="loan-calculator__heading">
+				<h2 id="simulator-title">Simula <span>tu crédito</span></h2>
+				<p>
+					{product === 'business'
+						? 'Crédito simple con garantía hipotecaria. Elige el monto y el plazo para conocer tu mensualidad estimada.'
+						: 'Elige el monto y el plazo para conocer tu mensualidad estimada.'}
+				</p>
+			</header>
+
+			<div class="loan-calculator__grid">
+				<form novalidate aria-labelledby="simulator-title">
+					<fieldset disabled>
+						<legend class="visually-hidden"
+							>Datos de la simulación</legend
+						>
+						<div class="loan-calculator__field">
+							<div
+								class="loan-calculator__field-heading"
+							>
+								<label
+									id="simulation-amount-label"
+									for="simulation-amount"
+									>Monto del crédito</label
+								>
+								<div class="loan-calculator__number">
+									<input
+										id="simulation-amount"
+										name="amount"
+										type="text"
+										inputmode="numeric"
+										autocomplete="off"
+										spellcheck={false}
+										value={formatCurrencyInput(
+											config.amount.initial,
+										)}
+										required
+										aria-describedby="simulation-amount-hint simulation-amount-error"
+									/>
+									<span aria-hidden="true">MXN</span>
+								</div>
+							</div>
+							<input
+								class="loan-calculator__range"
+								id="simulation-amount-range"
+								type="range"
+								min={config.amount.min}
+								max={config.amount.max}
+								step="1"
+								value={config.amount.initial}
+								style={`--range-progress: ${((config.amount.initial - config.amount.min) / (config.amount.max - config.amount.min)) * 100}%`}
+								aria-label="Ajustar monto del crédito en pesos mexicanos"
+								aria-valuetext={compactMoney(
+									config.amount.initial,
+								)}
+								aria-describedby="simulation-amount-hint simulation-amount-error"
+							/>
+							<div
+								class="loan-calculator__bounds"
+								id="simulation-amount-hint"
+							>
+								<span
+									>{compactMoney(config.amount.min)} MXN</span
+								><span
+									>{compactMoney(config.amount.max)} MXN</span>
+							</div>
+							<p
+								class="loan-calculator__error"
+								id="simulation-amount-error"
+								hidden
+							>
+							</p>
+						</div>
+
+						<fieldset
+							class="loan-calculator__field loan-calculator__term"
+							id="simulation-term"
+							aria-describedby="simulation-eligibility-note simulation-term-error"
+						>
+							<legend>Plazo</legend>
+							<div class="loan-calculator__term-options">
+								{
+									config.term.options.map((months) => (
+										<label class="loan-calculator__term-option">
+											<input
+												class="visually-hidden"
+												type="radio"
+												name="term"
+												value={months}
+												checked={
+													months ===
+													config.term.initial
+												}
+												required
+												aria-describedby="simulation-eligibility-note simulation-term-error"
+											/>
+											<span>{months} <small>meses</small></span>
+										</label>
+									))
+								}
+							</div>
+							<p
+								class="loan-calculator__error"
+								id="simulation-term-error"
+								hidden
+							>
+							</p>
+						</fieldset>
+					</fieldset>
+					<noscript
+						><p class="loan-calculator__hint">
+							Activa JavaScript para ajustar los datos. El
+							resultado mostrado es el ejemplo inicial.
+						</p></noscript
+					>
+				</form>
+
+				<div
+					class="loan-calculator__result"
+					aria-labelledby="simulation-result-title"
+				>
+					<h3 id="simulation-result-title">Mensualidad estimada</h3>
+					<p class="loan-calculator__payment">
+						<span data-monthly-payment
+							>{money(initial.monthlyPayment)}</span
+						>
+						<small data-result-currency>MXN</small>
+					</p>
+					<p
+						class="loan-calculator__context"
+						data-result-context
+						hidden
+					>
+						Completa el monto y el plazo para ver tu mensualidad.
+					</p>
+					<div data-result-details>
+						<div class="loan-calculator__opening">
+							<p>
+								Comisión de apertura con IVA <strong
+									data-opening-fee
+									>{money(initial.openingFee)}</strong>
+							</p>
+						</div>
+					</div>
+					<p class="loan-calculator__insurance">
+						La estimación no incluye seguros. Su aplicación y costo
+						están pendientes de confirmación.
+					</p>
+				</div>
+			</div>
+
+			<footer class="loan-calculator__reference">
+				<p id="simulation-eligibility-note">
+					* Monto y plazo sujetos a evaluación.
+				</p>
+				<p>
+					Supuestos del cálculo: tasa anual del {
+						percent(config.annualRate)
+					}, apertura del {percent(config.openingFeeRate)} más IVA e IVA
+					del {percent(config.vatRate)}. Son referencias de
+					simulación; la tasa y la comisión definitivas están
+					pendientes de publicación.
+				</p>
+				{product === 'business' && <p>El CAT de la modalidad con garantía hipotecaria está pendiente de confirmación.</p>}
+			</footer>
+			<p
+				class="visually-hidden"
+				role="status"
+				aria-live="polite"
+				aria-atomic="true"
+				data-result-status
+			>
+			</p>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { calculateLoan, loanSimulations } from "../lib/loan-simulation";
+	import {
+		formatCurrencyEdit,
+		formatCurrencyInput,
+		parseCurrencyInput,
+	} from "../lib/currency-input";
+
+	function initLoanCalculator() {
+		const calculator = document.querySelector<HTMLElement>(
+			"[data-loan-calculator]",
+		);
+		const form = calculator?.querySelector("form");
+		if (!calculator || !form || form.dataset.initialized) return;
+		const product = calculator.dataset.loanProduct;
+		if (product !== 'personal' && product !== 'business') return;
+		const config = loanSimulations[product];
+
+		const fieldset = form.querySelector("fieldset")!;
+		const amount = form.querySelector<HTMLInputElement>('[name="amount"]')!;
+		const amountRange = form.querySelector<HTMLInputElement>(
+			"#simulation-amount-range",
+		)!;
+		const termField =
+			form.querySelector<HTMLFieldSetElement>("#simulation-term")!;
+		const termOptions = Array.from(
+			termField.querySelectorAll<HTMLInputElement>('[name="term"]'),
+		);
+		const selectedTerm = () =>
+			Number(termOptions.find((option) => option.checked)?.value);
+		const resultDetails = calculator.querySelector<HTMLElement>(
+			"[data-result-details]",
+		)!;
+		const currency = calculator.querySelector<HTMLElement>(
+			"[data-result-currency]",
+		)!;
+		const context = calculator.querySelector<HTMLElement>(
+			"[data-result-context]",
+		)!;
+		const status = calculator.querySelector<HTMLElement>(
+			"[data-result-status]",
+		)!;
+		const money = new Intl.NumberFormat("es-MX", {
+			style: "currency",
+			currency: "MXN",
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2,
+		});
+		const compactMoney = new Intl.NumberFormat("es-MX", {
+			style: "currency",
+			currency: "MXN",
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 2,
+		});
+		let announcementTimer: ReturnType<typeof setTimeout>;
+		const announce = (message: string) => {
+			clearTimeout(announcementTimer);
+			announcementTimer = setTimeout(() => {
+				if (calculator.isConnected) status.textContent = message;
+			}, 400);
+		};
+		const setText = (selector: string, value: string) => {
+			const element = calculator.querySelector<HTMLElement>(selector)!;
+			if (element.textContent !== value) element.textContent = value;
+		};
+		const setError = (
+			field: HTMLInputElement | HTMLFieldSetElement,
+			message: string,
+		) => {
+			const error = calculator.querySelector<HTMLElement>(
+				`#${field.id}-error`,
+			)!;
+			error.textContent = message;
+			error.hidden = !message;
+			if (message) field.setAttribute("aria-invalid", "true");
+			else field.removeAttribute("aria-invalid");
+		};
+		const updateRange = (
+			range: HTMLInputElement,
+			value: number,
+			text: string,
+		) => {
+			range.value = String(value);
+			const progress =
+				((value - Number(range.min)) /
+					(Number(range.max) - Number(range.min))) *
+				100;
+			range.style.setProperty("--range-progress", `${progress}%`);
+			range.setAttribute("aria-valuetext", text);
+		};
+		const validate = (amountValue: number) => [
+			amount.value.trim() === "" || amount.value.trim() === "$"
+				? "Ingresa el monto del crédito."
+				: !Number.isFinite(amountValue)
+					? "Ingresa un monto en pesos enteros."
+					: amountValue < config.amount.min ||
+						  amountValue > config.amount.max
+						? `Elige un monto de ${compactMoney.format(config.amount.min)} a ${compactMoney.format(config.amount.max)}.`
+						: "",
+			config.term.options.some((months) => months === selectedTerm())
+				? ""
+				: `Elige un plazo de ${new Intl.ListFormat('es-MX', { type: 'disjunction' }).format(config.term.options.map(String))} meses.`,
+		];
+		const update = (showErrors = false, announceResult = true) => {
+			const amountValue = parseCurrencyInput(amount.value);
+			const errors = validate(amountValue);
+			[amount, termField].forEach((field, index) => {
+				if (
+					showErrors ||
+					!errors[index] ||
+					field.hasAttribute("aria-invalid")
+				)
+					setError(field, errors[index]);
+			});
+			if (!errors[0])
+				updateRange(
+					amountRange,
+					amountValue,
+					compactMoney.format(amountValue),
+				);
+			const invalid = errors.some(Boolean);
+			resultDetails.hidden = invalid;
+			currency.hidden = invalid;
+			context.hidden = !invalid;
+			if (invalid) {
+				setText("[data-monthly-payment]", "—");
+				if (announceResult)
+					announce(
+						"Completa el monto y el plazo para ver tu mensualidad.",
+					);
+				return;
+			}
+
+			const estimate = calculateLoan(product, {
+				amount: amountValue,
+				termMonths: selectedTerm(),
+			});
+			setText(
+				"[data-monthly-payment]",
+				money.format(estimate.monthlyPayment),
+			);
+			setText("[data-opening-fee]", money.format(estimate.openingFee));
+			if (announceResult)
+				announce(
+					`Mensualidad estimada: ${money.format(estimate.monthlyPayment)}. Apertura por separado: ${money.format(estimate.openingFee)}.`,
+				);
+		};
+
+		const formatEditingAmount = () => {
+			const formatted = formatCurrencyEdit(
+				amount.value,
+				amount.selectionStart ?? amount.value.length,
+				amount.selectionEnd ?? amount.value.length,
+			);
+			if (formatted && formatted.text !== amount.value) {
+				const direction = amount.selectionDirection ?? "none";
+				amount.value = formatted.text;
+				amount.setSelectionRange(
+					formatted.selectionStart,
+					formatted.selectionEnd,
+					direction,
+				);
+			}
+			update();
+		};
+		amount.addEventListener("beforeinput", (event) => {
+			if (event.isComposing) return;
+			const start = amount.selectionStart ?? 0;
+			const end = amount.selectionEnd ?? start;
+			if (
+				start === 0 &&
+				end === 0 &&
+				amount.value.startsWith("$") &&
+				event.inputType === "insertText" &&
+				event.data !== null
+			) {
+				event.preventDefault();
+				if (
+					formatCurrencyEdit(`$${event.data}${amount.value.slice(1)}`)
+				) {
+					amount.setRangeText(event.data, 1, 1, "end");
+					formatEditingAmount();
+				}
+				return;
+			}
+			if (event.inputType === "insertText" && event.data !== null) {
+				const next =
+					amount.value.slice(0, start) +
+					event.data +
+					amount.value.slice(end);
+				if (!formatCurrencyEdit(next)) event.preventDefault();
+			}
+			// Delete the neighboring digit as well when Backspace/Delete crosses a comma.
+			if (
+				start === end &&
+				event.inputType === "deleteContentBackward" &&
+				amount.value[start - 1] === ","
+			) {
+				event.preventDefault();
+				amount.setRangeText("", start - 2, start, "end");
+				formatEditingAmount();
+			} else if (
+				start === end &&
+				event.inputType === "deleteContentForward" &&
+				amount.value[start] === ","
+			) {
+				event.preventDefault();
+				amount.setRangeText("", start, start + 2, "start");
+				formatEditingAmount();
+			}
+		});
+		amount.addEventListener("input", (event) => {
+			if (!(event instanceof InputEvent) || !event.isComposing)
+				formatEditingAmount();
+		});
+		amount.addEventListener("compositionend", formatEditingAmount);
+		amount.addEventListener("blur", () => {
+			const value = parseCurrencyInput(amount.value);
+			if (Number.isFinite(value))
+				amount.value = formatCurrencyInput(value);
+			update(true);
+		});
+		amountRange.addEventListener("input", () => {
+			// Use a practical drag increment while retaining exact whole-peso input.
+			amount.value = formatCurrencyInput(
+				amountRange.matches(":active")
+					? Math.round(amountRange.valueAsNumber / config.amount.dragStep) * config.amount.dragStep
+					: amountRange.valueAsNumber,
+			);
+			update();
+		});
+		amountRange.addEventListener("keydown", (event) => {
+			const increments: Record<string, number> = {
+				ArrowRight: config.amount.dragStep,
+				ArrowUp: config.amount.dragStep,
+				ArrowLeft: -config.amount.dragStep,
+				ArrowDown: -config.amount.dragStep,
+				PageUp: config.amount.pageStep,
+				PageDown: -config.amount.pageStep,
+			};
+			if (!(event.key in increments)) return;
+			event.preventDefault();
+			const next = amountRange.valueAsNumber + increments[event.key];
+			amount.value = formatCurrencyInput(
+				Math.min(config.amount.max, Math.max(config.amount.min, next)),
+			);
+			update();
+		});
+		termOptions.forEach((option) =>
+			option.addEventListener("change", () => update()),
+		);
+		form.addEventListener("submit", (event) => {
+			event.preventDefault();
+			update(true);
+			if (amount.hasAttribute("aria-invalid")) amount.focus();
+			else if (termField.hasAttribute("aria-invalid"))
+				termOptions[0]?.focus();
+		});
+
+		form.dataset.initialized = "true";
+		fieldset.disabled = false;
+		update(false, false);
+	}
+
+	initLoanCalculator();
+	document.addEventListener("astro:page-load", initLoanCalculator);
+</script>
+
+<style>
+	.loan-calculator {
+		padding: 40px 0 120px;
+		scroll-margin-top: 112px;
+	}
+	.loan-calculator__inner {
+		width: min(calc(100% - 96px), 1276px);
+		margin-inline: auto;
+	}
+	.loan-calculator__panel {
+		padding: 40px;
+		border-radius: 16px;
+		background: var(--color-surface);
+	}
+	.loan-calculator__heading {
+		margin-bottom: 40px;
+	}
+	h2 {
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: -0.6px;
+		color: #000;
+	}
+	h2 span {
+		color: var(--color-primary);
+	}
+	.loan-calculator__heading > p {
+		margin-top: 16px;
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--color-muted);
+	}
+	.loan-calculator__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: clamp(40px, 5vw, 72px);
+	}
+	form,
+	fieldset {
+		min-width: 0;
+	}
+	fieldset {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.loan-calculator__field + .loan-calculator__field {
+		margin-top: 32px;
+	}
+	.loan-calculator__field-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+	}
+	label {
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+	.loan-calculator__number {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 6px;
+		width: 210px;
+		flex-shrink: 0;
+		padding: 10px 12px;
+		border: 1px solid transparent;
+		border-radius: 8px;
+		background: transparent;
+	}
+	.loan-calculator__number > span {
+		font-size: 14px;
+		color: #696967;
+	}
+	.loan-calculator__term legend {
+		margin-bottom: 16px;
+		padding: 0;
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+	.loan-calculator__term-options {
+		display: grid;
+		grid-template-columns: repeat(var(--term-count, 3), minmax(0, 1fr));
+		border: 1px solid #d9d9d7;
+		border-radius: 999px;
+		background: var(--color-soft);
+	}
+	.loan-calculator__term-option {
+		position: relative;
+		min-width: 0;
+		cursor: pointer;
+	}
+	.loan-calculator__term-option span {
+		display: flex;
+		min-height: 47px;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
+		padding: 10px 12px;
+		border: 2px solid transparent;
+		border-radius: 999px;
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 1.4;
+		white-space: nowrap;
+		transition:
+			color 160ms ease,
+			background-color 160ms ease,
+			border-color 160ms ease,
+			box-shadow 160ms ease;
+	}
+	.loan-calculator__term-option:hover span {
+		color: var(--color-primary);
+	}
+	.loan-calculator__term-option small {
+		font: inherit;
+	}
+	.loan-calculator__term-option input:checked + span {
+		border-color: var(--color-primary);
+		background: var(--color-white);
+		color: var(--color-primary);
+		box-shadow: 0 2px 5px rgb(193 2 48 / 12%);
+	}
+	.loan-calculator__term-option input:focus-visible + span {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 3px;
+	}
+	.loan-calculator__term-option input:disabled + span {
+		cursor: not-allowed;
+	}
+	input[name="amount"] {
+		width: var(--amount-width, 8ch);
+		min-width: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--color-text);
+		font: inherit;
+		font-size: 20px;
+		font-weight: 600;
+		line-height: 1.4;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	input[name="amount"]:focus-visible {
+		outline: none;
+	}
+	input[name="amount"]:focus,
+	input[name="amount"][aria-invalid="true"] {
+		box-shadow: 0 2px 0 var(--color-primary);
+		caret-color: var(--color-primary);
+	}
+	.loan-calculator__range {
+		display: block;
+		width: 100%;
+		height: 44px;
+		margin: 14px 0 0;
+		padding: 0;
+		appearance: none;
+		background: transparent;
+		cursor: pointer;
+	}
+	.loan-calculator__range::-webkit-slider-runnable-track {
+		height: 4px;
+		border-radius: 999px;
+		background: linear-gradient(
+			to right,
+			var(--color-primary) 0% var(--range-progress),
+			#d9d9d7 var(--range-progress) 100%
+		);
+	}
+	.loan-calculator__range::-moz-range-track {
+		height: 4px;
+		border-radius: 999px;
+		background: linear-gradient(
+			to right,
+			var(--color-primary) 0% var(--range-progress),
+			#d9d9d7 var(--range-progress) 100%
+		);
+	}
+	.loan-calculator__range::-webkit-slider-thumb {
+		width: 20px;
+		height: 20px;
+		margin-top: -8px;
+		border: 3px solid var(--color-primary);
+		border-radius: 50%;
+		background: var(--color-white);
+		box-shadow: 0 2px 5px rgb(0 0 0 / 12%);
+		appearance: none;
+	}
+	.loan-calculator__range::-moz-range-thumb {
+		width: 14px;
+		height: 14px;
+		border: 3px solid var(--color-primary);
+		border-radius: 50%;
+		background: var(--color-white);
+		box-shadow: 0 2px 5px rgb(0 0 0 / 12%);
+	}
+	.loan-calculator__range:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 3px;
+		border-radius: 6px;
+	}
+	fieldset:disabled {
+		opacity: 0.55;
+	}
+	fieldset:disabled input {
+		cursor: not-allowed;
+	}
+	.loan-calculator__bounds {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		font-size: 12px;
+		line-height: 1.5;
+		color: #696967;
+	}
+	.loan-calculator__hint,
+	.loan-calculator__error {
+		margin-top: 8px;
+		font-size: 14px;
+		line-height: 1.55;
+		color: #696967;
+	}
+	.loan-calculator__error {
+		color: var(--color-primary);
+	}
+	.loan-calculator__result {
+		min-width: 0;
+		padding-left: clamp(32px, 4vw, 64px);
+		border-left: 1px solid #e0e0de;
+	}
+	h3 {
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+	.loan-calculator__payment {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 6px;
+		margin-top: 12px;
+		font-size: clamp(32px, 3vw, 44px);
+		font-weight: 600;
+		line-height: 1.15;
+		letter-spacing: -1px;
+		font-variant-numeric: tabular-nums;
+		overflow-wrap: anywhere;
+	}
+	.loan-calculator__payment > span {
+		white-space: nowrap;
+	}
+	.loan-calculator__payment small {
+		white-space: nowrap;
+		font-size: 14px;
+		font-weight: 400;
+		letter-spacing: 0;
+		color: #696967;
+	}
+	.loan-calculator__context {
+		margin-top: 16px;
+		font-size: 16px;
+		line-height: 1.5;
+	}
+	.loan-calculator__opening {
+		margin-top: 28px;
+		padding-top: 24px;
+		border-top: 1px solid #e0e0de;
+	}
+	.loan-calculator__opening > p:first-child {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 8px 24px;
+		font-size: 14px;
+		line-height: 1.5;
+	}
+	.loan-calculator__opening strong {
+		font-size: 20px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+	.loan-calculator__insurance {
+		margin-top: 24px;
+		font-size: 12px;
+		line-height: 1.65;
+		color: #696967;
+	}
+	.loan-calculator__reference {
+		margin-top: 32px;
+		padding-top: 24px;
+		border-top: 1px solid #e0e0de;
+		font-size: 12px;
+		line-height: 1.65;
+		color: #696967;
+	}
+	.loan-calculator__reference p + p {
+		margin-top: 8px;
+	}
+	[hidden] {
+		display: none;
+	}
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+	@media (max-width: 1023px) {
+		.loan-calculator__grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 32px;
+		}
+		.loan-calculator__result {
+			padding: 32px 0 0;
+			border-left: 0;
+			border-top: 1px solid #e0e0de;
+		}
+	}
+	@media (max-width: 767px) {
+		.loan-calculator {
+			padding: 24px 0 72px;
+		}
+		.loan-calculator__inner {
+			width: calc(100% - 40px);
+		}
+		.loan-calculator__panel {
+			padding: 24px;
+		}
+		.loan-calculator__heading {
+			margin-bottom: 28px;
+		}
+		h2 {
+			font-size: 28px;
+		}
+	}
+	@media (max-width: 479px) {
+		.loan-calculator__field-heading {
+			flex-wrap: wrap;
+			gap: 12px;
+		}
+		.loan-calculator__number {
+			width: 100%;
+		}
+		.loan-calculator__term-option span {
+			padding-inline: 4px;
+			font-size: 14px;
+		}
+		.loan-calculator[data-loan-product='business'] .loan-calculator__term-option span {
+			flex-direction: column;
+			gap: 2px;
+			min-height: 60px;
+			padding: 8px 2px;
+		}
+		.loan-calculator[data-loan-product='business'] .loan-calculator__term-option small {
+			font-size: 11px;
+			font-weight: 400;
+		}
+	}
+</style>

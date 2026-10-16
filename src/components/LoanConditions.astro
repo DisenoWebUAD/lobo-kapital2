@@ -1,0 +1,150 @@
+---
+import { credits } from "../data/credits";
+
+interface Props {
+	product: keyof typeof credits;
+}
+const { product: productId } = Astro.props;
+const product = credits[productId];
+const titleId = `${productId}-loan-conditions-title`;
+---
+
+<div
+	class="loan-conditions"
+	aria-labelledby={titleId}
+>
+	<h3 id={titleId}>Montos y condiciones</h3>
+
+	<table aria-labelledby={titleId}>
+		<tbody>
+			<tr
+				><th scope="row">Monto (MXN)</th><td
+					class="loan-conditions__amount"
+					>{product.amount}</td
+				></tr
+			>
+			<tr>
+				<th scope="row">Plazo</th>
+				<td>{product.termRange}</td>
+			</tr>
+			<tr><th scope="row">Cobertura</th><td>{product.coverage}</td></tr>
+			<tr
+				><th scope="row">Tasa de interés</th><td
+					class="loan-conditions__pending"
+					>{product.contractualPricing.status}</td
+				></tr
+			>
+			<tr
+				><th scope="row">Comisión de apertura</th><td
+					class="loan-conditions__pending"
+					>{product.contractualPricing.status}</td
+				></tr
+			>
+			<tr>
+				<th scope="row">CAT informativo</th>
+				<td
+					>{product.cat} anual (sin IVA)<small
+						>{product.catModality}</small
+					></td
+				>
+			</tr>
+		</tbody>
+	</table>
+
+	<footer class="loan-conditions__footnote">
+		<p>{product.catDisclosure}</p>
+	</footer>
+</div>
+
+<style>
+	.loan-conditions {
+		min-width: 0;
+		padding: 32px;
+		border-radius: 16px;
+		background: var(--color-surface);
+	}
+
+	h3 {
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: -0.6px;
+		color: #000;
+	}
+
+	table {
+		width: 100%;
+		margin-top: 24px;
+		border-collapse: collapse;
+		table-layout: fixed;
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	th,
+	td {
+		padding-block: 16px;
+		border-bottom: 1px solid #e0e0de;
+		text-align: left;
+		vertical-align: baseline;
+		overflow-wrap: break-word;
+	}
+
+	th {
+		width: 43%;
+		padding-right: 24px;
+		font-size: 14px;
+		font-weight: 400;
+		color: #696967;
+	}
+
+	td {
+		font-weight: 500;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.loan-conditions__amount {
+		font-size: 20px;
+		font-weight: 600;
+		letter-spacing: -0.3px;
+	}
+
+	.loan-conditions__pending {
+		font-size: 14px;
+		font-weight: 400;
+		color: #696967;
+	}
+
+	td small {
+		display: block;
+		margin-top: 6px;
+		font-size: 14px;
+		font-weight: 400;
+		color: #696967;
+	}
+
+	.loan-conditions__footnote {
+		margin-top: 24px;
+		font-size: 12px;
+		line-height: 1.65;
+		color: #696967;
+	}
+
+	@media (max-width: 767px) {
+		.loan-conditions {
+			padding: 24px;
+		}
+
+		h3 {
+			font-size: 28px;
+		}
+
+		.loan-conditions__amount {
+			font-size: 18px;
+		}
+
+		th {
+			padding-right: 16px;
+		}
+	}
+</style>

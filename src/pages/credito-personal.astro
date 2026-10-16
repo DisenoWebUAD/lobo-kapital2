@@ -2,16 +2,18 @@
 import '@fontsource-variable/figtree/wght.css';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
-import PersonalCreditHero from '../components/PersonalCreditHero.astro';
-import PersonalCardCarousel from '../components/PersonalCardCarousel.astro';
-import PersonalRewards from '../components/PersonalRewards.astro';
+import PersonalLoanHero from '../components/PersonalLoanHero.astro';
+import CreditDetails from '../components/CreditDetails.astro';
+import PersonalLoanRequirements from '../components/PersonalLoanRequirements.astro';
+import PersonalLoanConditions from '../components/PersonalLoanConditions.astro';
+import PersonalLoanCalculator from '../components/PersonalLoanCalculator.astro';
+import LeadForm from '../components/LeadForm.astro';
 import Footer from '../components/Footer.astro';
 import logoMark from '../assets/home/logo-mark.svg';
 import '../styles/global.css';
-import '../styles/personal-credit.css';
 
 const title = 'Crédito Personal | Lobo Kapital';
-const description = 'Tarjetas de crédito Lobo Kapital con beneficios, recompensas y soluciones diseñadas para cada perfil.';
+const description = 'Crédito personal de $30,000 a $200,000 MXN en Durango. Consulta montos, plazos, condiciones orientativas y requisitos para la evaluación.';
 ---
 
 <!doctype html>
@@ -26,13 +28,17 @@ const description = 'Tarjetas de crédito Lobo Kapital con beneficios, recompens
 		<title>{title}</title>
 		<ClientRouter />
 	</head>
-	<body class="personal-credit-page">
+	<body class="personal-loan-page">
 		<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 		<Header />
 		<main id="main-content" tabindex="-1" transition:name="page-main" transition:animate="fade">
-			<PersonalCreditHero />
-			<PersonalCardCarousel />
-			<PersonalRewards />
+			<PersonalLoanHero />
+			<CreditDetails product="personal">
+				<PersonalLoanRequirements slot="heading" />
+				<PersonalLoanConditions slot="conditions" />
+			</CreditDetails>
+			<PersonalLoanCalculator />
+			<LeadForm product="personal" />
 		</main>
 		<Footer />
 	</body>

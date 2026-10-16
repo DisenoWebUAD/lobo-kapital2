@@ -1,0 +1,119 @@
+---
+interface Props {
+	product: 'personal' | 'business';
+}
+const { product } = Astro.props;
+const business = product === 'business';
+const requirements = business ? [
+	'Empresa con al menos 24 meses de operación.',
+	'Estados financieros y constancia de situación fiscal. Historial crediticio y capacidad de pago sujetos a evaluación.',
+	'Garantía conforme al monto y al perfil de la operación.',
+] : [
+	'Identificación oficial INE y comprobante de ingresos.',
+	'Puntaje de Buró de Crédito de al menos 600, sujeto a validación y análisis de capacidad de pago.',
+];
+const intro = business
+	? 'Para empresas con operación formal y flujo comprobable. La evaluación considera ingresos, historial y capacidad de pago.'
+	: 'Para personas asalariadas, profesionistas o con ingresos comprobables. La autorización depende de tu historial crediticio y capacidad de pago.';
+---
+
+<div class="loan-requirements" id="requisitos">
+	<h2 id="credit-details-title">¿Puede ser <span>{business ? 'para tu empresa' : 'para ti'}</span>?</h2>
+	<p class="loan-requirements__intro">
+		{intro}
+	</p>
+	<ul>
+		{
+			requirements.map((requirement) => (
+				<li>
+					<svg
+						viewBox="0 0 24 24"
+						width="18"
+						height="18"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="m5 12 4 4L19 6"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					<span>{requirement}</span>
+				</li>
+			))
+		}
+	</ul>
+	<p class="loan-requirements__note">
+		No necesitas adjuntar documentos al pedir información. Si inicias el
+		trámite, un asesor te indicará el canal para enviarlos.
+	</p>
+</div>
+
+<style>
+	.loan-requirements {
+		min-width: 0;
+		padding-top: 32px;
+	}
+
+	h2 {
+		font-size: 32px;
+		line-height: 1.2;
+		letter-spacing: -0.6px;
+		color: #000;
+	}
+
+	h2 span {
+		color: var(--color-primary);
+	}
+
+	.loan-requirements__intro {
+		margin-top: 20px;
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--color-muted);
+	}
+
+	ul {
+		display: grid;
+		gap: 16px;
+		margin: 28px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		display: flex;
+		gap: 12px;
+		align-items: flex-start;
+		font-size: 16px;
+		line-height: 1.6;
+	}
+
+	li svg {
+		flex-shrink: 0;
+		margin-top: 3px;
+		color: var(--color-primary);
+	}
+
+	.loan-requirements__note {
+		margin-top: 24px;
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--color-muted);
+	}
+
+	@media (max-width: 900px) {
+		.loan-requirements {
+			padding-top: 0;
+		}
+	}
+
+	@media (max-width: 767px) {
+		h2 {
+			font-size: 28px;
+		}
+	}
+</style>
