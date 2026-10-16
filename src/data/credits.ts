@@ -29,7 +29,7 @@ export const credits = {
 		title: 'Crédito empresarial',
 		summary: 'Capital de trabajo, inventario o expansión para tu empresa.',
 		description: 'Capital de trabajo, inventario o expansión para empresas con al menos 24 meses de operación.',
-		href: '/creditos-pymes/#condiciones',
+		href: '/creditos-pymes/',
 		amount: '$250,000 a $10,150,000',
 		maxAmount: '$10,150,000',
 		term: '12 a 36 meses',
