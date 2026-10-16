@@ -8,7 +8,8 @@ const isPymesPage = Astro.url.pathname.startsWith("/creditos-pymes");
 const isLeasePage = Astro.url.pathname.startsWith("/arrendamiento");
 const isFactoringPage = Astro.url.pathname.startsWith("/factoraje");
 const isPymesSection = isPymesPage || isLeasePage || isFactoringPage;
-const clientHref = isPymesPage || isLeasePage ? "#solicitud" : "#contacto";
+const hasContactSection = Astro.url.pathname === "/" || isPersonalSection || isFactoringPage;
+const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection ? "#contacto" : "/#contacto";
 ---
 
 <header
