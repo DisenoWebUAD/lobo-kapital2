@@ -1,9 +1,13 @@
 ---
-import { Picture } from 'astro:assets';
-import heroImage from '../assets/personal-credit/hero.jpg';
+import { Picture } from "astro:assets";
+import heroImage from "../assets/personal-credit/hero.jpg";
 ---
 
-<section class="personal-hero" id="inicio" aria-labelledby="personal-hero-title">
+<section
+	class="personal-hero"
+	id="inicio"
+	aria-labelledby="personal-hero-title"
+>
 	<div class="personal-hero__inner">
 		<div class="personal-hero__copy">
 			<h1 id="personal-hero-title">
@@ -11,16 +15,26 @@ import heroImage from '../assets/personal-credit/hero.jpg';
 				<span class="personal-hero__muted">con Beneficios</span>
 				<span>Exclusivos</span>
 			</h1>
-			<p>Diseñadas para adaptarse a tu estilo de vida y potenciar el crecimiento de tu negocio. Seguridad institucional, recompensas excepcionales y aceptación global.</p>
+			<p>
+				Diseñadas para adaptarse a tu estilo de vida y potenciar el
+				crecimiento de tu negocio. Seguridad institucional, recompensas
+				excepcionales y aceptación global.
+			</p>
 			<div class="personal-hero__actions">
-				<a class="button button--primary" href="/?producto=Tarjeta%20de%20Cr%C3%A9dito#contacto">Solicitar ahora <span aria-hidden="true">→</span></a>
-				<a class="button button--outline" href="#beneficios">Conoce los beneficios</a>
+				<a
+					class="button button--primary"
+					href="#contacto"
+					>Solicitar ahora <span aria-hidden="true">→</span></a
+				>
+				<a class="button button--outline" href="#beneficios"
+					>Conoce los beneficios</a
+				>
 			</div>
 		</div>
 
 		<Picture
 			src={heroImage}
-			formats={['avif', 'webp']}
+			formats={["avif", "webp"]}
 			widths={[420, 646]}
 			sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1199px) 43vw, 646px"
 			alt="Mujer mostrando una tarjeta de crédito Lobo Kapital"

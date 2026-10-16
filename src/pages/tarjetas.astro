@@ -1,0 +1,41 @@
+---
+import '@fontsource-variable/figtree/wght.css';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import PersonalCreditHero from '../components/PersonalCreditHero.astro';
+import PersonalCardCarousel from '../components/PersonalCardCarousel.astro';
+import PersonalRewards from '../components/PersonalRewards.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Footer from '../components/Footer.astro';
+import logoMark from '../assets/home/logo-mark.svg';
+import '../styles/global.css';
+import '../styles/personal-credit.css';
+
+const title = 'Tarjetas de Crédito | Lobo Kapital';
+const description = 'Conoce las tarjetas de crédito Lobo Kapital y sus beneficios, recompensas y opciones para cada perfil.';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#c10230" />
+		<link rel="icon" type="image/svg+xml" href={logoMark.src} />
+		<title>{title}</title>
+		<ClientRouter />
+	</head>
+	<body class="personal-credit-page">
+		<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+		<Header />
+		<main id="main-content" tabindex="-1" transition:name="page-main" transition:animate="fade">
+			<PersonalCreditHero />
+			<PersonalCardCarousel />
+			<PersonalRewards />
+			<LeadForm product="cards" />
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,41 +1,120 @@
 ---
-import logoWordmark from '../assets/home/logo-wordmark.svg';
+import logoWordmark from "../assets/home/logo-wordmark.svg";
 
-const isPersonalPage = Astro.url.pathname.startsWith('/credito-personal');
-const isPymesPage = Astro.url.pathname.startsWith('/creditos-pymes');
-const isLeasePage = Astro.url.pathname.startsWith('/arrendamiento');
-const isFactoringPage = Astro.url.pathname.startsWith('/factoraje');
+const isPersonalPage = Astro.url.pathname.startsWith("/credito-personal");
+const isCardsPage = Astro.url.pathname.startsWith("/tarjetas");
+const isPersonalSection = isPersonalPage || isCardsPage;
+const isPymesPage = Astro.url.pathname.startsWith("/creditos-pymes");
+const isLeasePage = Astro.url.pathname.startsWith("/arrendamiento");
+const isFactoringPage = Astro.url.pathname.startsWith("/factoraje");
 const isPymesSection = isPymesPage || isLeasePage || isFactoringPage;
-const clientHref = isPymesPage || isLeasePage ? '#solicitud' : isFactoringPage ? '/?producto=Factoraje#contacto' : '/#contacto';
+const clientHref = isPymesPage || isLeasePage ? "#solicitud" : "#contacto";
 ---
 
-<header class="site-header" aria-label="Encabezado principal" transition:name="site-header" transition:animate="none">
-	<a class="site-header__brand" href="/" aria-label="Lobo Kapital, ir al inicio">
-		<img src={logoWordmark.src} alt="Lobo Kapital" width="187" height="19" />
+<header
+	class="site-header"
+	aria-label="Encabezado principal"
+	transition:name="site-header"
+	transition:animate="none"
+>
+	<a
+		class="site-header__brand"
+		href="/"
+		aria-label="Lobo Kapital, ir al inicio"
+	>
+		<img
+			src={logoWordmark.src}
+			alt="Lobo Kapital"
+			width="187"
+			height="19"
+		/>
 	</a>
 
-	<nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
-		<a href="/credito-personal/" aria-current={isPersonalPage ? 'page' : undefined}>Personal</a>
-		<div class="site-nav__pymes" data-active={isPymesSection ? '' : undefined}>
+	<nav
+		class="site-nav"
+		id="site-navigation"
+		aria-label="Navegación principal"
+	>
+		<div
+			class="site-nav__pymes"
+			data-nav-dropdown
+			data-active={isPersonalSection ? "" : undefined}
+		>
+			<button
+				class="site-nav__pymes-trigger"
+				type="button"
+				aria-controls="personal-navigation"
+				aria-expanded="false"
+				aria-current={isPersonalSection ? "page" : undefined}
+			>
+				Personal
+			</button>
+			<div
+				class="site-nav__pymes-menu"
+				id="personal-navigation"
+				aria-label="Productos personales"
+				aria-hidden="true"
+			>
+				<a
+					href="/credito-personal/"
+					aria-current={isPersonalPage ? "page" : undefined}
+					>Crédito personal</a
+				>
+				<a
+					href="/tarjetas/"
+					aria-current={isCardsPage ? "page" : undefined}>Tarjetas</a
+				>
+			</div>
+		</div>
+		<div
+			class="site-nav__pymes"
+			data-nav-dropdown
+			data-active={isPymesSection ? "" : undefined}
+		>
 			<button
 				class="site-nav__pymes-trigger"
 				type="button"
 				aria-controls="pymes-navigation"
 				aria-expanded="false"
-				aria-current={isPymesSection ? 'page' : undefined}
+				aria-current={isPymesSection ? "page" : undefined}
 			>
 				PyMEs
 			</button>
-			<div class="site-nav__pymes-menu" id="pymes-navigation" aria-label="Soluciones para PyMEs" aria-hidden="true">
-				<a href="/creditos-pymes/" aria-current={isPymesPage ? 'page' : undefined}>Créditos PyMEs</a>
-				<a href="/arrendamiento/" aria-current={isLeasePage ? 'page' : undefined}>Arrendamiento</a>
-				<a href="/factoraje/" aria-current={isFactoringPage ? 'page' : undefined}>Factoraje</a>
+			<div
+				class="site-nav__pymes-menu"
+				id="pymes-navigation"
+				aria-label="Soluciones para PyMEs"
+				aria-hidden="true"
+			>
+				<a
+					href="/creditos-pymes/"
+					aria-current={isPymesPage ? "page" : undefined}
+					>Créditos PyMEs</a
+				>
+				<a
+					href="/arrendamiento/"
+					aria-current={isLeasePage ? "page" : undefined}
+					>Arrendamiento</a
+				>
+				<a
+					href="/factoraje/"
+					aria-current={isFactoringPage ? "page" : undefined}
+					>Factoraje</a
+				>
 			</div>
 		</div>
 		<a class="site-nav__section-link" href="/#confianza">Conócenos</a>
-		<span class="site-nav__disabled" aria-disabled="true" title="Disponible próximamente">FAQ</span>
+		<span
+			class="site-nav__disabled"
+			aria-disabled="true"
+			title="Disponible próximamente">FAQ</span
+		>
 		<a class="site-nav__client" href={clientHref}>Hazte Cliente</a>
-		<span class="site-nav__login" aria-disabled="true" title="Disponible próximamente">Ingresar</span>
+		<span
+			class="site-nav__login"
+			aria-disabled="true"
+			title="Disponible próximamente">Ingresar</span
+		>
 	</nav>
 
 	<button
@@ -58,96 +137,200 @@ const clientHref = isPymesPage || isLeasePage ? '#solicitud' : isFactoringPage ?
 		headerController?.abort();
 		headerController = new AbortController();
 		const { signal } = headerController;
-		const menuButton = document.querySelector<HTMLButtonElement>('.menu-toggle');
-		const navigation = document.querySelector<HTMLElement>('#site-navigation');
-		const pymesGroup = document.querySelector<HTMLElement>('.site-nav__pymes');
-		const pymesTrigger = document.querySelector<HTMLButtonElement>('.site-nav__pymes-trigger');
-		const pymesMenu = document.querySelector<HTMLElement>('#pymes-navigation');
-		const pymesLinks = pymesMenu?.querySelectorAll<HTMLAnchorElement>('a');
-		const desktopNavigation = window.matchMedia('(min-width: 1200px)');
-		let pymesCloseTimer: number | undefined;
+		const menuButton =
+			document.querySelector<HTMLButtonElement>(".menu-toggle");
+		const navigation =
+			document.querySelector<HTMLElement>("#site-navigation");
+		const desktopNavigation = window.matchMedia("(min-width: 1200px)");
+		const dropdowns = Array.from(
+			document.querySelectorAll<HTMLElement>("[data-nav-dropdown]"),
+		).map((group) => ({
+			group,
+			trigger: group.querySelector<HTMLButtonElement>(
+				".site-nav__pymes-trigger",
+			),
+			menu: group.querySelector<HTMLElement>(".site-nav__pymes-menu"),
+			closeTimer: undefined as number | undefined,
+		}));
 
-		const setPymesOpen = (isOpen: boolean) => {
-			if (!pymesGroup || !pymesTrigger || !pymesMenu) return;
-			window.clearTimeout(pymesCloseTimer);
-			pymesGroup.toggleAttribute('data-open', isOpen);
-			pymesTrigger.setAttribute('aria-expanded', String(isOpen));
-			pymesMenu.setAttribute('aria-hidden', String(!isOpen));
+		const setDropdownOpen = (
+			dropdown: (typeof dropdowns)[number],
+			isOpen: boolean,
+		) => {
+			window.clearTimeout(dropdown.closeTimer);
+			dropdown.group.toggleAttribute("data-open", isOpen);
+			dropdown.trigger?.setAttribute("aria-expanded", String(isOpen));
+			dropdown.menu?.setAttribute("aria-hidden", String(!isOpen));
 		};
-
-		const schedulePymesClose = () => {
-			window.clearTimeout(pymesCloseTimer);
-			pymesCloseTimer = window.setTimeout(() => setPymesOpen(false), 140);
+		const closeDropdowns = () =>
+			dropdowns.forEach((dropdown) => setDropdownOpen(dropdown, false));
+		const openDropdown = (dropdown: (typeof dropdowns)[number]) => {
+			dropdowns.forEach((other) =>
+				setDropdownOpen(other, other === dropdown),
+			);
 		};
+		const scheduleDropdownClose = (
+			dropdown: (typeof dropdowns)[number],
+		) => {
+			window.clearTimeout(dropdown.closeTimer);
+			dropdown.closeTimer = window.setTimeout(
+				() => setDropdownOpen(dropdown, false),
+				140,
+			);
+		};
+		signal.addEventListener(
+			"abort",
+			() =>
+				dropdowns.forEach((dropdown) =>
+					window.clearTimeout(dropdown.closeTimer),
+				),
+			{ once: true },
+		);
 
 		const closeMenu = () => {
 			if (!menuButton || !navigation) return;
-			menuButton.setAttribute('aria-expanded', 'false');
-			menuButton.setAttribute('aria-label', 'Abrir menú');
-			navigation.removeAttribute('data-open');
-			setPymesOpen(false);
+			menuButton.setAttribute("aria-expanded", "false");
+			menuButton.setAttribute("aria-label", "Abrir menú");
+			navigation.removeAttribute("data-open");
+			closeDropdowns();
 		};
 
-		menuButton?.addEventListener('click', () => {
-			if (!navigation) return;
-			const willOpen = menuButton.getAttribute('aria-expanded') !== 'true';
-			menuButton.setAttribute('aria-expanded', String(willOpen));
-			menuButton.setAttribute('aria-label', willOpen ? 'Cerrar menú' : 'Abrir menú');
-			navigation.toggleAttribute('data-open', willOpen);
-		}, { signal });
+		menuButton?.addEventListener(
+			"click",
+			() => {
+				if (!navigation) return;
+				const willOpen =
+					menuButton.getAttribute("aria-expanded") !== "true";
+				menuButton.setAttribute("aria-expanded", String(willOpen));
+				menuButton.setAttribute(
+					"aria-label",
+					willOpen ? "Cerrar menú" : "Abrir menú",
+				);
+				navigation.toggleAttribute("data-open", willOpen);
+			},
+			{ signal },
+		);
 
-		navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu, { signal }));
-		pymesTrigger?.addEventListener('click', () => {
-			setPymesOpen(pymesTrigger.getAttribute('aria-expanded') !== 'true');
-		}, { signal });
+		navigation
+			?.querySelectorAll("a")
+			.forEach((link) =>
+				link.addEventListener("click", closeMenu, { signal }),
+			);
+		dropdowns.forEach((dropdown) => {
+			dropdown.trigger?.addEventListener(
+				"click",
+				() => {
+					if (
+						dropdown.trigger?.getAttribute("aria-expanded") ===
+						"true"
+					)
+						setDropdownOpen(dropdown, false);
+					else openDropdown(dropdown);
+				},
+				{ signal },
+			);
+			dropdown.trigger?.addEventListener(
+				"keydown",
+				(event) => {
+					if (event.key !== "ArrowDown" && event.key !== "ArrowUp")
+						return;
+					event.preventDefault();
+					openDropdown(dropdown);
+					const links =
+						dropdown.menu?.querySelectorAll<HTMLAnchorElement>("a");
+					links?.[
+						event.key === "ArrowDown" ? 0 : links.length - 1
+					]?.focus();
+				},
+				{ signal },
+			);
+			dropdown.group.addEventListener(
+				"pointerenter",
+				() => {
+					if (desktopNavigation.matches) openDropdown(dropdown);
+				},
+				{ signal },
+			);
+			dropdown.group.addEventListener(
+				"pointerleave",
+				() => {
+					if (
+						desktopNavigation.matches &&
+						!dropdown.group.contains(document.activeElement)
+					)
+						scheduleDropdownClose(dropdown);
+				},
+				{ signal },
+			);
+			dropdown.group.addEventListener(
+				"focusin",
+				() => window.clearTimeout(dropdown.closeTimer),
+				{ signal },
+			);
+			dropdown.group.addEventListener(
+				"focusout",
+				(event) => {
+					if (
+						!dropdown.group.contains(
+							event.relatedTarget as Node | null,
+						)
+					)
+						scheduleDropdownClose(dropdown);
+				},
+				{ signal },
+			);
+		});
 
-		pymesTrigger?.addEventListener('keydown', (event) => {
-			if (event.key === 'ArrowDown') {
-				event.preventDefault();
-				setPymesOpen(true);
-				pymesLinks?.[0]?.focus();
-			}
-		}, { signal });
+		document.addEventListener(
+			"pointerdown",
+			(event) => {
+				dropdowns.forEach((dropdown) => {
+					if (!dropdown.group.contains(event.target as Node))
+						setDropdownOpen(dropdown, false);
+				});
+			},
+			{ signal },
+		);
+		document.addEventListener(
+			"keydown",
+			(event) => {
+				if (event.key !== "Escape") return;
+				const activeDropdown = dropdowns.find(
+					(dropdown) =>
+						dropdown.trigger?.getAttribute("aria-expanded") ===
+						"true",
+				);
+				if (activeDropdown) {
+					setDropdownOpen(activeDropdown, false);
+					activeDropdown.trigger?.focus();
+					return;
+				}
+				if (menuButton?.getAttribute("aria-expanded") === "true") {
+					closeMenu();
+					menuButton.focus();
+				}
+			},
+			{ signal },
+		);
 
-		pymesGroup?.addEventListener('pointerenter', () => {
-			if (desktopNavigation.matches) setPymesOpen(true);
-		}, { signal });
-		pymesGroup?.addEventListener('pointerleave', () => {
-			if (desktopNavigation.matches) schedulePymesClose();
-		}, { signal });
-		pymesGroup?.addEventListener('focusin', () => window.clearTimeout(pymesCloseTimer), { signal });
-		pymesGroup?.addEventListener('focusout', () => {
-			window.setTimeout(() => {
-				if (desktopNavigation.matches && pymesGroup && !pymesGroup.contains(document.activeElement)) schedulePymesClose();
-			});
-		}, { signal });
-
-		document.addEventListener('pointerdown', (event) => {
-			if (pymesGroup && !pymesGroup.contains(event.target as Node)) setPymesOpen(false);
-		}, { signal });
-		document.addEventListener('keydown', (event) => {
-			if (event.key !== 'Escape') return;
-			if (pymesTrigger?.getAttribute('aria-expanded') === 'true') {
-				setPymesOpen(false);
-				pymesTrigger.focus();
-				return;
-			}
-			if (menuButton?.getAttribute('aria-expanded') === 'true') {
-				closeMenu();
-				menuButton.focus();
-			}
-		}, { signal });
-
-		const aboutLink = document.querySelector<HTMLAnchorElement>('.site-nav__section-link');
-		const aboutSection = document.querySelector<HTMLElement>('#confianza');
+		const aboutLink = document.querySelector<HTMLAnchorElement>(
+			".site-nav__section-link",
+		);
+		const aboutSection = document.querySelector<HTMLElement>("#confianza");
 		if (aboutLink && aboutSection) {
-			const setAboutActive = (isActive: boolean) => aboutLink.toggleAttribute('aria-current', isActive);
-			const observer = new IntersectionObserver(([entry]) => setAboutActive(entry.isIntersecting), { threshold: .25 });
+			const setAboutActive = (isActive: boolean) =>
+				aboutLink.toggleAttribute("aria-current", isActive);
+			const observer = new IntersectionObserver(
+				([entry]) => setAboutActive(entry.isIntersecting),
+				{ threshold: 0.25 },
+			);
 			observer.observe(aboutSection);
-			signal.addEventListener('abort', () => observer.disconnect(), { once: true });
+			signal.addEventListener("abort", () => observer.disconnect(), {
+				once: true,
+			});
 		}
 	};
 
 	initializeHeader();
-	document.addEventListener('astro:page-load', initializeHeader);
+	document.addEventListener("astro:page-load", initializeHeader);
 </script>

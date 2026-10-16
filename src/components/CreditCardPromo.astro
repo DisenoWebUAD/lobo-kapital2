@@ -1,15 +1,17 @@
 ---
-import { Image } from 'astro:assets';
-import cardPromo from '../assets/home/tarjeta-cinta.png';
-import underline from '../assets/home/subrayado.svg';
+import { Image } from "astro:assets";
+import cardPromo from "../assets/home/tarjeta-cinta.png";
+import underline from "../assets/home/subrayado.svg";
 ---
 
 <section class="card-promo" aria-labelledby="card-promo-title">
 	<div class="card-promo__inner">
 		<div class="card-promo__copy" data-reveal-group="90">
-			<h2 id="card-promo-title" data-reveal>La tarjeta de crédito<br />para tu futuro</h2>
-			<a class="button button--primary" href="#contacto" data-product="Tarjeta de Crédito" data-reveal>
-				Solicitar ahora <span aria-hidden="true">→</span>
+			<h2 id="card-promo-title" data-reveal>
+				La tarjeta de crédito<br />para tu futuro
+			</h2>
+			<a class="button button--primary" href="/tarjetas/" data-reveal>
+				Conocer las tarjetas <span aria-hidden="true">→</span>
 			</a>
 		</div>
 		<div class="card-promo__visual" data-reveal="right">
@@ -25,7 +27,13 @@ import underline from '../assets/home/subrayado.svg';
 		</div>
 		<div class="no-fee" data-reveal="underline" data-reveal-delay="120">
 			<p>Y SIN ANUALIDAD</p>
-			<img class="no-fee__underline" src={underline.src} alt="" width="366" height="13" />
+			<img
+				class="no-fee__underline"
+				src={underline.src}
+				alt=""
+				width="366"
+				height="13"
+			/>
 			<small>*Aplican restricciones</small>
 		</div>
 	</div>
