@@ -1,0 +1,261 @@
+---
+import '@fontsource-variable/figtree/wght.css';
+import { ClientRouter } from 'astro:transitions';
+import { Picture } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import teamImage from '../assets/about/equipo.jpg';
+import logoMark from '../assets/home/logo-mark.svg';
+import '../styles/global.css';
+
+const values = [
+	{
+		title: 'Agilidad sin fricción',
+		description: 'Evaluaciones financieras eficientes y seguimiento cercano durante cada etapa del proceso.',
+	},
+	{
+		title: 'Transparencia absoluta',
+		description: 'Claridad total en nuestras condiciones, comisiones y contratos. Sin letras pequeñas ni costos ocultos.',
+	},
+	{
+		title: 'Empatía comercial',
+		description: 'Entendemos tu negocio más allá de un expediente; evaluamos proyectos y capacidad de pago con flexibilidad.',
+	},
+	{
+		title: 'Respeto a la norma',
+		description: 'Operamos conforme al marco aplicable a una SOFOM, E.N.R., con supervisión de la CNBV únicamente en los términos del artículo 95 Bis de la LGOAAC.',
+	},
+];
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="Conoce Lobo Kapital, nuestra visión y los valores que guían nuestras soluciones de crédito, arrendamiento y factoraje." />
+		<meta name="theme-color" content="#c10230" />
+		<link rel="icon" type="image/svg+xml" href={logoMark.src} />
+		<title>Nosotros | Lobo Kapital</title>
+		<ClientRouter />
+	</head>
+	<body>
+		<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+		<Header />
+		<main id="main-content" class="about-page" tabindex="-1" transition:name="page-main" transition:animate="fade">
+			<section class="about-intro" aria-labelledby="about-title">
+				<h1 id="about-title">Nosotros</h1>
+				<div class="about-intro__card">
+					<p>Nacimos con una visión clara: romper las barreras del financiamiento tradicional para ofrecer alternativas de crédito, arrendamiento y factoraje estructuradas a la velocidad que exige el mercado actual. Como SOFOM, E.N.R., combinamos la solidez institucional con un modelo de atención flexible para entender la realidad de cada negocio.</p>
+				</div>
+			</section>
+
+			<section class="about-banner" aria-labelledby="about-banner-title">
+				<Picture
+					src={teamImage}
+					formats={['avif', 'webp']}
+					widths={[640, 960, 1280, 1920, 2560, 3840]}
+					sizes="(max-width: 1524px) 1524px, 100vw"
+					alt="Profesionales conversando en una oficina"
+					width={1920}
+					height={302}
+					loading="eager"
+					fetchpriority="high"
+				/>
+				<h2 id="about-banner-title">Impulsamos el potencial de tu negocio con soluciones financieras ágiles</h2>
+			</section>
+
+			<section class="about-values" aria-labelledby="about-values-title">
+				<header class="about-values__heading">
+					<p>Valores Lobo Kapital</p>
+					<h2 id="about-values-title">Tu <span>aliado estratégico</span> en financiamiento y crecimiento empresarial.</h2>
+				</header>
+				<ul class="about-values__list" role="list">
+					{values.map((value) => (
+						<li><p><strong>{value.title}:</strong> {value.description}</p></li>
+					))}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.about-intro {
+		padding: 168px 24px 82px;
+	}
+
+	h1 {
+		color: var(--color-primary);
+		font-size: 24px;
+		font-weight: 600;
+		line-height: 1.25;
+		text-align: center;
+	}
+
+	.about-intro__card {
+		width: min(100%, 944px);
+		margin: 36px auto 0;
+		padding: 28px 44px;
+		border: 1px solid #ededed;
+		border-radius: 72px;
+		background: var(--color-white);
+		box-shadow: 0 2px 4px rgb(0 0 0 / 5%);
+		color: var(--color-muted);
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	.about-banner {
+		position: relative;
+		display: grid;
+		min-height: clamp(240px, 15.75vw, 340px);
+		place-items: center;
+		padding: 64px 24px;
+		isolation: isolate;
+		overflow: hidden;
+		border-radius: clamp(96px, 15.75vw, 302px) clamp(96px, 15.75vw, 302px) 0 0;
+		background: var(--color-dark);
+	}
+
+	.about-banner :global(picture) {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+	}
+
+	.about-banner :global(img) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+
+	.about-banner::before {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: rgb(0 0 0 / 46%);
+		content: '';
+	}
+
+	.about-banner h2 {
+		max-width: 1276px;
+		color: var(--color-white);
+		font-size: 32px;
+		font-weight: 650;
+		line-height: 1.25;
+		letter-spacing: -0.4px;
+		text-align: center;
+	}
+
+	.about-values {
+		padding: 104px 24px 140px;
+		background: var(--color-surface);
+	}
+
+	.about-values__heading {
+		width: min(100%, 1276px);
+		margin-inline: auto;
+		text-align: center;
+	}
+
+	.about-values__heading > p {
+		color: var(--color-muted);
+		font-size: 24px;
+		font-weight: 600;
+		line-height: 1.25;
+	}
+
+	.about-values__heading h2 {
+		margin-top: 28px;
+		color: var(--color-dark);
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 1.25;
+		letter-spacing: -0.4px;
+	}
+
+	.about-values__heading h2 span {
+		color: var(--color-primary);
+	}
+
+	.about-values__list {
+		display: grid;
+		gap: 16px;
+		width: min(100%, 954px);
+		margin: 64px auto 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.about-values__list li {
+		display: grid;
+		min-height: 98px;
+		align-items: center;
+		padding: 24px 44px;
+		border: 1px solid #ededed;
+		border-radius: 56px;
+		background: var(--color-white);
+		box-shadow: 0 2px 4px rgb(0 0 0 / 5%);
+		color: var(--color-muted);
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	.about-values__list strong {
+		color: var(--color-dark);
+		font-weight: 700;
+	}
+
+	@media (max-width: 767px) {
+		.about-intro {
+			padding: 140px 20px 48px;
+		}
+
+		.about-intro__card {
+			margin-top: 28px;
+			padding: 24px;
+			border-radius: 28px;
+		}
+
+		.about-banner {
+			padding: 48px 24px;
+			border-radius: 72px 72px 0 0;
+		}
+
+		.about-banner :global(img) {
+			object-position: 56% center;
+		}
+
+		.about-banner h2 {
+			font-size: 28px;
+		}
+
+		.about-values {
+			padding: 64px 20px 80px;
+		}
+
+		.about-values__heading > p {
+			font-size: 20px;
+		}
+
+		.about-values__heading h2 {
+			margin-top: 20px;
+			font-size: 28px;
+		}
+
+		.about-values__list {
+			gap: 16px;
+			margin-top: 40px;
+		}
+
+		.about-values__list li {
+			padding: 24px;
+			border-radius: 28px;
+		}
+	}
+</style>
