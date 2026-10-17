@@ -149,23 +149,29 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 				".site-nav__pymes-trigger",
 			),
 			menu: group.querySelector<HTMLElement>(".site-nav__pymes-menu"),
+			openedByHover: false,
 			closeTimer: undefined as number | undefined,
 		}));
 
 		const setDropdownOpen = (
 			dropdown: (typeof dropdowns)[number],
 			isOpen: boolean,
+			openedByHover = false,
 		) => {
 			window.clearTimeout(dropdown.closeTimer);
+			dropdown.openedByHover = isOpen && openedByHover;
 			dropdown.group.toggleAttribute("data-open", isOpen);
 			dropdown.trigger?.setAttribute("aria-expanded", String(isOpen));
 			dropdown.menu?.setAttribute("aria-hidden", String(!isOpen));
 		};
 		const closeDropdowns = () =>
 			dropdowns.forEach((dropdown) => setDropdownOpen(dropdown, false));
-		const openDropdown = (dropdown: (typeof dropdowns)[number]) => {
+		const openDropdown = (
+			dropdown: (typeof dropdowns)[number],
+			openedByHover = false,
+		) => {
 			dropdowns.forEach((other) =>
-				setDropdownOpen(other, other === dropdown),
+				setDropdownOpen(other, other === dropdown, openedByHover),
 			);
 		};
 		const scheduleDropdownClose = (
@@ -218,10 +224,12 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 		dropdowns.forEach((dropdown) => {
 			dropdown.trigger?.addEventListener(
 				"click",
-				() => {
+				(event) => {
+					// A first mouse click keeps a menu opened by hover available.
 					if (
 						dropdown.trigger?.getAttribute("aria-expanded") ===
-						"true"
+							"true" &&
+						(!desktopNavigation.matches || !dropdown.openedByHover || event.detail === 0)
 					)
 						setDropdownOpen(dropdown, false);
 					else openDropdown(dropdown);
@@ -245,16 +253,24 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 			);
 			dropdown.group.addEventListener(
 				"pointerenter",
-				() => {
-					if (desktopNavigation.matches) openDropdown(dropdown);
+				(event) => {
+					// Touch also emits pointerenter before click, without hovering.
+					window.clearTimeout(dropdown.closeTimer);
+					if (event.pointerType !== "mouse") {
+						dropdown.openedByHover = false;
+						return;
+					}
+					if (desktopNavigation.matches && !dropdown.group.hasAttribute("data-open"))
+						openDropdown(dropdown, true);
 				},
 				{ signal },
 			);
 			dropdown.group.addEventListener(
 				"pointerleave",
-				() => {
+				(event) => {
 					if (
 						desktopNavigation.matches &&
+						event.pointerType === "mouse" &&
 						!dropdown.group.contains(document.activeElement)
 					)
 						scheduleDropdownClose(dropdown);
