@@ -1,7 +1,6 @@
 ---
 import logoMark from "../assets/home/logo-mark.svg";
-import condusefLogo from "../assets/home/condusef-sipres.webp";
-import cnbvLogo from "../assets/home/cnbv-logo.svg";
+import RegulatoryLogos from "./RegulatoryLogos.astro";
 import GroupLoboMark from "../assets/grupo-lobo-mark.svg";
 import { legalEntity, legalLinks, transparencyLinks } from "../data/legal";
 // Reused from santander-live, preserving the original paths and view boxes.
@@ -20,7 +19,6 @@ const socialIcons = [
 ];
 
 const year = new Date().getFullYear();
-const isHomePage = Astro.url.pathname === "/";
 ---
 
 <footer class="site-footer">
@@ -45,35 +43,14 @@ const isHomePage = Astro.url.pathname === "/";
 				>contacto@lobokapital.mx</a
 			>
 			<address>{legalEntity.address}</address>
-			{
-				isHomePage ? (
-					<div
-						class="regulatory-logos"
-						aria-label="Instituciones regulatorias"
-					>
-						<img
-							src={condusefLogo.src}
-							alt="CONDUSEF SIPRES"
-							width="82"
-							height="82"
-						/>
-						<img
-							src={cnbvLogo.src}
-							alt="Comisión Nacional Bancaria y de Valores, CNBV"
-							width="88"
-							height="50"
-						/>
-					</div>
-				) : (
-					<div class="site-footer__group" role="img" aria-label="Una empresa del Grupo Lobo">
-						<GroupLoboMark width="44" height="44" aria-hidden="true" focusable="false" />
-						<span aria-hidden="true">
-							<span>Una empresa del</span>
-							<strong>Grupo Lobo</strong>
-						</span>
-					</div>
-				)
-			}
+			<div class="site-footer__group" role="img" aria-label="Una empresa del Grupo Lobo">
+				<GroupLoboMark width="44" height="44" aria-hidden="true" focusable="false" />
+				<span aria-hidden="true">
+					<span>Una empresa del</span>
+					<strong>Grupo Lobo</strong>
+				</span>
+			</div>
+			<RegulatoryLogos />
 		</div>
 
 		<div class="site-footer__social">
@@ -113,7 +90,7 @@ const isHomePage = Astro.url.pathname === "/";
 		display: inline-flex;
 		align-items: center;
 		gap: 12px;
-		margin-top: 75px;
+		margin-top: 44px;
 		color: var(--color-text);
 	}
 

@@ -1,35 +1,42 @@
 ---
 import { Picture } from "astro:assets";
 import heroImage from "../assets/home/hero.jpg";
+import RegulatoryLogos from "./RegulatoryLogos.astro";
 ---
 
-<section class="hero" id="inicio" aria-labelledby="hero-title">
-	<Picture
-		src={heroImage}
-		formats={["avif", "webp"]}
-		widths={[768, 1280, 1920, 2400]}
-		sizes="100vw"
-		alt=""
-		class="hero__media"
-		loading="eager"
-		fetchpriority="high"
-	/>
-	<div class="hero__shade" aria-hidden="true"></div>
-	<div class="hero__content" data-reveal-group="90">
-		<h1 id="hero-title" data-reveal data-reveal-delay="80">
-			Impulsa tu futuro con<br />financiamiento inteligente.
-		</h1>
-		<p data-reveal>
-			Créditos a tu medida con la transparencia que mereces. Soluciones
-			financieras diseñadas<br class="desktop-only" /> para hacer crecer tu
-			patrimonio y tu negocio.
-		</p>
-		<div class="hero__actions" data-reveal>
-			<a class="button button--primary" href="#contacto"
-				>Solicitar ahora <span aria-hidden="true">→</span></a
-			>
-			<a class="button button--light" href="#soluciones">Conocer más</a>
+<div class="hero-stage">
+	<section class="hero" id="inicio" aria-labelledby="hero-title">
+		<Picture
+			src={heroImage}
+			formats={["avif", "webp"]}
+			widths={[768, 1280, 1920, 2400]}
+			sizes="100vw"
+			alt=""
+			class="hero__media"
+			loading="eager"
+			fetchpriority="high"
+		/>
+		<div class="hero__shade" aria-hidden="true"></div>
+		<div class="hero__content" data-reveal-group="90">
+			<h1 id="hero-title" data-reveal data-reveal-delay="80">
+				Impulsa tu futuro con<br />financiamiento inteligente.
+			</h1>
+			<p data-reveal>
+				Créditos a tu medida con la transparencia que mereces. Soluciones
+				financieras diseñadas<br class="desktop-only" /> para hacer crecer tu
+				patrimonio y tu negocio.
+			</p>
+			<div class="hero__actions" data-reveal>
+				<a class="button button--primary" href="#contacto"
+					>Solicitar ahora <span aria-hidden="true">→</span></a
+				>
+				<a class="button button--light" href="#soluciones">Conocer más</a>
+			</div>
 		</div>
+	</section>
+	<div class="hero-regulatory" role="group" aria-labelledby="hero-regulatory-label">
+		<p id="hero-regulatory-label">Regulada y supervisada por:</p>
+		<RegulatoryLogos variant="band" />
 	</div>
 	<div class="brand-tab" aria-hidden="true">
 		<svg
@@ -43,4 +50,4 @@ import heroImage from "../assets/home/hero.jpg";
 		</svg>
 		<div class="brand-tab__logo"><span>LOBO</span><span>KAPITAL</span></div>
 	</div>
-</section>
+</div>

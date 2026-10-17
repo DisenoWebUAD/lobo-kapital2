@@ -1,0 +1,50 @@
+---
+import condusefLogo from '../assets/regulators/condusef-transparente.png';
+import cnbvLogo from '../assets/regulators/cnbv.png';
+import buroLogo from '../assets/regulators/buro.png';
+
+interface Props {
+	variant?: 'footer' | 'band';
+}
+
+const { variant = 'footer' } = Astro.props;
+const logos = [
+	{ image: condusefLogo, label: 'CONDUSEF' },
+	{ image: cnbvLogo, label: 'Comisión Nacional Bancaria y de Valores, CNBV' },
+	{ image: buroLogo, label: 'Buró de Entidades Financieras' },
+];
+---
+
+<div
+	class:list={['regulatory-logos', { 'regulatory-logos--band': variant === 'band' }]}
+	role="group"
+	aria-label="Organismos y registros financieros"
+>
+	{logos.map(({ image, label }) => (
+		<img src={image.src} alt={label} width={image.width} height={image.height} loading="lazy" />
+	))}
+</div>
+
+<style>
+	.regulatory-logos {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px 24px;
+		align-items: center;
+		max-width: 100%;
+		margin-top: 24px;
+	}
+
+	.regulatory-logos img {
+		width: auto;
+		height: 40px;
+		object-fit: contain;
+	}
+
+	.regulatory-logos--band {
+		flex-wrap: nowrap;
+		justify-content: center;
+		gap: 20px;
+		margin-top: 0;
+	}
+</style>
