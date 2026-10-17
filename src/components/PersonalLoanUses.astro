@@ -1,0 +1,173 @@
+---
+import homeIcon from '../assets/personal-credit/uso-hogar.svg';
+import studiesIcon from '../assets/personal-credit/uso-estudios.svg';
+import projectIcon from '../assets/personal-credit/uso-proyecto.svg';
+
+const uses = [
+	{
+		title: 'Tu hogar',
+		description: 'Mejoras y adecuaciones para tu casa.',
+		icon: homeIcon,
+	},
+	{
+		title: 'Tus estudios',
+		description: 'Un siguiente paso en tu formación.',
+		icon: studiesIcon,
+	},
+	{
+		title: 'Tu proyecto',
+		description: 'Para gastos de salud y otros proyectos personales.',
+		icon: projectIcon,
+	},
+];
+---
+
+<section class="personal-loan-uses" aria-labelledby="personal-loan-uses-title">
+	<div class="personal-loan-uses__inner">
+		<header class="personal-loan-uses__heading">
+			<h2 id="personal-loan-uses-title">Impulsa tus <span>planes</span></h2>
+			<p>Financiamiento para tus proyectos personales.</p>
+		</header>
+		<ul class="personal-loan-uses__grid" role="list">
+			{uses.map((use) => (
+				<li class="personal-loan-use">
+					<span class="personal-loan-use__icon">
+						<img src={use.icon.src} alt="" width="43" height="43" />
+					</span>
+					<h3>{use.title}</h3>
+					<p>{use.description}</p>
+				</li>
+			))}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.personal-loan-uses {
+		padding-bottom: 112px;
+	}
+
+	.personal-loan-uses__inner {
+		width: min(calc(100% - 96px), 1276px);
+		margin-inline: auto;
+	}
+
+	.personal-loan-uses__heading {
+		text-align: center;
+	}
+
+	h2 {
+		color: #000;
+		font-size: 44px;
+		font-weight: 700;
+		line-height: 1.1;
+		letter-spacing: -0.8px;
+	}
+
+	h2 span {
+		color: var(--color-primary);
+	}
+
+	.personal-loan-uses__heading p {
+		margin-top: 14px;
+		color: var(--color-muted);
+		font-size: 20px;
+		line-height: 1.4;
+	}
+
+	.personal-loan-uses__grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 28px;
+		margin: 64px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.personal-loan-use {
+		min-height: 290px;
+		padding: 36px 28px 32px;
+		border-radius: 18px;
+		background: var(--color-surface);
+	}
+
+	.personal-loan-use__icon {
+		display: grid;
+		width: 78px;
+		height: 78px;
+		place-items: center;
+		border-radius: 50%;
+		background: var(--color-soft);
+	}
+
+	.personal-loan-use__icon img {
+		width: 43px;
+		height: 43px;
+		object-fit: contain;
+	}
+
+	h3 {
+		margin-top: 32px;
+		color: #000;
+		font-size: 24px;
+		font-weight: 600;
+		line-height: 1.15;
+		letter-spacing: -0.35px;
+	}
+
+	.personal-loan-use p {
+		margin-top: 12px;
+		color: var(--color-muted);
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	@media (max-width: 1023px) {
+		.personal-loan-uses__grid {
+			gap: 20px;
+		}
+
+		.personal-loan-use {
+			padding: 28px 24px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.personal-loan-uses {
+			padding-bottom: 72px;
+		}
+
+		.personal-loan-uses__inner {
+			width: calc(100% - 40px);
+		}
+
+		h2 {
+			font-size: 38px;
+			letter-spacing: -0.6px;
+		}
+
+		.personal-loan-uses__heading p {
+			font-size: 17px;
+		}
+
+		.personal-loan-uses__grid {
+			grid-template-columns: 1fr;
+			gap: 18px;
+			margin-top: 44px;
+		}
+
+		.personal-loan-use {
+			min-height: 0;
+		}
+
+		.personal-loan-use__icon {
+			width: 67px;
+			height: 67px;
+		}
+
+		h3 {
+			margin-top: 28px;
+			font-size: 22px;
+		}
+	}
+</style>
