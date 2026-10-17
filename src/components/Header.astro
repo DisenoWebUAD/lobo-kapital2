@@ -7,6 +7,8 @@ const isPersonalSection = isPersonalPage || isCardsPage;
 const isPymesPage = Astro.url.pathname.startsWith("/creditos-pymes");
 const isLeasePage = Astro.url.pathname.startsWith("/arrendamiento");
 const isFactoringPage = Astro.url.pathname.startsWith("/factoraje");
+const isFaqPage = Astro.url.pathname.startsWith("/faq");
+const isAboutPage = Astro.url.pathname.startsWith("/nosotros");
 const isPymesSection = isPymesPage || isLeasePage || isFactoringPage;
 const hasContactSection = Astro.url.pathname === "/" || isPersonalSection || isFactoringPage;
 const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection ? "#contacto" : "/#contacto";
@@ -104,11 +106,12 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 				>
 			</div>
 		</div>
-		<a class="site-nav__section-link" href="/#confianza">Conócenos</a>
-		<span
-			class="site-nav__disabled"
-			aria-disabled="true"
-			title="Disponible próximamente">FAQ</span
+		<a class="site-nav__section-link" href="/nosotros/" aria-current={isAboutPage ? "page" : undefined}>Conócenos</a>
+		<a
+			class="site-nav__faq"
+			href="/faq/"
+			aria-label="Preguntas frecuentes"
+			aria-current={isFaqPage ? "page" : undefined}>FAQ</a
 		>
 		<a class="site-nav__client" href={clientHref}>Hazte Cliente</a>
 		<span
@@ -313,23 +316,6 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 			},
 			{ signal },
 		);
-
-		const aboutLink = document.querySelector<HTMLAnchorElement>(
-			".site-nav__section-link",
-		);
-		const aboutSection = document.querySelector<HTMLElement>("#confianza");
-		if (aboutLink && aboutSection) {
-			const setAboutActive = (isActive: boolean) =>
-				aboutLink.toggleAttribute("aria-current", isActive);
-			const observer = new IntersectionObserver(
-				([entry]) => setAboutActive(entry.isIntersecting),
-				{ threshold: 0.25 },
-			);
-			observer.observe(aboutSection);
-			signal.addEventListener("abort", () => observer.disconnect(), {
-				once: true,
-			});
-		}
 	};
 
 	initializeHeader();
