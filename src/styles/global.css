@@ -214,18 +214,13 @@ input {
 	color: var(--color-primary);
 }
 
-.site-nav__disabled,
-.site-nav__login {
+.site-nav__disabled {
 	cursor: not-allowed;
 }
 
-.site-nav__client,
-.site-nav__login {
+.site-nav__client {
 	padding: 5px 19px;
 	border-radius: 999px;
-}
-
-.site-nav__client {
 	color: var(--color-white);
 	background: var(--color-primary);
 	transition: transform 160ms ease, box-shadow 160ms ease;
@@ -244,10 +239,6 @@ input {
 	.site-nav__client {
 		transition-duration: 1ms;
 	}
-}
-
-.site-nav__login {
-	background: var(--color-soft);
 }
 
 .menu-toggle {
@@ -1229,8 +1220,7 @@ input {
 		border-radius: 14px;
 	}
 
-	.site-nav__client,
-	.site-nav__login {
+	.site-nav__client {
 		justify-content: center !important;
 	}
 
