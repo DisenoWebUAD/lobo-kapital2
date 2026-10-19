@@ -1457,9 +1457,10 @@ input {
 	}
 
 	.hero h1 {
-		font-size: clamp(38px, 10.6vw, 52px);
-		line-height: 1.01;
+		font-size: clamp(32px, 9.2vw, 46px);
+		line-height: 1.06;
 		letter-spacing: -1px;
+		text-wrap: balance;
 	}
 
 	.hero h1 br {
