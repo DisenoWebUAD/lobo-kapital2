@@ -3,7 +3,7 @@ import '@fontsource-variable/figtree/wght.css';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import PersonalCreditHero from '../components/PersonalCreditHero.astro';
-import PersonalCardCarousel from '../components/PersonalCardCarousel.astro';
+import PersonalCard from '../components/PersonalCard.astro';
 import PersonalRewards from '../components/PersonalRewards.astro';
 import LeadForm from '../components/LeadForm.astro';
 import Footer from '../components/Footer.astro';
@@ -32,7 +32,7 @@ const description = 'Conoce las tarjetas de crédito Lobo Kapital y sus benefici
 		<Header />
 		<main id="main-content" tabindex="-1" transition:name="page-main" transition:animate="fade">
 			<PersonalCreditHero />
-			<PersonalCardCarousel />
+			<PersonalCard />
 			<PersonalRewards />
 			<LeadForm product="cards" />
 		</main>

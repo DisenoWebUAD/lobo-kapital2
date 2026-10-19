@@ -1,0 +1,48 @@
+---
+import { Image } from "astro:assets";
+import classicCard from "../assets/personal-credit/tarjeta-clasica.png";
+---
+
+<section
+	class="personal-cards"
+	id="tarjetas"
+	aria-labelledby="personal-cards-title"
+>
+	<div class="personal-cards__heading">
+		<p>Tarjeta de Crédito Empresarial</p>
+		<h2 id="personal-cards-title">
+			Una <span>Tarjeta</span> para Cada Perfil
+		</h2>
+		<div>
+			Soluciones de crédito estructuradas para brindar liquidez, control y
+			recompensas adaptadas<br class="personal-cards__desktop-break" /> a tus
+			necesidades corporativas o personales.
+		</div>
+	</div>
+
+	<article class="personal-card card-slide" aria-labelledby="classic-card-title">
+		<div class="card-slide__copy">
+			<h3 id="classic-card-title">Clasica</h3>
+			<ul>
+				<li>
+					Ideal para construir historial crediticio y manejar
+					<br class="personal-cards__desktop-break" />{" "}
+					gastos diarios con total seguridad.
+				</li>
+				<li>Línea de crédito desde $10,000 MXN</li>
+				<li>Anualidad sin costo el primer año</li>
+				<li>1% Cash Back en todas las compras</li>
+			</ul>
+		</div>
+		<div class="card-slide__visual">
+			<Image
+				src={classicCard}
+				format="png"
+				alt="Tarjeta de crédito Clásica Lobo Kapital sobre pedestal"
+				width={classicCard.width}
+				height={classicCard.height}
+				loading="eager"
+			/>
+		</div>
+	</article>
+</section>
