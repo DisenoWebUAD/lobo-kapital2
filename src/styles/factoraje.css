@@ -19,7 +19,8 @@
 .factoring-hero__copy {
 	position: absolute;
 	top: 356px;
-	left: max(72px, calc((100vw - 1270px) / 2));
+	/* Align both columns within the centered hero container. */
+	left: max(72px, calc((100% - 1270px) / 2));
 	z-index: 1;
 	width: min(40vw, 510px);
 }
@@ -79,6 +80,12 @@
 	object-position: center;
 	border-radius: 55px 0 0 55px;
 	box-shadow: 0 8px 18px rgb(0 0 0 / 8%);
+}
+
+@media (width > 1920px) {
+	.factoring-hero__image {
+		border-radius: 55px;
+	}
 }
 
 .factoring-process {
