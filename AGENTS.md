@@ -24,6 +24,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 ## Shared components
 
+- `FontHead.astro` uses Astro's Fonts API to preload the local Figtree variable font on every route. Its configuration reads the existing Fontsource package and generates metric-adjusted fallbacks; use `--font-figtree` instead of adding separate font CSS imports.
 - `Footer.astro` shows Grupo Lobo branding together with the CONDUSEF, CNBV and Buró logos on every route. Keep both blocks visible rather than switching them by page.
 - `RegulatoryLogos.astro` shares the three logos between the footer and the homepage band. The band sits between the hero image and the `brand-tab`; its height must remain in the page flow so the tab and following content stay aligned on mobile.
 - `LoanRequirements.astro`, `LoanConditions.astro` and `LoanCalculator.astro` share the presentation between personal and business credit. The `PersonalLoan*` wrappers preserve existing imports. Keep product-specific content and assumptions separate from shared layout and interaction.

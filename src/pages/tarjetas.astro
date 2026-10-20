@@ -1,5 +1,5 @@
 ---
-import '@fontsource-variable/figtree/wght.css';
+import FontHead from '../components/FontHead.astro';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import PersonalCreditHero from '../components/PersonalCreditHero.astro';
@@ -25,6 +25,7 @@ const description = 'Conoce las tarjetas de crédito Lobo Kapital y sus benefici
 		<meta name="theme-color" content="#c10230" />
 		<link rel="icon" type="image/svg+xml" href={logoMark.src} />
 		<title>{title}</title>
+		<FontHead />
 		<ClientRouter />
 	</head>
 	<body class="personal-credit-page">

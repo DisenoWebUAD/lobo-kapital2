@@ -1,5 +1,5 @@
 ---
-import '@fontsource-variable/figtree/wght.css';
+import FontHead from '../components/FontHead.astro';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
@@ -26,6 +26,7 @@ const description = 'Créditos, arrendamiento y soluciones financieras diseñada
 		<meta name="theme-color" content="#c10230" />
 		<link rel="icon" type="image/svg+xml" href={logoMark.src} />
 		<title>{title}</title>
+		<FontHead />
 		<ClientRouter />
 	</head>
 	<body data-page="home">

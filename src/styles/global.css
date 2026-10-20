@@ -9,7 +9,7 @@
 	--content-wide: 1596px;
 	--content-main: 1596px;
 	--focus-ring: #ffffff;
-	font-family: 'Figtree Variable', sans-serif;
+	font-family: var(--font-figtree);
 	font-synthesis: none;
 	color: var(--color-text);
 	background: var(--color-white);
@@ -32,7 +32,7 @@ body {
 	min-width: 320px;
 	overflow-x: clip;
 	background: var(--color-white);
-	font-family: 'Figtree Variable', sans-serif;
+	font-family: var(--font-figtree);
 }
 
 body,
