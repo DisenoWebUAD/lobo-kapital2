@@ -118,7 +118,7 @@
 .personal-rewards {
 	padding: 88px 48px;
 	color: var(--color-white);
-	background: var(--color-primary);
+	background: var(--color-ink);
 }
 .personal-rewards__inner {
 	width: min(100%, 1000px);
@@ -137,14 +137,15 @@
 	font-size: 18px;
 	line-height: 1.5;
 	text-align: center;
-	color: var(--color-white);
+	color: var(--color-soft);
 }
 .personal-rewards__list {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: minmax(0, 1fr);
 	gap: 44px;
+	width: min(100%, 640px);
 	padding: 0;
-	margin: 48px 0 0;
+	margin: 48px auto 0;
 	list-style: none;
 }
 .personal-rewards__list li {
@@ -159,7 +160,7 @@
 	height: 52px;
 	place-items: center;
 	border-radius: 10px;
-	background: var(--color-white);
+	background: var(--color-soft);
 }
 .personal-rewards__icon img {
 	width: 36px;
@@ -167,14 +168,14 @@
 }
 .personal-rewards__list h3 {
 	font-size: 22px;
-	font-weight: 650;
+	font-weight: 700;
 	line-height: 1.25;
 }
 .personal-rewards__list p {
 	margin-top: 10px;
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 1.55;
-	color: var(--color-white);
+	color: var(--color-soft);
 }
 .personal-rewards br {
 	display: none;
@@ -190,9 +191,11 @@
 		font-size: 17px;
 	}
 	.personal-rewards__list {
-		grid-template-columns: 1fr;
 		gap: 32px;
 		margin-top: 36px;
+	}
+	.personal-rewards__list p {
+		font-size: 16px;
 	}
 }
 
