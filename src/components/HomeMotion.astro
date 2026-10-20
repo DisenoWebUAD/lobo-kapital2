@@ -24,36 +24,42 @@
 		const revealElements = [
 			...page.querySelectorAll<HTMLElement>("[data-reveal]"),
 		];
+		const heroElements = revealElements.filter((element) => element.closest(".hero__content"));
+		const initialPositions = new Map(revealElements.map((element) => [element, element.getBoundingClientRect()]));
 		reducedMotion.addEventListener("change", initializeHomeMotion, {
 			once: true,
 			signal,
 		});
 
-		page.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach(
-			(group) => {
-				const step = Number(group.dataset.revealGroup) || 80;
-				group
-					.querySelectorAll<HTMLElement>(":scope > [data-reveal]")
-					.forEach((element, index) => {
-						if (!element.dataset.revealDelay)
-							element.style.setProperty(
-								"--reveal-delay",
-								`${index * step}ms`,
-							);
-					});
-			},
-		);
+		const updateRevealDelays = () => {
+			const mobile = window.innerWidth < 768;
+			page.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach(
+				(group) => {
+					const step = Number(group.dataset.revealGroup) || 80;
+					group
+						.querySelectorAll<HTMLElement>(":scope > [data-reveal]")
+						.forEach((element, index) => {
+							if (!element.dataset.revealDelay)
+								element.style.setProperty(
+									"--reveal-delay",
+									`${mobile && !group.closest(".hero") ? 0 : Math.min(index * step, 180)}ms`,
+								);
+						});
+				},
+			);
 
-		revealElements.forEach((element) => {
-			if (element.dataset.revealDelay) {
-				element.style.setProperty(
-					"--reveal-delay",
-					`${Number(element.dataset.revealDelay) || 0}ms`,
-				);
-			}
-		});
+			revealElements.forEach((element) => {
+				if (element.dataset.revealDelay) {
+					element.style.setProperty(
+						"--reveal-delay",
+						`${Number(element.dataset.revealDelay) || 0}ms`,
+					);
+				}
+			});
+		};
+		updateRevealDelays();
 
-		if (reducedMotion.matches) {
+		if (reducedMotion.matches || !("IntersectionObserver" in window)) {
 			page.dataset.motion = "reduced";
 			revealElements.forEach((element) =>
 				element.toggleAttribute("data-revealed", true),
@@ -68,25 +74,122 @@
 			return;
 		}
 
-		page.dataset.motion = "ready";
-		const revealObserver = new IntersectionObserver(
-			(entries, observer) => {
+		const pending = new Set<HTMLElement>();
+		let revealObserver: IntersectionObserver | undefined;
+		let heroFrame: number | undefined;
+		let revealResizeFrame: number | undefined;
+		const showImmediately = (element: HTMLElement) => {
+			element.removeAttribute("data-reveal-preparing");
+			element.style.setProperty("--home-reveal-duration", "0ms");
+			element.style.setProperty("--home-reveal-opacity-duration", "0ms");
+			element.style.setProperty("--home-reveal-filter-duration", "0ms");
+			element.style.setProperty("--reveal-delay", "0ms");
+			element.toggleAttribute("data-revealed", true);
+			element.toggleAttribute("data-reveal-complete", true);
+			pending.delete(element);
+			revealObserver?.unobserve(element);
+		};
+		const showRelated = (target: EventTarget | null, includeChildren = false) => {
+			if (!(target instanceof Element)) return;
+			revealElements.forEach((element) => {
+				if (element.contains(target) || (includeChildren && target.contains(element))) showImmediately(element);
+			});
+		};
+		const showHash = (hash = location.hash) => {
+			try {
+				if (hash) showRelated(document.getElementById(decodeURIComponent(hash.slice(1))), true);
+			} catch {
+				// Invalid fragments must not prevent the page from becoming readable.
+			}
+		};
+		const observeReveals = () => {
+			revealObserver?.disconnect();
+			revealObserver = new IntersectionObserver((entries, observer) => {
 				entries.forEach((entry) => {
 					if (!entry.isIntersecting) return;
-					(entry.target as HTMLElement).toggleAttribute(
-						"data-revealed",
-						true,
-					);
+					(entry.target as HTMLElement).toggleAttribute("data-revealed", true);
+					pending.delete(entry.target as HTMLElement);
 					observer.unobserve(entry.target);
 				});
-			},
-			{ threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-		);
-
-		revealElements.forEach((element) => revealObserver.observe(element));
-		signal.addEventListener("abort", () => revealObserver.disconnect(), {
-			once: true,
-		});
+				if (!pending.size) observer.disconnect();
+			}, {
+				threshold: 0,
+				// Pixel margins keep the trigger at 78% of viewport height on every device.
+				rootMargin: `0px 0px -${Math.round(window.innerHeight * 0.22)}px 0px`,
+			});
+			pending.forEach((element) => revealObserver?.observe(element));
+		};
+		signal.addEventListener("abort", () => {
+			revealObserver?.disconnect();
+			if (heroFrame !== undefined) cancelAnimationFrame(heroFrame);
+			if (revealResizeFrame !== undefined) cancelAnimationFrame(revealResizeFrame);
+			revealElements.forEach(showImmediately);
+		}, { once: true });
+		try {
+			observeReveals();
+			revealElements.forEach((element) => {
+				if (!element.hasAttribute("data-revealed")) element.toggleAttribute("data-reveal-preparing", true);
+			});
+			page.dataset.motion = "ready";
+			revealElements.forEach((element) => {
+				if (heroElements.includes(element)) return;
+				const rect = initialPositions.get(element)!;
+				if (element.hasAttribute("data-revealed") || rect.top < innerHeight || !rect.width || !rect.height) {
+					showImmediately(element);
+				} else {
+					pending.add(element);
+					revealObserver?.observe(element);
+				}
+			});
+			// Prepare without an outgoing transition, including after ClientRouter navigation.
+			page.getBoundingClientRect();
+			revealElements.forEach((element) => {
+				if (!heroElements.includes(element)) element.removeAttribute("data-reveal-preparing");
+			});
+			heroFrame = requestAnimationFrame(() => {
+				heroFrame = undefined;
+				heroElements.forEach((element) => {
+					element.removeAttribute("data-reveal-preparing");
+					element.toggleAttribute("data-revealed", true);
+				});
+			});
+			showHash();
+			if (document.activeElement !== document.body) showRelated(document.activeElement);
+		} catch {
+			homeMotionController.abort();
+			page.dataset.motion = "reduced";
+			return;
+		}
+		window.addEventListener("resize", () => {
+			if (revealResizeFrame !== undefined || !pending.size) return;
+			revealResizeFrame = requestAnimationFrame(() => {
+				revealResizeFrame = undefined;
+				try {
+					updateRevealDelays();
+					pending.forEach((element) => {
+						if (element.getBoundingClientRect().top < innerHeight) showImmediately(element);
+					});
+					if (pending.size) observeReveals();
+				} catch {
+					homeMotionController?.abort();
+				}
+			});
+		}, { signal, passive: true });
+		document.addEventListener("transitionend", (event) => {
+			if (event.propertyName === "transform" && event.target instanceof HTMLElement && event.target.matches("[data-reveal][data-revealed]")) {
+				event.target.toggleAttribute("data-reveal-complete", true);
+			}
+		}, { signal });
+		document.addEventListener("focusin", (event) => showRelated(event.target), { signal, capture: true });
+		document.addEventListener("pointerdown", (event) => showRelated(event.target), { signal, capture: true });
+		document.addEventListener("click", (event) => {
+			const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+			if (!link) return;
+			const url = new URL(link.href, location.href);
+			if (url.origin === location.origin && url.pathname === location.pathname && url.search === location.search) showHash(url.hash);
+		}, { signal, capture: true });
+		window.addEventListener("hashchange", () => showHash(), { signal });
+		window.addEventListener("beforeprint", () => revealElements.forEach(showImmediately), { signal });
 
 		let headerFrame: number | undefined;
 		const updateHeader = () => {
@@ -102,11 +205,18 @@
 			passive: true,
 			signal,
 		});
+		signal.addEventListener("abort", () => {
+			if (headerFrame !== undefined) cancelAnimationFrame(headerFrame);
+		}, { once: true });
 
 		const parallaxElement =
 			page.querySelector<HTMLElement>("[data-parallax]");
 		let parallaxFrame: number | undefined;
 		let parallaxActive = false;
+		signal.addEventListener("abort", () => {
+			if (parallaxFrame !== undefined) cancelAnimationFrame(parallaxFrame);
+			parallaxElement?.removeAttribute("data-parallax-active");
+		}, { once: true });
 		const updateParallax = () => {
 			parallaxFrame = undefined;
 			if (!parallaxActive || !parallaxElement) return;
@@ -163,6 +273,10 @@
 				let spotlightFrame: number | undefined;
 				let pointerX = 0;
 				let pointerY = 0;
+				signal.addEventListener("abort", () => {
+					if (spotlightFrame !== undefined) cancelAnimationFrame(spotlightFrame);
+					card.removeAttribute("data-spotlight-active");
+				}, { once: true });
 				const renderSpotlight = () => {
 					spotlightFrame = undefined;
 					card.style.setProperty("--spotlight-x", `${pointerX}px`);
@@ -207,6 +321,10 @@
 		);
 	};
 
-	initializeHomeMotion();
 	document.addEventListener("astro:page-load", initializeHomeMotion);
+	document.addEventListener("astro:before-swap", () => homeMotionController?.abort());
+	window.addEventListener("pagehide", () => homeMotionController?.abort());
+	window.addEventListener("pageshow", (event) => {
+		if (event.persisted) initializeHomeMotion();
+	});
 </script>

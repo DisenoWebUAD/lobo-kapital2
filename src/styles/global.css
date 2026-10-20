@@ -1678,6 +1678,26 @@ input {
 }
 
 /* Home motion system: restrained, brand-led movement with progressive enhancement. */
+body[data-page='home'] {
+	--home-reveal-duration: 700ms;
+	--home-reveal-ease: cubic-bezier(.22, .75, .25, 1);
+	--home-reveal-distance: 24px;
+	--home-reveal-blur: 4px;
+}
+
+body[data-page='home'] .hero__content {
+	--home-reveal-duration: 680ms;
+	--home-reveal-opacity-duration: 640ms;
+	--home-reveal-filter-duration: 560ms;
+	--home-reveal-ease: cubic-bezier(.22, 1, .36, 1);
+	--home-reveal-distance: 18px;
+	--home-reveal-blur: 9px;
+}
+
+body[data-page='home'] .card-promo__visual {
+	--home-reveal-duration: 760ms;
+}
+
 body[data-page='home'] .site-header {
 	transition: background-color 320ms ease, box-shadow 320ms ease, backdrop-filter 320ms ease;
 }
@@ -1690,17 +1710,21 @@ body[data-page='home'] .site-header[data-scrolled] {
 
 body[data-page='home'][data-motion='ready'] [data-reveal]:not([data-reveal='underline']) {
 	opacity: 0;
-	filter: blur(9px);
-	transform: translate3d(0, 18px, 0);
+	filter: blur(var(--home-reveal-blur));
+	transform: translate3d(0, var(--home-reveal-distance), 0);
 	transition:
-		opacity 640ms cubic-bezier(.22, 1, .36, 1),
-		filter 560ms cubic-bezier(.22, 1, .36, 1),
-		transform 680ms cubic-bezier(.22, 1, .36, 1);
+		opacity var(--home-reveal-opacity-duration, var(--home-reveal-duration)) var(--home-reveal-ease),
+		filter var(--home-reveal-filter-duration, var(--home-reveal-duration)) var(--home-reveal-ease),
+		transform var(--home-reveal-duration) var(--home-reveal-ease);
 	transition-delay: var(--reveal-delay, 0ms);
 }
 
 body[data-page='home'][data-motion='ready'] [data-reveal='right'] {
 	transform: translate3d(28px, 8px, 0);
+}
+
+body[data-page='home'][data-motion='ready'] [data-reveal-preparing] {
+	transition: none !important;
 }
 
 body[data-page='home'][data-motion='ready'] [data-reveal]:not([data-reveal='underline'])[data-revealed] {
@@ -1756,11 +1780,22 @@ body[data-page='home'] .product-card[data-spotlight] {
 /* Preserve staggered reveals alongside the card's spotlight transitions. */
 body[data-page='home'][data-motion='ready'] .product-card[data-reveal][data-spotlight] {
 	transition:
-		opacity 640ms cubic-bezier(.22, 1, .36, 1),
-		filter 560ms cubic-bezier(.22, 1, .36, 1),
-		transform 680ms cubic-bezier(.22, 1, .36, 1),
+		opacity var(--home-reveal-duration) var(--home-reveal-ease),
+		filter var(--home-reveal-duration) var(--home-reveal-ease),
+		transform var(--home-reveal-duration) var(--home-reveal-ease),
 		box-shadow 300ms ease;
 	transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms;
+}
+
+/* Once the entrance settles, hover and focus respond without reveal delays. */
+body[data-page='home'][data-motion='ready'] .product-card[data-spotlight][data-reveal-complete] {
+	transition: transform 300ms cubic-bezier(.22, 1, .36, 1), box-shadow 300ms ease;
+	transition-delay: 0ms;
+}
+
+body[data-page='home'][data-motion='ready'] .button[data-reveal-complete] {
+	transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+	transition-delay: 0ms;
 }
 
 body[data-page='home'] .product-card[data-spotlight-active] {
@@ -1836,14 +1871,22 @@ body[data-page='home'] .card-promo__image[data-parallax-active] {
 	}
 }
 
+@media (max-width: 767px) {
+	body[data-page='home'] {
+		--home-reveal-distance: 16px;
+		--home-reveal-blur: 2px;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	body[data-page='home'] .site-header,
+	body[data-page='home'] [data-reveal],
 	body[data-page='home'] .product-card[data-spotlight],
 	body[data-page='home'] .product-card__icon,
 	body[data-page='home'] .button,
 	body[data-page='home'] .button > span {
 		animation: none !important;
-		transition-duration: 0.01ms !important;
+		transition: none !important;
 	}
 
 	body[data-page='home'] [data-reveal],
@@ -1863,7 +1906,9 @@ body[data-page='home'] .card-promo__image[data-parallax-active] {
 	*::after {
 		scroll-behavior: auto !important;
 		transition-duration: 0.01ms !important;
+		transition-delay: 0ms !important;
 		animation-duration: 0.01ms !important;
+		animation-delay: 0ms !important;
 		animation-iteration-count: 1 !important;
 	}
 }
