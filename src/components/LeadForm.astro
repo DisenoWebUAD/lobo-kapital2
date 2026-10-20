@@ -68,7 +68,7 @@ const fieldId = (name: string) => `${sectionId}-${name}`;
 				</div>
 				<div class="form-field form-field--wide">
 					<label for={fieldId('message')} data-contact-message-label>{copy.messageLabel}</label>
-					<textarea id={fieldId('message')} name="message" rows="3" maxlength="800" placeholder={copy.messagePlaceholder} aria-describedby={`${fieldId('message-help')} ${fieldId('message-error')}`}></textarea>
+					<textarea id={fieldId('message')} name="message" rows="3" maxlength="800" placeholder={copy.messagePlaceholder} aria-describedby={fieldId('message-error')}></textarea>
 					<p class="form-error" id={fieldId('message-error')}></p>
 				</div>
 			</div>
@@ -84,7 +84,8 @@ const fieldId = (name: string) => `${sectionId}-${name}`;
 				<p class="form-error" id={fieldId('privacy-error')}></p>
 			</div>
 			<div class="lead-form__actions">
-				<button class="button button--light button--form lead-form__submit" type="submit" disabled>Enviar consulta</button>
+				<button class="button button--light button--form lead-form__submit" type="submit" aria-describedby={fieldId('email-help')} disabled>Preparar consulta por correo</button>
+				<p class="form-help" id={fieldId('email-help')}>Se abrirá tu aplicación de correo para revisar y enviar la consulta.</p>
 			</div>
 			<p class="form-status" role="status" aria-live="polite" data-contact-status></p>
 			<noscript><p class="form-help">Para preparar la consulta, activa JavaScript o escríbenos a <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p></noscript>
