@@ -132,8 +132,15 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 <script>
 	let headerController: AbortController | undefined;
 
-	const initializeHeader = () => {
+	const disposeHeader = () => {
 		headerController?.abort();
+		headerController = undefined;
+	};
+
+	const initializeHeader = () => {
+		disposeHeader();
+		const header = document.querySelector<HTMLElement>(".site-header");
+		if (!header) return;
 		headerController = new AbortController();
 		const { signal } = headerController;
 		const menuButton =
@@ -153,16 +160,115 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 			closeTimer: undefined as number | undefined,
 		}));
 
+		const isHomePage = document.body.dataset.page === "home";
+		const scrollTolerance = 8;
+		let scrollFrame: number | undefined;
+		let measureOnNextFrame = false;
+		let scrollThreshold = 0;
+		let direction = 0;
+		let directionalDistance = 0;
+		// Clamp Safari's rubber-band positions before detecting direction.
+		const getScrollY = (scrollY = window.scrollY) => Math.max(0, Math.min(
+			scrollY,
+			Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
+		));
+		let lastScrollY = getScrollY();
+		const restoredScrollY: unknown = history.state?.scrollY;
+		// Astro's history restoration can still be scrolling when page-load fires.
+		let restoringScroll = typeof restoredScrollY === "number" &&
+			Math.abs(lastScrollY - getScrollY(restoredScrollY)) > 1;
+		const updateHeaderSurface = (scrollY: number) => {
+			header.toggleAttribute("data-scrolled", isHomePage && scrollY > 24);
+		};
+		const resetScrollTracking = () => {
+			lastScrollY = getScrollY();
+			direction = 0;
+			directionalDistance = 0;
+			header.removeAttribute("data-scroll-hidden");
+			updateHeaderSurface(lastScrollY);
+		};
+		const finishScrollRestoration = () => {
+			if (!restoringScroll) return;
+			restoringScroll = false;
+			resetScrollTracking();
+		};
+		const measureHeader = () => {
+			scrollThreshold = header.offsetHeight + parseFloat(getComputedStyle(header).top);
+		};
+		const navigationIsEngaged = () =>
+			navigation?.hasAttribute("data-open") ||
+			dropdowns.some(({ group }) => group.hasAttribute("data-open")) ||
+			header.querySelector(":focus-visible") !== null;
+		const updateScroll = () => {
+			scrollFrame = undefined;
+			if (measureOnNextFrame) {
+				measureOnNextFrame = false;
+				measureHeader();
+				resetScrollTracking();
+				return;
+			}
+			const scrollY = getScrollY();
+			const delta = scrollY - lastScrollY;
+			lastScrollY = scrollY;
+			updateHeaderSurface(scrollY);
+			if (restoringScroll) {
+				if (typeof restoredScrollY === "number" && Math.abs(scrollY - getScrollY(restoredScrollY)) <= 1)
+					restoringScroll = false;
+				resetScrollTracking();
+				return;
+			}
+			if (scrollY <= scrollThreshold || navigationIsEngaged()) {
+				direction = 0;
+				directionalDistance = 0;
+				header.removeAttribute("data-scroll-hidden");
+				return;
+			}
+			if (delta === 0) return;
+			const nextDirection = Math.sign(delta);
+			if (nextDirection !== direction) {
+				direction = nextDirection;
+				directionalDistance = 0;
+			}
+			directionalDistance = Math.min(scrollTolerance, directionalDistance + Math.abs(delta));
+			if (directionalDistance >= scrollTolerance) {
+				const shouldHide = direction > 0;
+				if (header.hasAttribute("data-scroll-hidden") !== shouldHide)
+					header.toggleAttribute("data-scroll-hidden", shouldHide);
+			}
+		};
+		const scheduleScrollUpdate = () => {
+			if (scrollFrame === undefined)
+				scrollFrame = window.requestAnimationFrame(updateScroll);
+		};
+		// A bfcache restore may reuse a header that was hidden on departure.
+		const previousTransition = header.style.transition;
+		header.style.transition = "none";
+		resetScrollTracking();
+		measureHeader();
+		if (previousTransition) header.style.transition = previousTransition;
+		else header.style.removeProperty("transition");
+		window.addEventListener("scroll", scheduleScrollUpdate, { passive: true, signal });
+		window.addEventListener("scrollend", finishScrollRestoration, { signal });
+		window.addEventListener("wheel", finishScrollRestoration, { passive: true, signal });
+		window.addEventListener("resize", () => {
+			measureOnNextFrame = true;
+			scheduleScrollUpdate();
+		}, { passive: true, signal });
+		header.addEventListener("focusin", resetScrollTracking, { signal });
+		header.addEventListener("focusout", resetScrollTracking, { signal });
+
 		const setDropdownOpen = (
 			dropdown: (typeof dropdowns)[number],
 			isOpen: boolean,
 			openedByHover = false,
 		) => {
 			window.clearTimeout(dropdown.closeTimer);
+			const wasOpen = dropdown.group.hasAttribute("data-open");
 			dropdown.openedByHover = isOpen && openedByHover;
 			dropdown.group.toggleAttribute("data-open", isOpen);
 			dropdown.trigger?.setAttribute("aria-expanded", String(isOpen));
 			dropdown.menu?.setAttribute("aria-hidden", String(!isOpen));
+			if (wasOpen !== isOpen) resetScrollTracking();
 		};
 		const closeDropdowns = () =>
 			dropdowns.forEach((dropdown) => setDropdownOpen(dropdown, false));
@@ -185,10 +291,12 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 		};
 		signal.addEventListener(
 			"abort",
-			() =>
+			() => {
+				if (scrollFrame !== undefined) window.cancelAnimationFrame(scrollFrame);
 				dropdowns.forEach((dropdown) =>
 					window.clearTimeout(dropdown.closeTimer),
-				),
+				);
+			},
 			{ once: true },
 		);
 
@@ -198,7 +306,9 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 			menuButton.setAttribute("aria-label", "Abrir menú");
 			navigation.removeAttribute("data-open");
 			closeDropdowns();
+			resetScrollTracking();
 		};
+		desktopNavigation.addEventListener("change", closeMenu, { signal });
 
 		menuButton?.addEventListener(
 			"click",
@@ -212,6 +322,8 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 					willOpen ? "Cerrar menú" : "Abrir menú",
 				);
 				navigation.toggleAttribute("data-open", willOpen);
+				if (!willOpen) closeDropdowns();
+				resetScrollTracking();
 			},
 			{ signal },
 		);
@@ -299,6 +411,7 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 		document.addEventListener(
 			"pointerdown",
 			(event) => {
+				finishScrollRestoration();
 				dropdowns.forEach((dropdown) => {
 					if (!dropdown.group.contains(event.target as Node))
 						setDropdownOpen(dropdown, false);
@@ -309,6 +422,7 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 		document.addEventListener(
 			"keydown",
 			(event) => {
+				finishScrollRestoration();
 				if (event.key !== "Escape") return;
 				const activeDropdown = dropdowns.find(
 					(dropdown) =>
@@ -329,6 +443,10 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 		);
 	};
 
-	initializeHeader();
 	document.addEventListener("astro:page-load", initializeHeader);
+	document.addEventListener("astro:before-swap", disposeHeader);
+	window.addEventListener("pagehide", disposeHeader);
+	window.addEventListener("pageshow", (event) => {
+		if (event.persisted) initializeHeader();
+	});
 </script>

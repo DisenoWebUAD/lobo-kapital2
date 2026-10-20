@@ -96,8 +96,9 @@ input {
 }
 
 .site-header {
+	--header-top: 16px;
 	position: fixed;
-	top: 16px;
+	top: var(--header-top);
 	left: 50%;
 	z-index: 20;
 	display: flex;
@@ -107,6 +108,17 @@ input {
 	background: var(--color-white);
 	box-shadow: 0 6px 16px rgb(0 0 0 / 22%);
 	transform: translateX(-50%);
+	transition: transform 420ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.site-header[data-scroll-hidden] {
+	/* Clear the homepage's larger scrolled shadow as well as the bar. */
+	transform: translate(-50%, calc(-100% - var(--header-top) - 64px));
+}
+
+.site-header:has(:focus-visible) {
+	transform: translateX(-50%);
+	transition: none !important;
 }
 
 .site-header__brand {
@@ -1412,7 +1424,7 @@ input {
 
 @media (max-width: 767px) {
 	.site-header {
-		top: 12px;
+		--header-top: 12px;
 		width: calc(100% - 24px);
 		height: 60px;
 	}
@@ -1699,7 +1711,7 @@ body[data-page='home'] .card-promo__visual {
 }
 
 body[data-page='home'] .site-header {
-	transition: background-color 320ms ease, box-shadow 320ms ease, backdrop-filter 320ms ease;
+	transition: transform 450ms cubic-bezier(.4, 0, .2, 1), background-color 320ms ease, box-shadow 320ms ease, backdrop-filter 320ms ease;
 }
 
 body[data-page='home'] .site-header[data-scrolled] {
@@ -1879,7 +1891,7 @@ body[data-page='home'] .card-promo__image[data-parallax-active] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	body[data-page='home'] .site-header,
+	.site-header,
 	body[data-page='home'] [data-reveal],
 	body[data-page='home'] .product-card[data-spotlight],
 	body[data-page='home'] .product-card__icon,

@@ -8,12 +8,7 @@
 		const page = document.querySelector<HTMLElement>(
 			'body[data-page="home"]',
 		);
-		const header = document.querySelector<HTMLElement>(".site-header");
-
-		if (!page) {
-			header?.removeAttribute("data-scrolled");
-			return;
-		}
+		if (!page) return;
 
 		const reducedMotion = window.matchMedia(
 			"(prefers-reduced-motion: reduce)",
@@ -64,13 +59,6 @@
 			revealElements.forEach((element) =>
 				element.toggleAttribute("data-revealed", true),
 			);
-			const updateReducedMotionHeader = () =>
-				header?.toggleAttribute("data-scrolled", window.scrollY > 24);
-			updateReducedMotionHeader();
-			window.addEventListener("scroll", updateReducedMotionHeader, {
-				passive: true,
-				signal,
-			});
 			return;
 		}
 
@@ -190,24 +178,6 @@
 		}, { signal, capture: true });
 		window.addEventListener("hashchange", () => showHash(), { signal });
 		window.addEventListener("beforeprint", () => revealElements.forEach(showImmediately), { signal });
-
-		let headerFrame: number | undefined;
-		const updateHeader = () => {
-			headerFrame = undefined;
-			header?.toggleAttribute("data-scrolled", window.scrollY > 24);
-		};
-		const scheduleHeaderUpdate = () => {
-			if (headerFrame !== undefined) return;
-			headerFrame = window.requestAnimationFrame(updateHeader);
-		};
-		updateHeader();
-		window.addEventListener("scroll", scheduleHeaderUpdate, {
-			passive: true,
-			signal,
-		});
-		signal.addEventListener("abort", () => {
-			if (headerFrame !== undefined) cancelAnimationFrame(headerFrame);
-		}, { once: true });
 
 		const parallaxElement =
 			page.querySelector<HTMLElement>("[data-parallax]");
