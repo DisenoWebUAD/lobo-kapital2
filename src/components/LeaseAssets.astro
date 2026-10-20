@@ -33,7 +33,7 @@ const assets = [
 ---
 
 <section class="lease-assets" aria-labelledby="lease-assets-title">
-	<header class="lease-section-heading">
+	<header class="lease-section-heading" data-page-reveal>
 		<h2 id="lease-assets-title">
 			<span>Activos</span> Disponibles para Arrendamiento
 		</h2>
@@ -43,10 +43,10 @@ const assets = [
 		</p>
 	</header>
 
-	<div class="lease-assets__grid">
+	<div class="lease-assets__grid" data-page-reveal-group>
 		{
 			assets.map((asset) => (
-				<article class="lease-asset-card">
+				<article class="lease-asset-card" data-page-reveal>
 					<div class="lease-asset-card__icon">
 						<img
 							src={asset.icon.src}

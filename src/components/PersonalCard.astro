@@ -8,7 +8,7 @@ import classicCard from "../assets/personal-credit/tarjeta-clasica.png";
 	id="tarjetas"
 	aria-labelledby="personal-cards-title"
 >
-	<div class="personal-cards__heading">
+	<div class="personal-cards__heading" data-page-reveal>
 		<p>Tarjeta de Crédito Empresarial</p>
 		<h2 id="personal-cards-title">
 			Una <span>Tarjeta</span> para Cada Perfil
@@ -21,7 +21,7 @@ import classicCard from "../assets/personal-credit/tarjeta-clasica.png";
 	</div>
 
 	<article class="personal-card card-slide" aria-labelledby="classic-card-title">
-		<div class="card-slide__copy">
+		<div class="card-slide__copy" data-page-reveal="fade">
 			<h3 id="classic-card-title">Clasica</h3>
 			<ul>
 				<li>
@@ -34,7 +34,7 @@ import classicCard from "../assets/personal-credit/tarjeta-clasica.png";
 				<li>1% Cash Back en todas las compras</li>
 			</ul>
 		</div>
-		<div class="card-slide__visual">
+		<div class="card-slide__visual" data-page-reveal="image">
 			<Image
 				src={classicCard}
 				format="png"

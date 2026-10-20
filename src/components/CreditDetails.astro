@@ -19,7 +19,7 @@ const contactHref = Astro.url.pathname.replace(/\/$/, "") === productPath
 	id="condiciones"
 	aria-labelledby="credit-details-title"
 >
-	<div class="credit-details__inner">
+	<div class="credit-details__inner" data-page-reveal-group>
 		<slot name="heading">
 			<header class="credit-details__heading">
 				<p class="credit-details__eyebrow">Montos y condiciones</p>

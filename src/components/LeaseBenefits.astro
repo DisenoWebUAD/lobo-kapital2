@@ -30,15 +30,15 @@ const benefits = [
 	id="beneficios"
 	aria-labelledby="lease-benefits-title"
 >
-	<header class="lease-section-heading">
+	<header class="lease-section-heading" data-page-reveal>
 		<h2 id="lease-benefits-title"><span>Beneficios</span> Financieros</h2>
 		<p>Estrategias inteligentes para el flujo de efectivo.</p>
 	</header>
 
-	<div class="lease-benefits__grid">
+	<div class="lease-benefits__grid" data-page-reveal-group>
 		{
 			benefits.map((benefit) => (
-				<article class="lease-benefit-card">
+				<article class="lease-benefit-card" data-page-reveal>
 					<div class="lease-benefit-card__icon">
 						<img
 							src={benefit.icon.src}

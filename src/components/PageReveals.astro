@@ -1,0 +1,202 @@
+<script>
+	let disposePageReveals: (() => void) | undefined;
+	const revealMotion = {
+		viewportTrigger: 0.78,
+		distance: { mobile: 16, desktop: 24 },
+		duration: { rise: 700, fade: 560, image: 760 },
+		easing: "cubic-bezier(.22,.75,.25,1)",
+	};
+
+	const initializePageReveals = () => {
+		disposePageReveals?.();
+		const elements = [
+			...document.querySelectorAll<HTMLElement>(
+				"#main-content [data-page-reveal]",
+			),
+		].filter((element) => !element.parentElement?.closest("[data-page-reveal]"));
+		if (!elements.length) return;
+
+		const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+		if (
+			reducedMotion.matches ||
+			!("IntersectionObserver" in window) ||
+			typeof Element.prototype.animate !== "function" ||
+			!CSS.supports("translate", "0 1px")
+		) return;
+
+		const controller = new AbortController();
+		const { signal } = controller;
+		const pending = new Set<HTMLElement>();
+		const animations = new Map<HTMLElement, Animation>();
+		let observer: IntersectionObserver | undefined;
+		let resizeFrame: number | undefined;
+
+		const show = (element: HTMLElement) => {
+			pending.delete(element);
+			element.removeAttribute("data-page-reveal-pending");
+			element.setAttribute("data-page-revealed", "");
+			observer?.unobserve(element);
+			animations.get(element)?.cancel();
+			animations.delete(element);
+		};
+
+		const dispose = () => {
+			controller.abort();
+			observer?.disconnect();
+			if (resizeFrame !== undefined) cancelAnimationFrame(resizeFrame);
+			elements.forEach(show);
+			if (disposePageReveals === dispose) disposePageReveals = undefined;
+		};
+		disposePageReveals = dispose;
+
+		const showRelated = (target: EventTarget | null, includeChildren = false) => {
+			if (!(target instanceof Element)) return;
+			elements.forEach((element) => {
+				if (element.contains(target) || (includeChildren && target.contains(element))) show(element);
+			});
+		};
+		const showHash = (hash = location.hash) => {
+			if (!hash) return;
+			try {
+				showRelated(document.getElementById(decodeURIComponent(hash.slice(1))), true);
+			} catch {
+				// A malformed fragment must not interrupt navigation or initialization.
+			}
+		};
+
+		const reveal = (element: HTMLElement, delay: number) => {
+			const kind = element.dataset.pageReveal;
+			const rise = !kind || kind === "rise";
+			const distance = window.innerWidth < 768
+				? revealMotion.distance.mobile
+				: revealMotion.distance.desktop;
+			const from: Keyframe = { opacity: 0 };
+			const to: Keyframe = { opacity: 1 };
+			if (rise) {
+				// Individual translate preserves transforms used by the existing layout.
+				from.translate = `0 ${distance}px`;
+				to.translate = "0 0";
+			}
+			const animation = element.animate([from, to], {
+				duration: kind === "image"
+					? revealMotion.duration.image
+					: rise ? revealMotion.duration.rise : revealMotion.duration.fade,
+				delay,
+				easing: revealMotion.easing,
+				fill: "backwards",
+			});
+			animations.set(element, animation);
+			pending.delete(element);
+			element.removeAttribute("data-page-reveal-pending");
+			element.setAttribute("data-page-revealed", "");
+			observer?.unobserve(element);
+			void animation.finished.then(() => {
+				if (animations.get(element) !== animation) return;
+				animations.delete(element);
+				animation.cancel();
+			}, () => {
+				if (animations.get(element) === animation) animations.delete(element);
+			});
+		};
+
+		const onIntersect: IntersectionObserverCallback = (entries) => {
+			try {
+				const rows = new Map<Element, { top: number; count: number }[]>();
+				entries.forEach((entry) => {
+					const element = entry.target as HTMLElement;
+					if (!entry.isIntersecting || !pending.has(element)) return;
+					let delay = 0;
+					const group = element.parentElement?.closest("[data-page-reveal-group]");
+					if (group && window.innerWidth >= 768) {
+						const groupRows = rows.get(group) ?? [];
+						let row = groupRows.find(({ top }) => Math.abs(top - entry.boundingClientRect.top) < 24);
+						if (!row) {
+							row = { top: entry.boundingClientRect.top, count: 0 };
+							groupRows.push(row);
+							rows.set(group, groupRows);
+						}
+						delay = Math.min(row.count++ * 60, 180);
+					}
+					reveal(element, delay);
+				});
+				if (!pending.size) observer?.disconnect();
+			} catch {
+				dispose();
+			}
+		};
+
+		const observePending = () => {
+			observer?.disconnect();
+			// Pixels keep the trigger proportional to viewport height rather than width.
+			observer = new IntersectionObserver(onIntersect, {
+				threshold: 0,
+				rootMargin: `0px 0px -${Math.round(window.innerHeight * (1 - revealMotion.viewportTrigger))}px 0px`,
+			});
+			pending.forEach((element) => observer?.observe(element));
+		};
+
+		try {
+			observePending();
+			// Read all positions before preparing hidden states, never hiding the initial view.
+			const positions = elements.map((element) => ({ element, rect: element.getBoundingClientRect() }));
+			positions.forEach(({ element, rect }) => {
+				if (element.hasAttribute("data-page-revealed") || rect.top < innerHeight || !rect.width || !rect.height) {
+					show(element);
+					return;
+				}
+				pending.add(element);
+				element.setAttribute("data-page-reveal-pending", "");
+				observer?.observe(element);
+			});
+			showHash();
+			if (document.activeElement !== document.body) showRelated(document.activeElement);
+
+			document.addEventListener("focusin", (event) => showRelated(event.target), { signal, capture: true });
+			document.addEventListener("pointerdown", (event) => showRelated(event.target), { signal, capture: true });
+			document.addEventListener("click", (event) => {
+				const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+				if (!link) return;
+				const url = new URL(link.href, location.href);
+				if (url.origin === location.origin && url.pathname === location.pathname && url.search === location.search) showHash(url.hash);
+			}, { signal, capture: true });
+			window.addEventListener("hashchange", () => showHash(), { signal });
+			window.addEventListener("beforeprint", dispose, { signal });
+			reducedMotion.addEventListener("change", () => {
+				if (reducedMotion.matches) dispose();
+			}, { signal });
+			window.addEventListener("resize", () => {
+				if (resizeFrame !== undefined || !pending.size) return;
+				resizeFrame = requestAnimationFrame(() => {
+					resizeFrame = undefined;
+					try {
+						pending.forEach((element) => {
+							if (element.getBoundingClientRect().top < innerHeight) show(element);
+						});
+						if (pending.size) observePending();
+					} catch {
+						dispose();
+					}
+				});
+			}, { signal, passive: true });
+			if (!pending.size) observer?.disconnect();
+		} catch {
+			dispose();
+		}
+	};
+
+	document.addEventListener("astro:page-load", initializePageReveals);
+	document.addEventListener("astro:before-swap", () => disposePageReveals?.());
+	window.addEventListener("pagehide", () => disposePageReveals?.());
+	window.addEventListener("pageshow", (event) => {
+		if (event.persisted) initializePageReveals();
+	});
+</script>
+
+<style is:global>
+	/* Only a successfully initialized controller prepares off-screen content. */
+	@media screen and (prefers-reduced-motion: no-preference) {
+		[data-page-reveal][data-page-reveal-pending] {
+			opacity: 0;
+		}
+	}
+</style>

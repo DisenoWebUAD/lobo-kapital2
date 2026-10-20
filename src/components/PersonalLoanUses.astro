@@ -24,13 +24,13 @@ const uses = [
 
 <section class="personal-loan-uses" aria-labelledby="personal-loan-uses-title">
 	<div class="personal-loan-uses__inner">
-		<header class="personal-loan-uses__heading">
+		<header class="personal-loan-uses__heading" data-page-reveal>
 			<h2 id="personal-loan-uses-title">Impulsa tus <span>planes</span></h2>
 			<p>Financiamiento para tus proyectos personales.</p>
 		</header>
-		<ul class="personal-loan-uses__grid" role="list">
+		<ul class="personal-loan-uses__grid" role="list" data-page-reveal-group>
 			{uses.map((use) => (
-				<li class="personal-loan-use">
+				<li class="personal-loan-use" data-page-reveal>
 					<span class="personal-loan-use__icon">
 						<img src={use.icon.src} alt="" width="43" height="43" />
 					</span>

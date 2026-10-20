@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import { Picture } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PageReveals from '../components/PageReveals.astro';
 import teamImage from '../assets/about/equipo.jpg';
 import logoMark from '../assets/home/logo-mark.svg';
 import '../styles/global.css';
@@ -64,22 +65,23 @@ const values = [
 					loading="eager"
 					fetchpriority="high"
 				/>
-				<h2 id="about-banner-title">Impulsamos el potencial de tu negocio con soluciones financieras ágiles</h2>
+				<h2 id="about-banner-title" data-page-reveal>Impulsamos el potencial de tu negocio con soluciones financieras ágiles</h2>
 			</section>
 
 			<section class="about-values" aria-labelledby="about-values-title">
-				<header class="about-values__heading">
+				<header class="about-values__heading" data-page-reveal>
 					<p>Valores Lobo Kapital</p>
 					<h2 id="about-values-title">Tu <span>aliado estratégico</span> en financiamiento y crecimiento empresarial.</h2>
 				</header>
-				<ul class="about-values__list" role="list">
+				<ul class="about-values__list" role="list" data-page-reveal-group>
 					{values.map((value) => (
-						<li><p><strong>{value.title}:</strong> {value.description}</p></li>
+						<li data-page-reveal><p><strong>{value.title}:</strong> {value.description}</p></li>
 					))}
 				</ul>
 			</section>
 		</main>
 		<Footer />
+		<PageReveals />
 	</body>
 </html>
 

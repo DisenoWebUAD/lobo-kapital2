@@ -33,7 +33,7 @@ const steps = [
 ---
 
 <section class="factoring-process" aria-labelledby="factoring-process-title">
-	<header class="factoring-section-heading">
+	<header class="factoring-section-heading" data-page-reveal>
 		<h2 id="factoring-process-title">
 			El Proceso de <span>Factoraje</span>
 		</h2>
@@ -42,10 +42,10 @@ const steps = [
 			48 horas.
 		</p>
 	</header>
-	<ol class="factoring-process__grid">
+	<ol class="factoring-process__grid" data-page-reveal-group>
 		{
 			steps.map((step) => (
-				<li class="factoring-process__card">
+				<li class="factoring-process__card" data-page-reveal>
 					<img src={step.icon.src} alt="" width="112" height="114" />
 					<h3>{step.title}</h3>
 					<p>{step.description}</p>

@@ -30,15 +30,15 @@ const solutions = [
 	id="soluciones"
 	aria-labelledby="pymes-solutions-title"
 >
-	<header class="pymes-solutions__heading">
+	<header class="pymes-solutions__heading" data-page-reveal>
 		<h2 id="pymes-solutions-title">Impulsa tu <span>Crecimiento</span></h2>
 		<p>Soluciones financieras adaptadas a cada etapa de tu negocio.</p>
 	</header>
 
-	<div class="pymes-solutions__grid">
+	<div class="pymes-solutions__grid" data-page-reveal-group>
 		{
 			solutions.map((solution) => (
-				<article class="pymes-solution-card">
+				<article class="pymes-solution-card" data-page-reveal>
 					<div class="pymes-solution-card__icon">
 						<img
 							src={solution.icon.src}
