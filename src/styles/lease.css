@@ -26,8 +26,7 @@
 	color: #000;
 }
 
-.lease-hero h1 span,
-.lease-section-heading h2 span {
+.lease-hero h1 span {
 	color: var(--color-primary);
 }
 
@@ -52,7 +51,6 @@
 	font-size: 16px;
 }
 
-
 .lease-hero__actions .lease-hero__more {
 	min-width: 152px;
 	min-height: 47px;
@@ -74,127 +72,123 @@
 }
 
 .lease-section-heading {
+	width: min(calc(100% - 96px), 1276px);
+	margin-inline: auto;
 	text-align: center;
 }
-
 .lease-section-heading h2 {
-	font-size: 48px;
+	font-size: 44px;
 	font-weight: 700;
-	line-height: 1.06;
-	letter-spacing: -.9px;
+	line-height: 1.12;
+	letter-spacing: -0.8px;
+	color: var(--color-ink);
+}
+.lease-section-heading h2 span {
+	color: var(--color-primary);
+}
+.lease-section-heading p {
+	max-width: 64ch;
+	margin: 14px auto 0;
+	font-size: 20px;
+	line-height: 1.5;
 	color: var(--color-text);
 }
-
-.lease-section-heading p {
-	margin-top: 13px;
-	font-size: 24px;
-	line-height: 1.2;
-	color: var(--color-muted);
-}
-
 .lease-benefits {
-	padding: 133px 0 176px;
+	padding: 88px 0;
 	background: var(--color-white);
 }
-
 .lease-benefits__grid {
 	display: grid;
-	width: min(calc(100% - 324px), 1596px);
+	width: min(calc(100% - 96px), 1276px);
 	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 46px;
-	margin: 100px auto 0;
+	gap: 24px;
+	margin: 44px auto 0;
 }
-
 .lease-benefit-card {
-	min-height: 330px;
-	padding: 48px 39px 29px;
-	border-radius: 20px;
+	min-width: 0;
+	padding: 30px;
+	border-radius: 18px;
 	background: var(--color-surface);
-	transition: box-shadow 180ms ease;
 }
-
-.lease-benefit-card:hover,
-.lease-benefit-card:focus-within {
-	box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
-}
-
 .lease-benefit-card__icon {
 	display: grid;
-	width: 83px;
-	height: 83px;
+	width: 52px;
+	height: 52px;
 	place-items: center;
-	border-radius: 50%;
-	background: var(--color-soft);
 }
-
 .lease-benefit-card__icon img {
-	width: 49px;
-	height: 49px;
+	width: 44px;
+	height: 44px;
 	object-fit: contain;
 }
-
 .lease-benefit-card h3 {
-	margin-top: 47px;
+	margin-top: 24px;
 	font-size: 24px;
-	font-weight: 600;
-	line-height: 1.1;
-	letter-spacing: -.35px;
-	color: #000;
-}
-
-.lease-benefit-card p {
-	margin-top: 11px;
-	font-size: 16px;
+	font-weight: 650;
 	line-height: 1.2;
-	color: var(--color-muted);
+	letter-spacing: -0.35px;
+	color: var(--color-ink);
 }
-
+.lease-benefit-card p {
+	margin-top: 12px;
+	font-size: 16px;
+	line-height: 1.55;
+	color: var(--color-text);
+}
 .lease-assets {
-	padding: 115px 0 112px;
+	padding: 88px 0;
 	background: var(--color-soft);
 }
-
 .lease-assets__grid {
 	display: grid;
-	width: min(calc(100% - 324px), 1268px);
+	width: min(calc(100% - 96px), 1276px);
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 44px;
-	margin: 100px auto 0;
+	gap: 24px;
+	margin: 44px auto 0;
 }
-
-.lease-asset-card {
-	min-height: 330px;
-	padding: 42px 36px 31px;
-	border-radius: 20px;
-	background: var(--color-white);
+@media (max-width: 1199px) {
+	.lease-assets__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 20px;
+	}
+	.lease-benefits__grid {
+		gap: 20px;
+	}
+	.lease-benefit-card {
+		padding: 26px 22px;
+	}
+	.lease-benefit-card h3 {
+		font-size: 21px;
+	}
 }
-
-.lease-asset-card__icon {
-	display: grid;
-	height: 99px;
-	place-items: center;
-}
-
-.lease-asset-card__icon img {
-	width: 116px;
-	height: 91px;
-	object-fit: contain;
-}
-
-.lease-asset-card h3 {
-	margin-top: 34px;
-	font-size: 24px;
-	font-weight: 600;
-	line-height: 1.1;
-	letter-spacing: -.35px;
-	color: #000;
-}
-
-.lease-asset-card p {
-	margin-top: 14px;
-	font-size: 16px;
-	line-height: 1.2;
-	color: var(--color-muted);
+@media (max-width: 767px) {
+	.lease-benefits,
+	.lease-assets {
+		padding: 64px 0;
+	}
+	.lease-section-heading,
+	.lease-benefits__grid,
+	.lease-assets__grid {
+		width: calc(100% - 40px);
+	}
+	.lease-section-heading h2 {
+		font-size: 36px;
+	}
+	.lease-section-heading p {
+		font-size: 17px;
+	}
+	.lease-benefits__grid,
+	.lease-assets__grid {
+		grid-template-columns: 1fr;
+		gap: 20px;
+		margin-top: 32px;
+	}
+	.lease-benefit-card {
+		padding: 28px;
+	}
+	.lease-benefit-card h3 {
+		font-size: 23px;
+	}
 }
 
 .lease-lead {
@@ -386,58 +380,9 @@
 }
 
 @media (max-width: 1599px) and (min-width: 1200px) {
-	.lease-benefits {
-		padding-top: clamp(84px, 6.9vw, 133px);
-		padding-bottom: clamp(112px, 9.17vw, 176px);
-	}
 
-	.lease-section-heading h2 {
-		font-size: clamp(40px, 2.5vw, 48px);
-	}
-
-	.lease-section-heading p,
 	.lease-lead__copy > p {
 		font-size: clamp(18px, 1.25vw, 24px);
-	}
-
-	.lease-benefits__grid {
-		gap: clamp(24px, 2.4vw, 46px);
-		margin-top: clamp(64px, 5.2vw, 100px);
-	}
-
-	.lease-benefit-card {
-		min-height: clamp(286px, 17.2vw, 330px);
-		padding: clamp(34px, 2.5vw, 48px) clamp(25px, 2vw, 39px) 28px;
-	}
-
-	.lease-benefit-card h3 {
-		margin-top: clamp(32px, 2.45vw, 47px);
-		font-size: clamp(19px, 1.25vw, 24px);
-	}
-
-	.lease-benefit-card p,
-	.lease-asset-card p {
-		font-size: clamp(14px, .84vw, 16px);
-	}
-
-	.lease-assets {
-		padding-top: clamp(80px, 6vw, 115px);
-		padding-bottom: clamp(80px, 5.85vw, 112px);
-	}
-
-	.lease-assets__grid {
-		gap: clamp(20px, 2.3vw, 44px);
-		margin-top: clamp(64px, 5.2vw, 100px);
-	}
-
-	.lease-asset-card {
-		min-height: clamp(275px, 17.2vw, 330px);
-		padding: clamp(30px, 2.2vw, 42px) clamp(22px, 1.9vw, 36px) 28px;
-	}
-
-	.lease-asset-card h3 {
-		margin-top: clamp(25px, 1.8vw, 34px);
-		font-size: clamp(19px, 1.25vw, 24px);
 	}
 
 	.lease-lead {
@@ -479,64 +424,6 @@
 
 	.lease-hero__copy p {
 		font-size: 19px;
-	}
-
-	.lease-benefits {
-		padding: 94px 48px 116px;
-	}
-
-	.lease-section-heading h2 {
-		font-size: 44px;
-	}
-
-	.lease-section-heading p {
-		font-size: 20px;
-	}
-
-	.lease-benefits__grid {
-		width: 100%;
-		gap: 20px;
-		margin-top: 72px;
-	}
-
-	.lease-benefit-card {
-		min-height: 300px;
-		padding: 35px 23px 26px;
-	}
-
-	.lease-benefit-card__icon {
-		width: 67px;
-		height: 67px;
-	}
-
-	.lease-benefit-card__icon img {
-		width: 42px;
-		height: 42px;
-	}
-
-	.lease-benefit-card h3 {
-		margin-top: 35px;
-		font-size: 20px;
-	}
-
-	.lease-benefit-card p {
-		font-size: 15px;
-	}
-
-	.lease-assets {
-		padding: 94px 48px 102px;
-	}
-
-	.lease-assets__grid {
-		width: 100%;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 22px;
-		margin-top: 72px;
-	}
-
-	.lease-asset-card {
-		min-height: 280px;
-		padding: 35px 30px 27px;
 	}
 
 	.lease-lead {
@@ -623,64 +510,6 @@
 		max-width: none;
 		margin-top: 0;
 		margin-left: -17.5%;
-	}
-
-	.lease-benefits {
-		padding: 76px 20px 86px;
-	}
-
-	.lease-section-heading h2 {
-		font-size: 38px;
-		line-height: 1.08;
-	}
-
-	.lease-section-heading p {
-		font-size: 17px;
-		line-height: 1.3;
-	}
-
-	.lease-benefits__grid {
-		grid-template-columns: 1fr;
-		gap: 18px;
-		margin-top: 52px;
-	}
-
-	.lease-benefit-card {
-		min-height: 0;
-		padding: 31px 25px 28px;
-	}
-
-	.lease-benefit-card h3 {
-		margin-top: 28px;
-		font-size: 22px;
-	}
-
-	.lease-benefit-card p {
-		font-size: 16px;
-	}
-
-	.lease-assets {
-		padding: 76px 20px 86px;
-	}
-
-	.lease-assets__grid {
-		grid-template-columns: 1fr;
-		gap: 18px;
-		margin-top: 52px;
-	}
-
-	.lease-asset-card {
-		min-height: 0;
-		padding: 31px 25px 28px;
-	}
-
-	.lease-asset-card h3 {
-		margin-top: 26px;
-		font-size: 22px;
-	}
-
-	.lease-asset-card p {
-		font-size: 16px;
 	}
 
 	.lease-lead {

@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+	image: ImageMetadata;
+	title: string;
+	description: string;
+	alt: string;
+	as?: 'article' | 'li';
+	variant?: 'surface' | 'white';
+	sizes?: string;
+}
+
+const {
+	image,
+	title,
+	description,
+	alt,
+	as: Tag = 'article',
+	variant = 'surface',
+	sizes = '(max-width: 767px) calc(100vw - 40px), (max-width: 1372px) calc((100vw - 144px) / 3), 410px',
+}: Props = Astro.props;
+---
+
+<Tag class:list={['editorial-card', `editorial-card--${variant}`]} data-page-reveal>
+	<Image
+		src={image}
+		alt={alt}
+		width={960}
+		height={640}
+		widths={[384, 640, 960]}
+		sizes={sizes}
+		format="webp"
+		quality={85}
+		loading="lazy"
+		decoding="async"
+	/>
+	<div class="editorial-card__copy">
+		<h3>{title}</h3>
+		<p>{description}</p>
+	</div>
+</Tag>
+
+<style>
+	.editorial-card {
+		min-width: 0;
+		overflow: hidden;
+		border-radius: 18px;
+		background: var(--color-surface);
+	}
+	.editorial-card--white {
+		background: var(--color-white);
+	}
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+	}
+	.editorial-card__copy {
+		padding: 26px 28px 30px;
+	}
+	h3 {
+		color: var(--color-ink);
+		font-size: 24px;
+		font-weight: 650;
+		line-height: 1.2;
+		letter-spacing: -0.35px;
+	}
+	p {
+		margin-top: 12px;
+		color: var(--color-text);
+		font-size: 16px;
+		line-height: 1.55;
+	}
+	@media (min-width: 768px) and (max-width: 1100px) {
+		.editorial-card__copy {
+			padding: 22px 20px 26px;
+		}
+		h3 {
+			font-size: 21px;
+		}
+	}
+	@media (max-width: 767px) {
+		img {
+			aspect-ratio: 16 / 9;
+		}
+		.editorial-card__copy {
+			padding: 24px;
+		}
+		h3 {
+			font-size: 23px;
+		}
+	}
+</style>

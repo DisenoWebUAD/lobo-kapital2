@@ -1,33 +1,38 @@
 ---
-import fleetsIcon from "../assets/arrendamiento/flotas-vehiculares.svg";
-import medicalIcon from "../assets/arrendamiento/equipo-medico.svg";
-import machineryIcon from "../assets/arrendamiento/maquinaria-pesada.svg";
-import technologyIcon from "../assets/arrendamiento/tecnologia.svg";
+import EditorialCard from './EditorialCard.astro';
+import fleetsImage from '../assets/editorial/vehiculos.jpg';
+import medicalImage from '../assets/editorial/medico.jpg';
+import machineryImage from '../assets/editorial/maquinaria.jpg';
+import technologyImage from '../assets/editorial/tecnologia.jpg';
 
 const assets = [
 	{
-		title: "Flotas Vehiculares",
+		title: "Flotas vehiculares",
 		description:
 			"Autos ejecutivos, utilitarios y vehículos de carga ligera.",
-		icon: fleetsIcon,
+		image: fleetsImage,
+		alt: 'Vehículos de reparto durante la carga de pedidos',
 	},
 	{
-		title: "Equipo Médico",
+		title: "Equipo médico",
 		description:
 			"Resonadores, equipo de diagnóstico y mobiliario clínico especializado.",
-		icon: medicalIcon,
+		image: medicalImage,
+		alt: 'Una profesional preparando equipo de diagnóstico en una clínica',
 	},
 	{
-		title: "Maquinaria Pesada",
+		title: "Maquinaria pesada",
 		description:
 			"Equipamiento para construcción, minería, agricultura y manufactura.",
-		icon: machineryIcon,
+		image: machineryImage,
+		alt: 'Una excavadora en una obra de construcción',
 	},
 	{
-		title: "Tecnología e IT",
+		title: "Tecnología",
 		description:
 			"Servidores, redes, equipo de cómputo y sistemas de comunicación avanzados.",
-		icon: technologyIcon,
+		image: technologyImage,
+		alt: 'Un técnico revisando los servidores de una empresa',
 	},
 ];
 ---
@@ -46,18 +51,11 @@ const assets = [
 	<div class="lease-assets__grid" data-page-reveal-group>
 		{
 			assets.map((asset) => (
-				<article class="lease-asset-card" data-page-reveal>
-					<div class="lease-asset-card__icon">
-						<img
-							src={asset.icon.src}
-							alt=""
-							width="116"
-							height="91"
-						/>
-					</div>
-					<h3>{asset.title}</h3>
-					<p>{asset.description}</p>
-				</article>
+				<EditorialCard
+					{...asset}
+					variant="white"
+					sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1199px) calc((100vw - 116px) / 2), (max-width: 1372px) calc((100vw - 168px) / 4), 301px"
+				/>
 			))
 		}
 	</div>

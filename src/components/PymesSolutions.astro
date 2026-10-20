@@ -1,26 +1,30 @@
 ---
-import workCapitalIcon from "../assets/pymes/capital-trabajo.svg";
-import equipmentIcon from "../assets/pymes/adquisicion-equipo.svg";
-import inventoryIcon from "../assets/pymes/inventario.svg";
+import EditorialCard from './EditorialCard.astro';
+import workCapitalImage from '../assets/editorial/capital.jpg';
+import equipmentImage from '../assets/editorial/equipo.jpg';
+import inventoryImage from '../assets/editorial/inventario.jpg';
 
 const solutions = [
 	{
-		title: "Capital de Trabajo",
+		title: "Capital de trabajo",
 		description:
 			"Mantén la liquidez de tu operación diaria, cubre nóminas, proveedores o aprovecha oportunidades inmediatas en el mercado.",
-		icon: workCapitalIcon,
+		image: workCapitalImage,
+		alt: 'Un equipo preparando pedidos en una panadería',
 	},
 	{
-		title: "Adquisición de Equipo",
+		title: "Equipo para tu negocio",
 		description:
 			"Moderniza tu maquinaria, tecnología o flotilla vehicular para aumentar tu capacidad productiva y competitividad.",
-		icon: equipmentIcon,
+		image: equipmentImage,
+		alt: 'Un operador trabajando con maquinaria en un taller',
 	},
 	{
-		title: "Financiamiento de Inventario",
+		title: "Inventario",
 		description:
 			"Asegura el stock necesario para temporadas altas sin comprometer tu flujo de efectivo operativo.",
-		icon: inventoryIcon,
+		image: inventoryImage,
+		alt: 'Dos personas organizando el inventario de un negocio',
 	},
 ];
 ---
@@ -38,18 +42,7 @@ const solutions = [
 	<div class="pymes-solutions__grid" data-page-reveal-group>
 		{
 			solutions.map((solution) => (
-				<article class="pymes-solution-card" data-page-reveal>
-					<div class="pymes-solution-card__icon">
-						<img
-							src={solution.icon.src}
-							alt=""
-							width="48"
-							height="48"
-						/>
-					</div>
-					<h3>{solution.title}</h3>
-					<p>{solution.description}</p>
-				</article>
+				<EditorialCard {...solution} />
 			))
 		}
 	</div>

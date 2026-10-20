@@ -1,16 +1,19 @@
 ---
-import pymesIcon from "../assets/home/pymes-icon.svg";
-import walletIcon from "../assets/home/cartera-icon.svg";
+import { Image } from 'astro:assets';
+import personalImage from '../assets/editorial/hogar.jpg';
+import businessImage from '../assets/editorial/capital.jpg';
 import { credits } from "../data/credits";
 
 const products = [
 	{
 		...credits.personal,
-		icon: walletIcon,
+		image: personalImage,
+		alt: 'Una pareja preparando mejoras para su hogar',
 	},
 	{
 		...credits.business,
-		icon: pymesIcon,
+		image: businessImage,
+		alt: 'Un equipo atendiendo los pedidos de su negocio',
 	},
 ];
 ---
@@ -35,35 +38,42 @@ const products = [
 					data-reveal
 					data-spotlight
 				>
-					<div class="product-card__icon">
-						<img
-							src={product.icon.src}
-							alt=""
-							width="56"
-							height="56"
-						/>
+					<Image
+						src={product.image}
+						alt={product.alt}
+						class="product-card__image"
+						width={1280}
+						height={854}
+						widths={[480, 768, 1280]}
+						sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1372px) calc((100vw - 120px) / 2), 626px"
+						format="webp"
+						quality={85}
+						loading="lazy"
+						decoding="async"
+					/>
+					<div class="product-card__body">
+						<h3>{product.title}</h3>
+						<p>{product.summary}</p>
+						<dl class="product-card__summary">
+							<div>
+								<dt>Hasta</dt>
+								<dd>
+									{product.maxAmount}
+									<span class="product-card__currency"> MXN</span>
+								</dd>
+							</div>
+							<div>
+								<dt>Plazo</dt>
+								<dd>
+									{product.term}
+									<small>{product.termNote}</small>
+								</dd>
+							</div>
+						</dl>
+						<a href={product.href}>
+							Conocer el crédito <span aria-hidden="true">→</span>
+						</a>
 					</div>
-					<h3>{product.title}</h3>
-					<p>{product.summary}</p>
-					<dl class="product-card__summary">
-						<div>
-							<dt>Hasta</dt>
-							<dd>
-								{product.maxAmount}
-								<span class="product-card__currency"> MXN</span>
-							</dd>
-						</div>
-						<div>
-							<dt>Plazo</dt>
-							<dd>
-								{product.term}
-								<small>{product.termNote}</small>
-							</dd>
-						</div>
-					</dl>
-					<a href={product.href}>
-						Conocer el crédito <span aria-hidden="true">→</span>
-					</a>
 				</article>
 			))
 		}
