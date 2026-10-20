@@ -484,7 +484,7 @@ const percent = (value: number) =>
 
 <style>
 	.loan-calculator {
-		padding: 40px 0 120px;
+		padding: 32px 0 88px;
 		scroll-margin-top: 112px;
 	}
 	.loan-calculator__inner {
@@ -715,8 +715,9 @@ const percent = (value: number) =>
 	}
 	.loan-calculator__result {
 		min-width: 0;
-		padding-left: clamp(32px, 4vw, 64px);
-		border-left: 1px solid #e0e0de;
+		padding: 28px;
+		border-radius: 14px;
+		background: var(--color-white);
 	}
 	h3 {
 		font-size: 16px;
@@ -734,6 +735,7 @@ const percent = (value: number) =>
 		line-height: 1.15;
 		letter-spacing: -1px;
 		font-variant-numeric: tabular-nums;
+		color: var(--color-ink);
 		overflow-wrap: anywhere;
 	}
 	.loan-calculator__payment > span {
@@ -772,7 +774,7 @@ const percent = (value: number) =>
 	}
 	.loan-calculator__insurance {
 		margin-top: 24px;
-		font-size: 12px;
+		font-size: 13px;
 		line-height: 1.65;
 		color: #696967;
 	}
@@ -780,7 +782,7 @@ const percent = (value: number) =>
 		margin-top: 32px;
 		padding-top: 24px;
 		border-top: 1px solid #e0e0de;
-		font-size: 12px;
+		font-size: 13px;
 		line-height: 1.65;
 		color: #696967;
 	}
@@ -804,9 +806,7 @@ const percent = (value: number) =>
 			gap: 32px;
 		}
 		.loan-calculator__result {
-			padding: 32px 0 0;
-			border-left: 0;
-			border-top: 1px solid #e0e0de;
+			padding: 28px;
 		}
 	}
 	@media (max-width: 767px) {
@@ -818,6 +818,9 @@ const percent = (value: number) =>
 		}
 		.loan-calculator__panel {
 			padding: 24px;
+		}
+		.loan-calculator__result {
+			padding: 24px 20px;
 		}
 		.loan-calculator__heading {
 			margin-bottom: 28px;
@@ -847,6 +850,12 @@ const percent = (value: number) =>
 		.loan-calculator[data-loan-product='business'] .loan-calculator__term-option small {
 			font-size: 11px;
 			font-weight: 400;
+		}
+	}
+	@media (max-width: 359px) {
+		.loan-calculator[data-loan-product='business'] .loan-calculator__payment {
+			font-size: 28px;
+			letter-spacing: -0.8px;
 		}
 	}
 </style>
