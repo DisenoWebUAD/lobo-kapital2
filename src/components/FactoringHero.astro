@@ -1,5 +1,9 @@
 ---
+import { Picture } from "astro:assets";
 import heroImage from "../assets/factoraje/hero.jpg";
+
+const imageSizes =
+	"(max-width: 640px) calc(100vw - 48px), (max-width: 775px) calc(100vw - 96px), (max-width: 1023px) 680px, (max-width: 1919px) 50.16vw, 963px";
 ---
 
 <section
@@ -30,12 +34,20 @@ import heroImage from "../assets/factoraje/hero.jpg";
 				>
 			</div>
 		</div>
-		<img
+		<Picture
 			class="factoring-hero__image"
-			src={heroImage.src}
+			src={heroImage}
+			formats={["webp"]}
+			fallbackFormat="jpeg"
+			quality={85}
+			widths={[480, 768, 1024, 1417]}
+			sizes={imageSizes}
+			pictureAttributes={{ style: "display: contents;" }}
 			alt="Emprendedora revisando información de su negocio"
-			width="1417"
-			height="1290"
+			width={1417}
+			height={1290}
+			loading="eager"
+			fetchpriority="high"
 		/>
 	</div>
 </section>

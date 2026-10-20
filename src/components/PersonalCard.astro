@@ -1,6 +1,6 @@
 ---
-import { Image } from "astro:assets";
 import classicCard from "../assets/personal-credit/tarjeta-clasica.png";
+import classicCardWebp from "../assets/personal-credit/tarjeta-clasica.webp";
 ---
 
 <section
@@ -35,14 +35,17 @@ import classicCard from "../assets/personal-credit/tarjeta-clasica.png";
 			</ul>
 		</div>
 		<div class="card-slide__visual" data-page-reveal="image">
-			<Image
-				src={classicCard}
-				format="png"
-				alt="Tarjeta de crédito Clásica Lobo Kapital sobre pedestal"
-				width={classicCard.width}
-				height={classicCard.height}
-				loading="eager"
-			/>
+			<picture style="display: contents;">
+				<source srcset={classicCardWebp.src} type="image/webp" />
+				<img
+					src={classicCard.src}
+					alt="Tarjeta de crédito Clásica Lobo Kapital sobre pedestal"
+					width={classicCard.width}
+					height={classicCard.height}
+					loading="lazy"
+					decoding="async"
+				/>
+			</picture>
 		</div>
 	</article>
 </section>
