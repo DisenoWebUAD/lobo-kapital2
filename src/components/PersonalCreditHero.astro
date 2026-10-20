@@ -1,18 +1,19 @@
 ---
 import { Picture } from "astro:assets";
+import "../styles/credit-heroes.css";
 import heroImage from "../assets/personal-credit/hero.jpg";
 ---
 
 <section
-	class="personal-hero"
+	class="credit-hero personal-hero"
 	id="inicio"
 	aria-labelledby="personal-hero-title"
 >
-	<div class="personal-hero__inner">
-		<div class="personal-hero__copy">
+	<div class="credit-hero__inner personal-hero__inner">
+		<div class="credit-hero__copy personal-hero__copy">
 			<h1 id="personal-hero-title">
 				<span>Libertad Financiera</span>
-				<span class="personal-hero__muted">con Beneficios</span>
+				<span class="credit-hero__muted personal-hero__muted">con Beneficios</span>
 				<span>Exclusivos</span>
 			</h1>
 			<p>
@@ -20,7 +21,7 @@ import heroImage from "../assets/personal-credit/hero.jpg";
 				crecimiento de tu negocio. Seguridad institucional, recompensas
 				excepcionales y aceptación global.
 			</p>
-			<div class="personal-hero__actions">
+			<div class="credit-hero__actions personal-hero__actions">
 				<a
 					class="button button--primary"
 					href="#contacto"
@@ -32,15 +33,17 @@ import heroImage from "../assets/personal-credit/hero.jpg";
 			</div>
 		</div>
 
-		<Picture
-			src={heroImage}
-			formats={["avif", "webp"]}
-			widths={[420, 646]}
-			sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1199px) 43vw, 646px"
-			alt="Mujer mostrando una tarjeta de crédito Lobo Kapital"
-			class="personal-hero__image"
-			loading="eager"
-			fetchpriority="high"
-		/>
+		<div class="credit-hero__visual personal-hero__visual">
+			<Picture
+				src={heroImage}
+				formats={["avif", "webp"]}
+				widths={[420, 646]}
+				sizes="(max-width: 479px) calc(100vw - 40px), (max-width: 899px) min(600px, calc(100vw - clamp(40px, 8vw, 64px))), min(33.85vw, 650px)"
+				alt="Mujer mostrando una tarjeta de crédito Lobo Kapital"
+				class="credit-hero__image personal-hero__image"
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</div>
 	</div>
 </section>

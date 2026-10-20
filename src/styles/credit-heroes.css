@@ -1,0 +1,247 @@
+/* Shared composition and type scale for personal credit and cards. */
+.credit-hero {
+	--hero-design-height: clamp(800px, 65.625vw, 1260px);
+	--hero-photo-height: min(48.75vw, 936px);
+	--hero-photo-min-height: 96px;
+	--hero-top: clamp(108px, 8.96vw, 172px);
+	--hero-bottom: min(7.915vw, 152px);
+	--hero-copy-width: min(42vw, 675px);
+	--hero-column-gap: clamp(24px, 3vw, 48px);
+	--hero-photo-width: min(33.85vw, 650px);
+	--hero-title-size: clamp(46px, 3.86vw, 74px);
+	--hero-summary-size: clamp(18px, 1.25vw, 24px);
+	--hero-clearance: 108px;
+	--hero-compression: max(
+		0px,
+		var(--hero-design-height) - var(--hero-viewport)
+	);
+	display: grid;
+	height: min(var(--hero-design-height), var(--hero-viewport));
+	/* Let content and the photo minimum outgrow a short viewport. */
+	min-height: min-content;
+	padding-block: max(
+			var(--hero-clearance),
+			calc(var(--hero-top) - var(--hero-compression) * 0.5)
+		)
+		max(
+			16px,
+			calc(var(--hero-bottom) - var(--hero-compression) * 0.5),
+			env(safe-area-inset-bottom)
+		);
+	background: var(--color-white);
+}
+.credit-hero.personal-loan-hero {
+	--hero-summary-measure: 37ch;
+}
+.credit-hero__inner {
+	display: grid;
+	width: fit-content;
+	max-width: calc(100% - 96px);
+	grid-template-columns: minmax(0, max-content) var(--hero-photo-width);
+	gap: var(--hero-column-gap);
+	align-items: center;
+	margin-inline: auto;
+}
+.credit-hero__copy {
+	position: relative;
+	z-index: 1;
+	width: fit-content;
+	max-width: var(--hero-copy-width);
+	min-width: 0;
+}
+.credit-hero h1 {
+	display: flex;
+	flex-direction: column;
+	overflow-wrap: anywhere;
+	font-size: min(var(--hero-title-size), var(--hero-height-title-limit, 74px));
+	font-weight: 700;
+	line-height: 0.98;
+	letter-spacing: -0.02em;
+	color: var(--color-text);
+}
+.credit-hero h1 > span:first-child {
+	color: var(--color-primary);
+}
+.credit-hero h1 .credit-hero__muted {
+	color: var(--color-muted);
+}
+.credit-hero__copy > p {
+	width: min(100%, 650px);
+	max-width: var(--hero-summary-measure, 650px);
+	margin-top: 18px;
+	font-size: min(
+		var(--hero-summary-size),
+		var(--hero-height-summary-limit, 24px)
+	);
+	line-height: 1.3;
+	color: var(--color-muted);
+}
+.credit-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin-top: 24px;
+}
+.credit-hero__actions .button {
+	min-height: 46px;
+	padding-inline: 22px;
+}
+.credit-hero__visual {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	min-height: var(--hero-photo-min-height);
+	max-height: var(--hero-photo-height);
+	overflow: hidden;
+	border-radius: min(4vw, 76px) min(4vw, 76px) min(3vw, 58px) min(3vw, 58px);
+}
+.credit-hero__image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center 20%;
+}
+
+@media (max-width: 1199px) {
+	.credit-hero {
+		--hero-design-height: calc(200px + var(--hero-photo-height));
+		--hero-title-size: clamp(40px, calc(32px + 1.2vw), 46px);
+		--hero-summary-size: 18px;
+		--hero-inline-space: 32px;
+		padding: var(--hero-clearance) var(--hero-inline-space)
+			max(24px, env(safe-area-inset-bottom));
+	}
+	.credit-hero__inner {
+		max-width: 100%;
+		gap: 32px;
+	}
+	.credit-hero h1 {
+		line-height: 1.05;
+		letter-spacing: -0.025em;
+	}
+	.credit-hero__copy > p {
+		width: 100%;
+		max-width: min(var(--hero-summary-measure, 48ch), 48ch);
+		margin-top: 16px;
+		line-height: 1.45;
+	}
+	.credit-hero__actions {
+		gap: 12px;
+		margin-top: 24px;
+	}
+	.credit-hero__visual {
+		border-radius: 48px 48px 36px 36px;
+	}
+}
+
+@media (max-width: 899px) {
+	.credit-hero {
+		--hero-design-height: 900px;
+		--hero-inline-space: clamp(20px, 4vw, 32px);
+		--hero-photo-min-height: min(
+			400px,
+			calc(100vw - var(--hero-inline-space) * 2)
+		);
+		--hero-photo-height: min(
+			560px,
+			calc(min(600px, 100vw - var(--hero-inline-space) * 2) * 1.25)
+		);
+		--hero-summary-size: clamp(16px, calc(14px + 0.5vw), 18px);
+	}
+	.credit-hero__inner {
+		width: min(100%, 600px);
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: auto minmax(var(--hero-photo-min-height), 1fr);
+		gap: 24px;
+		align-items: start;
+	}
+	.credit-hero__copy {
+		width: 100%;
+		max-width: none;
+	}
+	.credit-hero__visual {
+		max-width: none;
+		max-height: var(--hero-photo-height);
+		justify-self: stretch;
+		border-radius: 40px;
+	}
+}
+@media (min-width: 480px) and (max-width: 899px) and (orientation: portrait) {
+	.credit-hero.personal-hero .credit-hero__image {
+		object-position: center 28%;
+	}
+}
+@media (max-width: 767px) {
+	.credit-hero {
+		--hero-clearance: 96px;
+	}
+}
+@media (max-width: 479px) {
+	.credit-hero {
+		--hero-title-size: clamp(32px, calc(10px + 7vw), 40px);
+		--hero-photo-height: min(500px, calc((100vw - 40px) * 1.25));
+		--hero-inline-space: 20px;
+	}
+	.credit-hero__actions {
+		flex-direction: column;
+		align-items: stretch;
+		margin-top: 20px;
+	}
+	.credit-hero__actions .button {
+		width: 100%;
+	}
+	.credit-hero__visual {
+		border-radius: 32px;
+	}
+}
+
+/* Short landscape windows compact spacing first and retain readable type. */
+@media (max-width: 1199px) and (max-height: 600px) {
+	.credit-hero {
+		--hero-height-title-limit: clamp(
+			32px,
+			calc(6px + var(--hero-viewport) * 0.066667),
+			46px
+		);
+		--hero-height-summary-limit: clamp(
+			16px,
+			calc(10px + var(--hero-viewport) * 0.013333),
+			18px
+		);
+		padding-bottom: max(
+			clamp(16px, calc(var(--hero-viewport) * 0.04), 24px),
+			env(safe-area-inset-bottom)
+		);
+	}
+	.credit-hero__inner {
+		gap: clamp(16px, calc(var(--hero-viewport) * 0.04), 24px);
+	}
+	.credit-hero__actions {
+		margin-top: clamp(20px, calc(var(--hero-viewport) * 0.04), 24px);
+	}
+}
+@media (min-width: 720px) and (max-width: 899px) and (orientation: landscape) {
+	.credit-hero {
+		--hero-design-height: 820px;
+		--hero-inline-space: 24px;
+		--hero-photo-min-height: 96px;
+	}
+	.credit-hero__inner {
+		width: min(100%, 1050px);
+		grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+		grid-template-rows: auto;
+		align-items: center;
+		gap: 24px;
+	}
+	.credit-hero__copy {
+		width: auto;
+		max-width: none;
+	}
+	.credit-hero__visual {
+		max-width: 440px;
+		max-height: min(638px, calc((100vw - 72px) * 0.45 * 936 / 646));
+		justify-self: end;
+	}
+}

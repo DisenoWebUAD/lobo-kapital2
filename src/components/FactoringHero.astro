@@ -34,20 +34,22 @@ const imageSizes =
 				>
 			</div>
 		</div>
-		<Picture
-			class="factoring-hero__image"
-			src={heroImage}
-			formats={["webp"]}
-			fallbackFormat="jpeg"
-			quality={85}
-			widths={[480, 768, 1024, 1417]}
-			sizes={imageSizes}
-			pictureAttributes={{ style: "display: contents;" }}
-			alt="Emprendedora revisando información de su negocio"
-			width={1417}
-			height={1290}
-			loading="eager"
-			fetchpriority="high"
-		/>
+		<div class="factoring-hero__visual">
+			<Picture
+				class="factoring-hero__image"
+				src={heroImage}
+				formats={["webp"]}
+				fallbackFormat="jpeg"
+				quality={85}
+				widths={[480, 768, 1024, 1417]}
+				sizes={imageSizes}
+				pictureAttributes={{ style: "display: contents;" }}
+				alt="Emprendedora revisando información de su negocio"
+				width={1417}
+				height={1290}
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</div>
 	</div>
 </section>

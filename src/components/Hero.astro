@@ -2,6 +2,15 @@
 import { Picture } from "astro:assets";
 import heroImage from "../assets/home/hero.jpg";
 import RegulatoryLogos from "./RegulatoryLogos.astro";
+
+// Include the rendered width of the cover crop, not just the image element.
+const imageSizes = [
+	"(max-width: 767px) max(100vw, min(1366px, 190svh))",
+	"(min-width: 768px) and (max-width: 1199px) and (min-aspect-ratio: 4/3) max(calc(100vw + 280px), min(1518px, 190svh))",
+	"(max-width: 1199px) max(100vw, min(1518px, 190svh))",
+	"(min-width: 1200px) and (max-width: 1439px) and (min-aspect-ratio: 4/3) calc(1680px - 16.667vw)",
+	"100vw",
+].join(", ");
 ---
 
 <div class="hero-stage">
@@ -10,9 +19,10 @@ import RegulatoryLogos from "./RegulatoryLogos.astro";
 			src={heroImage}
 			formats={["avif", "webp"]}
 			widths={[768, 1280, 1920, 2400]}
-			sizes="100vw"
+			sizes={imageSizes}
 			alt=""
 			class="hero__media"
+			pictureAttributes={{ class: "hero__picture" }}
 			loading="eager"
 			fetchpriority="high"
 		/>
