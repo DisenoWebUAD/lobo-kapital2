@@ -33,33 +33,33 @@ const questions = [
 
 <style>
 	.personal-loan-faq {
-		padding: 40px 0 120px;
+		padding: 2.5rem 0 7.5rem;
 	}
 
 	.personal-loan-faq__inner {
 		display: grid;
 		grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-		gap: clamp(40px, 6vw, 96px);
-		width: min(calc(100% - 96px), 1276px);
+		gap: clamp(2.5rem, 6vw, 6rem);
+		width: min(calc(100% - 6rem), 79.75rem);
 		margin-inline: auto;
 	}
 
 	h2 {
-		font-size: 32px;
+		font-size: 2rem;
 		line-height: 1.2;
-		letter-spacing: -0.6px;
+		letter-spacing: -0.0375rem;
 		color: #000;
 	}
 
 	.personal-loan-faq p {
-		margin: 10px 0 0;
-		font-size: 16px;
+		margin: 0.625rem 0 0;
+		font-size: 1rem;
 		line-height: 1.6;
 		color: #696967;
 	}
 
 	details {
-		padding-block: 20px;
+		padding-block: 1.25rem;
 		border-top: 1px solid #e0e0de;
 	}
 
@@ -68,32 +68,32 @@ const questions = [
 	}
 
 	summary {
-		min-height: 44px;
+		min-height: 2.75rem;
 		align-content: center;
-		font-size: 18px;
+		font-size: 1.125rem;
 		font-weight: 600;
 		line-height: 1.4;
 		cursor: pointer;
 	}
 
-	@media (max-width: 900px) {
+	@media (max-width: 56.25em) {
 		.personal-loan-faq__inner {
 			grid-template-columns: 1fr;
-			gap: 36px;
+			gap: 2.25rem;
 		}
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 47.9375em) {
 		h2 {
-			font-size: 28px;
+			font-size: 1.75rem;
 		}
 
 		.personal-loan-faq {
-			padding: 48px 0 80px;
+			padding: 3rem 0 5rem;
 		}
 
 		.personal-loan-faq__inner {
-			width: calc(100% - 40px);
+			width: calc(100% - 2.5rem);
 		}
 	}
 </style>

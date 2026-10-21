@@ -71,12 +71,16 @@ const selected = options.find((option) => option.value === value);
 			let lastSearch = 0;
 
 			const position = () => {
+				// Compare rem-based limits with viewport measurements in CSS pixels.
+				const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+				const minimumHeight = 2.75 * rem;
+				const maximumHeight = 18.75 * rem;
 				const bounds = trigger.getBoundingClientRect();
-				const below = innerHeight - bounds.bottom - 16;
-				const above = bounds.top - 96;
-				const upwards = below < Math.min(300, options.length * 44 + 12) && above > below;
+				const below = innerHeight - bounds.bottom - rem;
+				const above = bounds.top - 6 * rem;
+				const upwards = below < Math.min(maximumHeight, list.scrollHeight) && above > below;
 				this.dataset.placement = upwards ? 'top' : 'bottom';
-				list.style.maxHeight = `${Math.max(44, Math.min(300, upwards ? above : below))}px`;
+				list.style.maxHeight = `${Math.max(minimumHeight, Math.min(maximumHeight, upwards ? above : below))}px`;
 			};
 			const setActive = (index: number) => {
 				active = Math.max(0, Math.min(index, options.length - 1));
@@ -225,16 +229,16 @@ const selected = options.find((option) => option.value === value);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 16px;
+		gap: 1rem;
 		width: 100%;
-		min-height: 46px;
-		padding: 12px 0 8px;
+		min-height: 2.875rem;
+		padding: 0.75rem 0 0.5rem;
 		border: 0;
 		border-bottom: 1px solid #707070;
 		color: var(--color-soft);
 		background: transparent;
 		font: inherit;
-		font-size: 16px;
+		font-size: 1rem;
 		line-height: 1.5;
 		text-align: left;
 		cursor: pointer;
@@ -276,38 +280,38 @@ const selected = options.find((option) => option.value === value);
 
 	.form-select__options {
 		position: absolute;
-		top: calc(100% + 8px);
+		top: calc(100% + 0.5rem);
 		z-index: 10;
 		width: 100%;
 		margin: 0;
-		padding: 6px;
+		padding: 0.375rem;
 		border: 1px solid #4a4a4a;
-		border-radius: 12px;
+		border-radius: 0.75rem;
 		overflow-y: auto;
 		overscroll-behavior: contain;
 		list-style: none;
 		color: var(--color-soft);
 		background: #262626;
 		box-shadow: 0 16px 40px rgb(0 0 0 / 30%);
-		scroll-padding-block: 6px;
+		scroll-padding-block: 0.375rem;
 		scrollbar-width: thin;
 		scrollbar-color: #686868 transparent;
 	}
 
 	.form-select[data-placement='top'] .form-select__options {
 		top: auto;
-		bottom: calc(100% + 8px);
+		bottom: calc(100% + 0.5rem);
 	}
 
 	.form-select__option {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 16px;
-		min-height: 44px;
-		padding: 10px 12px;
-		border-radius: 7px;
-		font-size: 15px;
+		gap: 1rem;
+		min-height: 2.75rem;
+		padding: 0.625rem 0.75rem;
+		border-radius: 0.4375rem;
+		font-size: 0.9375rem;
 		font-weight: 400;
 		line-height: 1.5;
 		cursor: pointer;

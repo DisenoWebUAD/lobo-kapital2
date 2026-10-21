@@ -1,18 +1,18 @@
 /* Shared composition and type scale for personal credit and cards. */
 .credit-hero {
-	--hero-design-height: clamp(800px, 65.625vw, 1260px);
-	--hero-photo-height: min(48.75vw, 936px);
-	--hero-photo-min-height: 96px;
-	--hero-top: clamp(108px, 8.96vw, 172px);
-	--hero-bottom: min(7.915vw, 152px);
-	--hero-copy-width: min(42vw, 675px);
-	--hero-column-gap: clamp(24px, 3vw, 48px);
-	--hero-photo-width: min(33.85vw, 650px);
-	--hero-title-size: clamp(46px, 3.86vw, 74px);
-	--hero-summary-size: clamp(18px, 1.25vw, 24px);
-	--hero-clearance: 108px;
+	--hero-design-height: clamp(50rem, 65.625vw, 78.75rem);
+	--hero-photo-height: min(48.75vw, 58.5rem);
+	--hero-photo-min-height: 6rem;
+	--hero-top: clamp(6.75rem, 8.96vw, 10.75rem);
+	--hero-bottom: min(7.915vw, 9.5rem);
+	--hero-copy-width: min(42vw, 42.1875rem);
+	--hero-column-gap: clamp(1.5rem, 3vw, 3rem);
+	--hero-photo-width: min(33.85vw, 40.625rem);
+	--hero-title-size: clamp(2.875rem, 3.86vw, 4.625rem);
+	--hero-summary-size: clamp(1.125rem, 1.25vw, 1.5rem);
+	--hero-clearance: 6.75rem;
 	--hero-compression: max(
-		0px,
+		0rem,
 		var(--hero-design-height) - var(--hero-viewport)
 	);
 	display: grid;
@@ -24,7 +24,7 @@
 			calc(var(--hero-top) - var(--hero-compression) * 0.5)
 		)
 		max(
-			16px,
+			1rem,
 			calc(var(--hero-bottom) - var(--hero-compression) * 0.5),
 			env(safe-area-inset-bottom)
 		);
@@ -36,7 +36,7 @@
 .credit-hero__inner {
 	display: grid;
 	width: fit-content;
-	max-width: calc(100% - 96px);
+	max-width: calc(100% - 6rem);
 	grid-template-columns: minmax(0, max-content) var(--hero-photo-width);
 	gap: var(--hero-column-gap);
 	align-items: center;
@@ -53,7 +53,7 @@
 	display: flex;
 	flex-direction: column;
 	overflow-wrap: anywhere;
-	font-size: min(var(--hero-title-size), var(--hero-height-title-limit, 74px));
+	font-size: min(var(--hero-title-size), var(--hero-height-title-limit, 4.625rem));
 	font-weight: 700;
 	line-height: 0.98;
 	letter-spacing: -0.02em;
@@ -66,12 +66,12 @@
 	color: var(--color-muted);
 }
 .credit-hero__copy > p {
-	width: min(100%, 650px);
-	max-width: var(--hero-summary-measure, 650px);
-	margin-top: 18px;
+	width: min(100%, 40.625rem);
+	max-width: var(--hero-summary-measure, 40.625rem);
+	margin-top: 1.125rem;
 	font-size: min(
 		var(--hero-summary-size),
-		var(--hero-height-summary-limit, 24px)
+		var(--hero-height-summary-limit, 1.5rem)
 	);
 	line-height: 1.3;
 	color: var(--color-muted);
@@ -79,12 +79,12 @@
 .credit-hero__actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 16px;
-	margin-top: 24px;
+	gap: 1rem;
+	margin-top: 1.5rem;
 }
 .credit-hero__actions .button {
-	min-height: 46px;
-	padding-inline: 22px;
+	min-height: 2.875rem;
+	padding-inline: 1.375rem;
 }
 .credit-hero__visual {
 	position: relative;
@@ -93,7 +93,7 @@
 	min-height: var(--hero-photo-min-height);
 	max-height: var(--hero-photo-height);
 	overflow: hidden;
-	border-radius: min(4vw, 76px) min(4vw, 76px) min(3vw, 58px) min(3vw, 58px);
+	border-radius: min(4vw, 4.75rem) min(4vw, 4.75rem) min(3vw, 3.625rem) min(3vw, 3.625rem);
 }
 .credit-hero__image {
 	position: absolute;
@@ -104,18 +104,18 @@
 	object-position: center 20%;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 74.9375em) {
 	.credit-hero {
-		--hero-design-height: calc(200px + var(--hero-photo-height));
-		--hero-title-size: clamp(40px, calc(32px + 1.2vw), 46px);
-		--hero-summary-size: 18px;
-		--hero-inline-space: 32px;
+		--hero-design-height: calc(12.5rem + var(--hero-photo-height));
+		--hero-title-size: clamp(2.5rem, calc(2rem + 1.2vw), 2.875rem);
+		--hero-summary-size: 1.125rem;
+		--hero-inline-space: 2rem;
 		padding: var(--hero-clearance) var(--hero-inline-space)
-			max(24px, env(safe-area-inset-bottom));
+			max(1.5rem, env(safe-area-inset-bottom));
 	}
 	.credit-hero__inner {
 		max-width: 100%;
-		gap: 32px;
+		gap: 2rem;
 	}
 	.credit-hero h1 {
 		line-height: 1.05;
@@ -124,37 +124,37 @@
 	.credit-hero__copy > p {
 		width: 100%;
 		max-width: min(var(--hero-summary-measure, 48ch), 48ch);
-		margin-top: 16px;
+		margin-top: 1rem;
 		line-height: 1.45;
 	}
 	.credit-hero__actions {
-		gap: 12px;
-		margin-top: 24px;
+		gap: 0.75rem;
+		margin-top: 1.5rem;
 	}
 	.credit-hero__visual {
-		border-radius: 48px 48px 36px 36px;
+		border-radius: 3rem 3rem 2.25rem 2.25rem;
 	}
 }
 
-@media (max-width: 899px) {
+@media (max-width: 56.1875em) {
 	.credit-hero {
-		--hero-design-height: 900px;
-		--hero-inline-space: clamp(20px, 4vw, 32px);
+		--hero-design-height: 56.25rem;
+		--hero-inline-space: clamp(1.25rem, 4vw, 2rem);
 		--hero-photo-min-height: min(
-			400px,
+			25rem,
 			calc(100vw - var(--hero-inline-space) * 2)
 		);
 		--hero-photo-height: min(
-			560px,
-			calc(min(600px, 100vw - var(--hero-inline-space) * 2) * 1.25)
+			35rem,
+			calc(min(37.5rem, 100vw - var(--hero-inline-space) * 2) * 1.25)
 		);
-		--hero-summary-size: clamp(16px, calc(14px + 0.5vw), 18px);
+		--hero-summary-size: clamp(1rem, calc(0.875rem + 0.5vw), 1.125rem);
 	}
 	.credit-hero__inner {
-		width: min(100%, 600px);
+		width: min(100%, 37.5rem);
 		grid-template-columns: minmax(0, 1fr);
 		grid-template-rows: auto minmax(var(--hero-photo-min-height), 1fr);
-		gap: 24px;
+		gap: 1.5rem;
 		align-items: start;
 	}
 	.credit-hero__copy {
@@ -165,83 +165,83 @@
 		max-width: none;
 		max-height: var(--hero-photo-height);
 		justify-self: stretch;
-		border-radius: 40px;
+		border-radius: 2.5rem;
 	}
 }
-@media (min-width: 480px) and (max-width: 899px) and (orientation: portrait) {
+@media (min-width: 30em) and (max-width: 56.1875em) and (orientation: portrait) {
 	.credit-hero.personal-hero .credit-hero__image {
 		object-position: center 28%;
 	}
 }
-@media (max-width: 767px) {
+@media (max-width: 47.9375em) {
 	.credit-hero {
-		--hero-clearance: 96px;
+		--hero-clearance: 6rem;
 	}
 }
-@media (max-width: 479px) {
+@media (max-width: 29.9375em) {
 	.credit-hero {
-		--hero-title-size: clamp(32px, calc(10px + 7vw), 40px);
-		--hero-photo-height: min(500px, calc((100vw - 40px) * 1.25));
-		--hero-inline-space: 20px;
+		--hero-title-size: clamp(2rem, calc(0.625rem + 7vw), 2.5rem);
+		--hero-photo-height: min(31.25rem, calc((100vw - 2.5rem) * 1.25));
+		--hero-inline-space: 1.25rem;
 	}
 	.credit-hero__actions {
 		flex-direction: column;
 		align-items: stretch;
-		margin-top: 20px;
+		margin-top: 1.25rem;
 	}
 	.credit-hero__actions .button {
 		width: 100%;
 	}
 	.credit-hero__visual {
-		border-radius: 32px;
+		border-radius: 2rem;
 	}
 }
 
 /* Short landscape windows compact spacing first and retain readable type. */
-@media (max-width: 1199px) and (max-height: 600px) {
+@media (max-width: 74.9375em) and (max-height: 37.5em) {
 	.credit-hero {
 		--hero-height-title-limit: clamp(
-			32px,
-			calc(6px + var(--hero-viewport) * 0.066667),
-			46px
+			2rem,
+			calc(0.375rem + var(--hero-viewport) * 0.066667),
+			2.875rem
 		);
 		--hero-height-summary-limit: clamp(
-			16px,
-			calc(10px + var(--hero-viewport) * 0.013333),
-			18px
+			1rem,
+			calc(0.625rem + var(--hero-viewport) * 0.013333),
+			1.125rem
 		);
 		padding-bottom: max(
-			clamp(16px, calc(var(--hero-viewport) * 0.04), 24px),
+			clamp(1rem, calc(var(--hero-viewport) * 0.04), 1.5rem),
 			env(safe-area-inset-bottom)
 		);
 	}
 	.credit-hero__inner {
-		gap: clamp(16px, calc(var(--hero-viewport) * 0.04), 24px);
+		gap: clamp(1rem, calc(var(--hero-viewport) * 0.04), 1.5rem);
 	}
 	.credit-hero__actions {
-		margin-top: clamp(20px, calc(var(--hero-viewport) * 0.04), 24px);
+		margin-top: clamp(1.25rem, calc(var(--hero-viewport) * 0.04), 1.5rem);
 	}
 }
-@media (min-width: 720px) and (max-width: 899px) and (orientation: landscape) {
+@media (min-width: 45em) and (max-width: 56.1875em) and (orientation: landscape) {
 	.credit-hero {
-		--hero-design-height: 820px;
-		--hero-inline-space: 24px;
-		--hero-photo-min-height: 96px;
+		--hero-design-height: 51.25rem;
+		--hero-inline-space: 1.5rem;
+		--hero-photo-min-height: 6rem;
 	}
 	.credit-hero__inner {
-		width: min(100%, 1050px);
+		width: min(100%, 65.625rem);
 		grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
 		grid-template-rows: auto;
 		align-items: center;
-		gap: 24px;
+		gap: 1.5rem;
 	}
 	.credit-hero__copy {
 		width: auto;
 		max-width: none;
 	}
 	.credit-hero__visual {
-		max-width: 440px;
-		max-height: min(638px, calc((100vw - 72px) * 0.45 * 936 / 646));
+		max-width: 27.5rem;
+		max-height: min(39.875rem, calc((100vw - 4.5rem) * 0.45 * 936 / 646));
 		justify-self: end;
 	}
 }

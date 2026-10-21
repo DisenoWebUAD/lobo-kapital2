@@ -147,7 +147,7 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 			document.querySelector<HTMLButtonElement>(".menu-toggle");
 		const navigation =
 			document.querySelector<HTMLElement>("#site-navigation");
-		const desktopNavigation = window.matchMedia("(min-width: 1200px)");
+		const desktopNavigation = window.matchMedia("(min-width: 75em)");
 		const dropdowns = Array.from(
 			document.querySelectorAll<HTMLElement>("[data-nav-dropdown]"),
 		).map((group) => ({

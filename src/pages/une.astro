@@ -63,29 +63,29 @@ import '../styles/global.css';
 
 <style>
 	.une-page {
-		width: min(calc(100% - 96px), 1276px);
+		width: min(calc(100% - 6rem), 79.75rem);
 		margin-inline: auto;
-		padding-block: 172px 80px;
-		font-size: 16px;
+		padding-block: 10.75rem 5rem;
+		font-size: 1rem;
 		line-height: 1.65;
 	}
 
 	.une-page__heading {
-		max-width: 780px;
-		margin-bottom: 64px;
+		max-width: 48.75rem;
+		margin-bottom: 4rem;
 	}
 
 	.une-page__eyebrow {
-		margin-bottom: 20px;
+		margin-bottom: 1.25rem;
 		color: #696967;
-		font-size: 14px;
+		font-size: 0.875rem;
 		font-weight: 600;
 	}
 
 	h1 {
-		margin-bottom: 24px;
+		margin-bottom: 1.5rem;
 		color: #000;
-		font-size: clamp(40px, 4.5vw, 60px);
+		font-size: clamp(2.5rem, 4.5vw, 3.75rem);
 		font-weight: 700;
 		line-height: 1.08;
 		letter-spacing: -0.035em;
@@ -97,14 +97,14 @@ import '../styles/global.css';
 
 	.une-page__heading > p:last-child {
 		color: #696967;
-		font-size: 18px;
+		font-size: 1.125rem;
 	}
 
 	.une-page__channels {
 		display: grid;
 		grid-template-columns: 1.1fr 1fr;
 		align-items: start;
-		gap: 72px;
+		gap: 4.5rem;
 	}
 
 	.une-page__channels > * {
@@ -113,9 +113,9 @@ import '../styles/global.css';
 	}
 
 	h2 {
-		margin-bottom: 20px;
+		margin-bottom: 1.25rem;
 		color: #000;
-		font-size: 26px;
+		font-size: 1.625rem;
 		font-weight: 650;
 		line-height: 1.25;
 		letter-spacing: -0.025em;
@@ -124,7 +124,7 @@ import '../styles/global.css';
 	.une-page a {
 		text-decoration: underline;
 		text-decoration-color: #b8b8b8;
-		text-underline-offset: 4px;
+		text-underline-offset: 0.25rem;
 	}
 
 	.une-page a:hover {
@@ -133,36 +133,36 @@ import '../styles/global.css';
 	}
 
 	.une-contact {
-		padding: 36px;
-		border-radius: 20px;
+		padding: 2.25rem;
+		border-radius: 1.25rem;
 		background: var(--color-surface);
 	}
 
 	.une-contact__email {
 		display: inline-block;
-		margin-bottom: 24px;
-		font-size: clamp(20px, 2vw, 26px);
+		margin-bottom: 1.5rem;
+		font-size: clamp(1.25rem, 2vw, 1.625rem);
 		font-weight: 600;
 		line-height: 1.4;
 		letter-spacing: -0.02em;
 	}
 
 	.une-contact p + p {
-		margin-top: 16px;
+		margin-top: 1rem;
 		color: #696967;
-		font-size: 14px;
+		font-size: 0.875rem;
 	}
 
 	.une-contact__address {
-		margin-top: 28px;
-		padding-top: 24px;
+		margin-top: 1.75rem;
+		padding-top: 1.5rem;
 		border-top: 1px solid #dedede;
 	}
 
 	h3 {
-		margin-bottom: 10px;
+		margin-bottom: 0.625rem;
 		color: #696967;
-		font-size: 14px;
+		font-size: 0.875rem;
 		font-weight: 600;
 	}
 
@@ -171,12 +171,12 @@ import '../styles/global.css';
 	}
 
 	.une-page__other-channels {
-		padding-top: 8px;
+		padding-top: 0.5rem;
 	}
 
 	.une-page__other-channels section + section {
-		margin-top: 36px;
-		padding-top: 32px;
+		margin-top: 2.25rem;
+		padding-top: 2rem;
 		border-top: 1px solid #dedede;
 	}
 
@@ -186,57 +186,57 @@ import '../styles/global.css';
 	}
 
 	.une-page__other-channels p + a {
-		margin-top: 16px;
+		margin-top: 1rem;
 	}
 
 	.une-page__procedure {
 		display: block;
 		width: fit-content;
-		margin-top: 24px;
-		font-size: 14px;
+		margin-top: 1.5rem;
+		font-size: 0.875rem;
 		font-weight: 600;
 	}
 
 	.une-page__procedure span {
 		display: inline-block;
-		margin-left: 8px;
+		margin-left: 0.5rem;
 	}
 
-	@media (max-width: 1000px) {
+	@media (max-width: 62.5em) {
 		.une-page__channels {
-			gap: 40px;
+			gap: 2.5rem;
 		}
 
 		.une-contact {
-			padding: 28px;
+			padding: 1.75rem;
 		}
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 47.9375em) {
 		.une-page {
-			width: calc(100% - 40px);
-			padding-block: 140px 48px;
+			width: calc(100% - 2.5rem);
+			padding-block: 8.75rem 3rem;
 		}
 
 		.une-page__heading {
-			margin-bottom: 40px;
+			margin-bottom: 2.5rem;
 		}
 
 		.une-page__heading > p:last-child {
-			font-size: 17px;
+			font-size: 1.0625rem;
 		}
 
 		.une-page__channels {
 			grid-template-columns: minmax(0, 1fr);
-			gap: 40px;
+			gap: 2.5rem;
 		}
 
 		h2 {
-			font-size: 24px;
+			font-size: 1.5rem;
 		}
 
 		.une-contact {
-			padding: 28px 24px;
+			padding: 1.75rem 1.5rem;
 		}
 
 		.une-page__other-channels {

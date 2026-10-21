@@ -2,7 +2,7 @@
 	let disposePageReveals: (() => void) | undefined;
 	const revealMotion = {
 		viewportTrigger: 0.78,
-		distance: { mobile: 16, desktop: 24 },
+		distance: { mobile: 1, desktop: 1.5 },
 		duration: { rise: 700, fade: 560, image: 760 },
 		easing: "cubic-bezier(.22,.75,.25,1)",
 	};
@@ -17,6 +17,7 @@
 		if (!elements.length) return;
 
 		const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+		const wideViewport = window.matchMedia("(min-width: 48em)");
 		if (
 			reducedMotion.matches ||
 			!("IntersectionObserver" in window) ||
@@ -67,14 +68,14 @@
 		const reveal = (element: HTMLElement, delay: number) => {
 			const kind = element.dataset.pageReveal;
 			const rise = !kind || kind === "rise";
-			const distance = window.innerWidth < 768
-				? revealMotion.distance.mobile
-				: revealMotion.distance.desktop;
+			const distance = wideViewport.matches
+				? revealMotion.distance.desktop
+				: revealMotion.distance.mobile;
 			const from: Keyframe = { opacity: 0 };
 			const to: Keyframe = { opacity: 1 };
 			if (rise) {
 				// Individual translate preserves transforms used by the existing layout.
-				from.translate = `0 ${distance}px`;
+				from.translate = `0 ${distance}rem`;
 				to.translate = "0 0";
 			}
 			const animation = element.animate([from, to], {
@@ -107,7 +108,7 @@
 					if (!entry.isIntersecting || !pending.has(element)) return;
 					let delay = 0;
 					const group = element.parentElement?.closest("[data-page-reveal-group]");
-					if (group && window.innerWidth >= 768) {
+					if (group && wideViewport.matches) {
 						const groupRows = rows.get(group) ?? [];
 						let row = groupRows.find(({ top }) => Math.abs(top - entry.boundingClientRect.top) < 24);
 						if (!row) {

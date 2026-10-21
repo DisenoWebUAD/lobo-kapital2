@@ -4,7 +4,7 @@
 
 .lease-hero {
 	position: relative;
-	height: min(57.35vw, 1101px);
+	height: min(57.35vw, 68.8125rem);
 	overflow: hidden;
 	background: var(--color-white);
 }
@@ -12,17 +12,17 @@
 .lease-hero__copy {
 	position: relative;
 	z-index: 1;
-	width: min(100% - 48px, 1160px);
-	padding-top: clamp(150px, 10.3vw, 198px);
+	width: min(100% - 3rem, 72.5rem);
+	padding-top: clamp(9.375rem, 10.3vw, 12.375rem);
 	margin: 0 auto;
 	text-align: center;
 }
 
 .lease-hero h1 {
-	font-size: clamp(47px, 3.88vw, 74.5px);
+	font-size: clamp(2.9375rem, 3.88vw, 4.65625rem);
 	font-weight: 700;
 	line-height: .96;
-	letter-spacing: -1.45px;
+	letter-spacing: -0.090625rem;
 	color: #000;
 }
 
@@ -31,8 +31,8 @@
 }
 
 .lease-hero__copy p {
-	margin-top: 16px;
-	font-size: clamp(18px, 1.25vw, 24px);
+	margin-top: 1rem;
+	font-size: clamp(1.125rem, 1.25vw, 1.5rem);
 	line-height: 1.18;
 	color: var(--color-muted);
 }
@@ -41,20 +41,20 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 18px;
-	margin-top: 22px;
+	gap: 1.125rem;
+	margin-top: 1.375rem;
 }
 
 .lease-hero__actions .button {
-	min-height: 45px;
-	padding-inline: 23px;
-	font-size: 16px;
+	min-height: 2.8125rem;
+	padding-inline: 1.4375rem;
+	font-size: 1rem;
 }
 
 .lease-hero__actions .lease-hero__more {
-	min-width: 152px;
-	min-height: 47px;
-	padding-inline: 20px;
+	min-width: 9.5rem;
+	min-height: 2.9375rem;
+	padding-inline: 1.25rem;
 }
 
 .lease-hero__media-frame {
@@ -63,7 +63,7 @@
 
 .lease-hero__media {
 	position: absolute;
-	top: min(29.6vw, 568px);
+	top: min(29.6vw, 35.5rem);
 	left: 0;
 	display: block;
 	width: 100%;
@@ -72,15 +72,15 @@
 }
 
 .lease-section-heading {
-	width: min(calc(100% - 96px), 1276px);
+	width: min(calc(100% - 6rem), 79.75rem);
 	margin-inline: auto;
 	text-align: center;
 }
 .lease-section-heading h2 {
-	font-size: 44px;
+	font-size: 2.75rem;
 	font-weight: 700;
 	line-height: 1.12;
-	letter-spacing: -0.8px;
+	letter-spacing: -0.05rem;
 	color: var(--color-ink);
 }
 .lease-section-heading h2 span {
@@ -88,149 +88,149 @@
 }
 .lease-section-heading p {
 	max-width: 64ch;
-	margin: 14px auto 0;
-	font-size: 20px;
+	margin: 0.875rem auto 0;
+	font-size: 1.25rem;
 	line-height: 1.5;
 	color: var(--color-text);
 }
 .lease-benefits {
-	padding: 88px 0;
+	padding: 5.5rem 0;
 	background: var(--color-white);
 }
 .lease-benefits__grid {
 	display: grid;
-	width: min(calc(100% - 96px), 1276px);
+	width: min(calc(100% - 6rem), 79.75rem);
 	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 24px;
-	margin: 44px auto 0;
+	gap: 1.5rem;
+	margin: 2.75rem auto 0;
 }
 .lease-benefit-card {
 	min-width: 0;
-	padding: 30px;
-	border-radius: 18px;
+	padding: 1.875rem;
+	border-radius: 1.125rem;
 	background: var(--color-surface);
 }
 .lease-benefit-card__icon {
 	display: grid;
-	width: 52px;
-	height: 52px;
+	width: 3.25rem;
+	height: 3.25rem;
 	place-items: center;
 }
 .lease-benefit-card__icon img {
-	width: 44px;
-	height: 44px;
+	width: 2.75rem;
+	height: 2.75rem;
 	object-fit: contain;
 }
 .lease-benefit-card h3 {
-	margin-top: 24px;
-	font-size: 24px;
+	margin-top: 1.5rem;
+	font-size: 1.5rem;
 	font-weight: 650;
 	line-height: 1.2;
-	letter-spacing: -0.35px;
+	letter-spacing: -0.021875rem;
 	color: var(--color-ink);
 }
 .lease-benefit-card p {
-	margin-top: 12px;
-	font-size: 16px;
+	margin-top: 0.75rem;
+	font-size: 1rem;
 	line-height: 1.55;
 	color: var(--color-text);
 }
 .lease-assets {
-	padding: 88px 0;
+	padding: 5.5rem 0;
 	background: var(--color-soft);
 }
 .lease-assets__grid {
 	display: grid;
-	width: min(calc(100% - 96px), 1276px);
+	width: min(calc(100% - 6rem), 79.75rem);
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 24px;
-	margin: 44px auto 0;
+	gap: 1.5rem;
+	margin: 2.75rem auto 0;
 }
-@media (max-width: 1199px) {
+@media (max-width: 74.9375em) {
 	.lease-assets__grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 20px;
+		gap: 1.25rem;
 	}
 	.lease-benefits__grid {
-		gap: 20px;
+		gap: 1.25rem;
 	}
 	.lease-benefit-card {
-		padding: 26px 22px;
+		padding: 1.625rem 1.375rem;
 	}
 	.lease-benefit-card h3 {
-		font-size: 21px;
+		font-size: 1.3125rem;
 	}
 }
-@media (max-width: 767px) {
+@media (max-width: 47.9375em) {
 	.lease-benefits,
 	.lease-assets {
-		padding: 64px 0;
+		padding: 4rem 0;
 	}
 	.lease-section-heading,
 	.lease-benefits__grid,
 	.lease-assets__grid {
-		width: calc(100% - 40px);
+		width: calc(100% - 2.5rem);
 	}
 	.lease-section-heading h2 {
-		font-size: 36px;
+		font-size: 2.25rem;
 	}
 	.lease-section-heading p {
-		font-size: 17px;
+		font-size: 1.0625rem;
 	}
 	.lease-benefits__grid,
 	.lease-assets__grid {
 		grid-template-columns: 1fr;
-		gap: 20px;
-		margin-top: 32px;
+		gap: 1.25rem;
+		margin-top: 2rem;
 	}
 	.lease-benefit-card {
-		padding: 28px;
+		padding: 1.75rem;
 	}
 	.lease-benefit-card h3 {
-		font-size: 23px;
+		font-size: 1.4375rem;
 	}
 }
 
 .lease-lead {
-	min-height: 834px;
-	padding: 154px 0 75px;
+	min-height: 52.125rem;
+	padding: 9.625rem 0 4.6875rem;
 	color: var(--color-white);
 	background: var(--color-dark);
 }
 
 .lease-lead__inner {
 	display: grid;
-	width: min(calc(100% - 326px), 1594px);
-	grid-template-columns: 520px minmax(0, 1fr);
-	gap: 130px;
+	width: min(calc(100% - 20.375rem), 99.625rem);
+	grid-template-columns: 32.5rem minmax(0, 1fr);
+	gap: 8.125rem;
 	margin: 0 auto;
 }
 
 .lease-lead__copy h2 {
-	font-size: 48px;
+	font-size: 3rem;
 	font-weight: 700;
 	line-height: 1.04;
-	letter-spacing: -.8px;
+	letter-spacing: -0.05rem;
 }
 
 .lease-lead__copy > p {
-	margin-top: 22px;
-	font-size: 24px;
+	margin-top: 1.375rem;
+	font-size: 1.5rem;
 	line-height: 1.17;
 	color: var(--color-white);
 }
 
 .lease-lead__advisor {
 	display: grid;
-	grid-template-columns: 40px 1fr;
-	gap: 16px;
+	grid-template-columns: 2.5rem 1fr;
+	gap: 1rem;
 	align-items: center;
-	margin-top: 115px;
+	margin-top: 7.1875rem;
 }
 
 .lease-lead__advisor img {
-	width: 38px;
-	height: 38px;
+	width: 2.375rem;
+	height: 2.375rem;
 	object-fit: contain;
 }
 
@@ -240,23 +240,23 @@
 }
 
 .lease-lead__advisor strong {
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 1.1;
 }
 
 .lease-lead__advisor span {
-	margin-top: 3px;
-	font-size: 12px;
+	margin-top: 0.1875rem;
+	font-size: 0.75rem;
 	line-height: 1.1;
 }
 
 .lease-lead__field {
-	margin-bottom: 17px;
+	margin-bottom: 1.0625rem;
 }
 
 .lease-lead__field label {
 	display: block;
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: 600;
 	line-height: 1;
 }
@@ -265,15 +265,15 @@
 .lease-lead__field select {
 	display: block;
 	width: 100%;
-	height: 44px;
-	padding: 9px 0 5px;
+	height: 2.75rem;
+	padding: 0.5625rem 0 0.3125rem;
 	border: 0;
 	border-bottom: 1px solid var(--color-muted);
 	border-radius: 0;
 	outline: 0;
 	color: var(--color-soft);
 	background: transparent;
-	font-size: 14px;
+	font-size: 0.875rem;
 }
 
 .lease-lead__field input::placeholder,
@@ -303,25 +303,25 @@
 }
 
 .lease-lead__error {
-	min-height: 14px;
-	margin-top: 2px;
-	font-size: 12px;
+	min-height: 0.875rem;
+	margin-top: 0.125rem;
+	font-size: 0.75rem;
 	line-height: 1;
 	color: #ffb8c7;
 }
 
 .lease-lead__privacy {
 	display: grid;
-	grid-template-columns: 18px 1fr;
-	gap: 10px;
+	grid-template-columns: 1.125rem 1fr;
+	gap: 0.625rem;
 	align-items: center;
-	margin-top: 10px;
+	margin-top: 0.625rem;
 	color: #a0a0a0;
 }
 
 .lease-lead__privacy input {
-	width: 16px;
-	height: 16px;
+	width: 1rem;
+	height: 1rem;
 	margin: 0;
 	border: 2px solid var(--color-primary);
 	border-radius: 50%;
@@ -335,7 +335,7 @@
 }
 
 .lease-lead__privacy label {
-	font-size: 14px;
+	font-size: 0.875rem;
 	line-height: 1.2;
 	cursor: pointer;
 }
@@ -345,20 +345,20 @@
 }
 
 .lease-lead__form .button {
-	margin-top: 2px;
+	margin-top: 0.125rem;
 	font-weight: 700;
 }
 
 .lease-lead__status {
-	min-height: 18px;
-	margin-top: 10px;
-	font-size: 13px;
+	min-height: 1.125rem;
+	margin-top: 0.625rem;
+	font-size: 0.8125rem;
 	color: var(--color-soft);
 }
 
 .lease-lead__privacy-note {
-	margin-top: 89px;
-	font-size: 14px;
+	margin-top: 5.5625rem;
+	font-size: 0.875rem;
 	color: #a0a0a0;
 }
 
@@ -379,10 +379,10 @@
 	color: #3c3c3b;
 }
 
-@media (max-width: 1599px) and (min-width: 1200px) {
+@media (max-width: 99.9375em) and (min-width: 75em) {
 
 	.lease-lead__copy > p {
-		font-size: clamp(18px, 1.25vw, 24px);
+		font-size: clamp(1.125rem, 1.25vw, 1.5rem);
 	}
 
 	.lease-lead {
@@ -391,17 +391,17 @@
 	}
 
 	.lease-lead__inner {
-		width: min(calc(100% - 120px), 1594px);
-		grid-template-columns: minmax(370px, .55fr) minmax(0, 1fr);
-		gap: clamp(64px, 6.77vw, 130px);
+		width: min(calc(100% - 7.5rem), 99.625rem);
+		grid-template-columns: minmax(23.125rem, .55fr) minmax(0, 1fr);
+		gap: clamp(4rem, 6.77vw, 8.125rem);
 	}
 
 	.lease-lead__copy h2 {
-		font-size: clamp(39px, 2.5vw, 48px);
+		font-size: clamp(2.4375rem, 2.5vw, 3rem);
 	}
 }
 
-@media (max-width: 1599px) {
+@media (max-width: 99.9375em) {
 	.lease-hero {
 		height: auto;
 	}
@@ -409,100 +409,100 @@
 	.lease-hero__media {
 		position: relative;
 		top: auto;
-		margin-top: 48px;
+		margin-top: 3rem;
 	}
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 74.9375em) {
 	.lease-hero__copy {
-		padding-top: 156px;
+		padding-top: 9.75rem;
 	}
 
 	.lease-hero h1 {
-		font-size: clamp(38px, 4.7vw, 52px);
+		font-size: clamp(2.375rem, 4.7vw, 3.25rem);
 	}
 
 	.lease-hero__copy p {
-		font-size: 19px;
+		font-size: 1.1875rem;
 	}
 
 	.lease-lead {
 		min-height: 0;
-		padding: 96px 48px 86px;
+		padding: 6rem 3rem 5.375rem;
 	}
 
 	.lease-lead__inner {
 		width: 100%;
-		grid-template-columns: minmax(270px, .72fr) minmax(0, 1.28fr);
-		gap: 64px;
+		grid-template-columns: minmax(16.875rem, .72fr) minmax(0, 1.28fr);
+		gap: 4rem;
 	}
 
 	.lease-lead__copy h2 {
-		font-size: 41px;
+		font-size: 2.5625rem;
 	}
 
 	.lease-lead__copy > p {
-		font-size: 19px;
+		font-size: 1.1875rem;
 	}
 
 	.lease-lead__advisor {
-		margin-top: 85px;
+		margin-top: 5.3125rem;
 	}
 
 	.lease-lead__privacy-note {
-		margin-top: 64px;
+		margin-top: 4rem;
 	}
 }
 
-@media (max-width: 767px) {
+@media (max-width: 47.9375em) {
 	.lease-desktop-break {
 		display: none;
 	}
 
 	.lease-hero__copy {
-		width: calc(100% - 40px);
-		padding-top: 112px;
+		width: calc(100% - 2.5rem);
+		padding-top: 7rem;
 	}
 
 	.lease-hero h1 {
-		font-size: clamp(34px, 9vw, 42px);
+		font-size: clamp(2.125rem, 9vw, 2.625rem);
 		line-height: 1.02;
-		letter-spacing: -.8px;
+		letter-spacing: -0.05rem;
 	}
 
 	.lease-hero__copy p {
-		margin-top: 16px;
-		font-size: 17px;
+		margin-top: 1rem;
+		font-size: 1.0625rem;
 		line-height: 1.28;
 	}
 
 	.lease-hero__actions {
 		flex-wrap: wrap;
-		gap: 14px;
-		margin-top: 20px;
+		gap: 0.875rem;
+		margin-top: 1.25rem;
 	}
 
 	.lease-hero__actions .button,
 	.lease-hero__more {
-		font-size: 14px;
+		font-size: 0.875rem;
 	}
 
 	.lease-hero__actions .button {
-		min-height: 42px;
-		padding-inline: 17px;
+		min-height: 2.625rem;
+		padding-inline: 1.0625rem;
 	}
 
 	.lease-hero__actions .lease-hero__more {
 		min-width: auto;
-		min-height: 42px;
-		padding-inline: 17px;
+		min-height: 2.625rem;
+		padding-inline: 1.0625rem;
 	}
 
 	.lease-hero__media-frame {
 		display: block;
 		overflow: hidden;
-		margin-top: 36px;
-		border-radius: clamp(40px, 12vw, 90px) clamp(40px, 12vw, 90px) 0 0;
+		margin-top: 2.25rem;
+		border-radius: clamp(2.5rem, 12vw, 5.625rem) clamp(2.5rem, 12vw, 5.625rem) 0 0;
 	}
 
 	.lease-hero__media {
@@ -513,7 +513,7 @@
 	}
 
 	.lease-lead {
-		padding: 72px 24px 76px;
+		padding: 4.5rem 1.5rem 4.75rem;
 	}
 
 	.lease-lead__inner {
@@ -522,23 +522,23 @@
 	}
 
 	.lease-lead__copy h2 {
-		font-size: 40px;
+		font-size: 2.5rem;
 	}
 
 	.lease-lead__copy > p {
-		font-size: 18px;
+		font-size: 1.125rem;
 		line-height: 1.25;
 	}
 
 	.lease-lead__advisor {
-		margin-top: 54px;
+		margin-top: 3.375rem;
 	}
 
 	.lease-lead__form {
-		margin-top: 64px;
+		margin-top: 4rem;
 	}
 
 	.lease-lead__privacy-note {
-		margin-top: 58px;
+		margin-top: 3.625rem;
 	}
 }

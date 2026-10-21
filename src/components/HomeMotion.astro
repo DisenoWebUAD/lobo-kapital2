@@ -16,6 +16,7 @@
 		const finePointer = window.matchMedia(
 			"(hover: hover) and (pointer: fine)",
 		);
+		const wideViewport = window.matchMedia("(min-width: 48em)");
 		const revealElements = [
 			...page.querySelectorAll<HTMLElement>("[data-reveal]"),
 		];
@@ -27,7 +28,7 @@
 		});
 
 		const updateRevealDelays = () => {
-			const mobile = window.innerWidth < 768;
+			const mobile = !wideViewport.matches;
 			page.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach(
 				(group) => {
 					const step = Number(group.dataset.revealGroup) || 80;
@@ -196,10 +197,10 @@
 			const progress =
 				(viewportCenter - elementCenter) /
 				((window.innerHeight + rect.height) / 2);
-			const offset = Math.max(-18, Math.min(18, progress * 18));
+			const offset = Math.max(-1.125, Math.min(1.125, progress * 1.125));
 			parallaxElement.style.setProperty(
 				"--parallax-y",
-				`${offset.toFixed(2)}px`,
+				`${offset}rem`,
 			);
 		};
 		const scheduleParallaxUpdate = () => {

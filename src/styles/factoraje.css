@@ -3,13 +3,13 @@
 }
 
 .factoring-hero {
-	--hero-design-height: 1000px;
-	--hero-top: 140px;
-	--hero-bottom: 1px;
-	--hero-copy-left: max(72px, calc((min(100vw, 1920px) - 1270px) / 2));
-	--hero-photo-width: min(50.16vw, 963px);
+	--hero-design-height: 62.5rem;
+	--hero-top: 8.75rem;
+	--hero-bottom: 0.0625rem;
+	--hero-copy-left: max(4.5rem, calc((min(100vw, 120rem) - 79.375rem) / 2));
+	--hero-photo-width: min(50.16vw, 60.1875rem);
 	--hero-compression: max(
-		0px,
+		0rem,
 		var(--hero-design-height) - var(--hero-viewport)
 	);
 	display: grid;
@@ -17,32 +17,32 @@
 	/* Preserve readable copy when even the minimum photo will not fit. */
 	min-height: min-content;
 	padding-block: max(
-			108px,
+			6.75rem,
 			calc(var(--hero-top) - var(--hero-compression) * 0.5)
 		)
-		max(16px, var(--hero-bottom), env(safe-area-inset-bottom));
+		max(1rem, var(--hero-bottom), env(safe-area-inset-bottom));
 	background: var(--color-white);
 }
 .factoring-hero__inner {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) var(--hero-photo-width);
 	align-items: center;
-	width: min(100%, 1920px);
+	width: min(100%, 120rem);
 	padding-left: var(--hero-copy-left);
 	margin-inline: auto;
 }
 .factoring-hero__copy {
 	position: relative;
 	z-index: 1;
-	width: min(40vw, 510px);
+	width: min(40vw, 31.875rem);
 	min-width: 0;
 }
 .factoring-hero h1 {
 	overflow-wrap: anywhere;
-	font-size: clamp(42px, 2.5vw, 48px);
+	font-size: clamp(2.625rem, 2.5vw, 3rem);
 	font-weight: 700;
 	line-height: 0.98;
-	letter-spacing: -1.1px;
+	letter-spacing: -0.06875rem;
 	color: var(--color-text);
 }
 .factoring-hero h1 .factoring-hero__highlight {
@@ -52,34 +52,34 @@
 	color: var(--color-muted);
 }
 .factoring-hero__copy > p {
-	margin-top: 19px;
-	font-size: 18px;
+	margin-top: 1.1875rem;
+	font-size: 1.125rem;
 	line-height: 1.12;
 	color: var(--color-muted);
 }
 .factoring-hero__actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 18px;
-	margin-top: 25px;
+	gap: 1.125rem;
+	margin-top: 1.5625rem;
 }
 .factoring-hero__actions .button {
-	min-height: 45px;
-	padding-inline: 21px;
-	font-size: 14px;
+	min-height: 2.8125rem;
+	padding-inline: 1.3125rem;
+	font-size: 0.875rem;
 }
 .factoring-hero__actions .button--primary {
-	min-width: 161px;
+	min-width: 10.0625rem;
 }
 .factoring-hero__actions .button--light {
-	min-width: 194px;
+	min-width: 12.125rem;
 }
 .factoring-hero__visual {
 	position: relative;
 	height: 100%;
-	min-height: 96px;
-	max-height: 859px;
-	border-radius: 55px 0 0 55px;
+	min-height: 6rem;
+	max-height: 53.6875rem;
+	border-radius: 3.4375rem 0 0 3.4375rem;
 	overflow: hidden;
 	box-shadow: 0 8px 18px rgb(0 0 0 / 8%);
 }
@@ -91,16 +91,16 @@
 	object-fit: cover;
 	object-position: center;
 }
-@media (width > 1920px) {
+@media (width > 120em) {
 	.factoring-hero__visual {
-		border-radius: 55px;
+		border-radius: 3.4375rem;
 	}
 }
-@media (max-width: 1250px) {
+@media (max-width: 78.125em) {
 	.factoring-hero {
-		--hero-design-height: 900px;
-		--hero-top: 130px;
-		--hero-bottom: 50px;
+		--hero-design-height: 56.25rem;
+		--hero-top: 8.125rem;
+		--hero-bottom: 3.125rem;
 		--hero-copy-left: 8vw;
 	}
 	.factoring-hero h1 {
@@ -110,23 +110,23 @@
 		display: none;
 	}
 	.factoring-hero__visual {
-		max-height: 720px;
+		max-height: 45rem;
 	}
 }
-@media (max-width: 1023px) {
+@media (max-width: 63.9375em) {
 	.factoring-hero {
-		--hero-design-height: 1130px;
-		padding: 148px 48px max(24px, env(safe-area-inset-bottom));
+		--hero-design-height: 70.625rem;
+		padding: 9.25rem 3rem max(1.5rem, env(safe-area-inset-bottom));
 	}
 	.factoring-hero__inner {
 		grid-template-columns: minmax(0, 1fr);
-		grid-template-rows: auto minmax(96px, 1fr);
+		grid-template-rows: auto minmax(6rem, 1fr);
 		padding: 0;
-		gap: 32px;
+		gap: 2rem;
 		justify-items: center;
 	}
 	.factoring-hero__copy {
-		width: min(100%, 580px);
+		width: min(100%, 36.25rem);
 		text-align: center;
 	}
 	.factoring-hero__copy > p {
@@ -136,94 +136,94 @@
 		justify-content: center;
 	}
 	.factoring-hero__visual {
-		width: min(100%, 680px);
-		max-height: min(620px, calc((100vw - 96px) * 1290 / 1417));
-		border-radius: 46px;
+		width: min(100%, 42.5rem);
+		max-height: min(38.75rem, calc((100vw - 6rem) * 1290 / 1417));
+		border-radius: 2.875rem;
 	}
 }
-@media (max-width: 640px) {
+@media (max-width: 40em) {
 	.factoring-hero {
-		--hero-design-height: calc(559px + (100vw - 48px) * 1290 / 1417);
-		padding: max(96px, calc(122px - var(--hero-compression) * 0.5)) 24px
+		--hero-design-height: calc(34.9375rem + (100vw - 3rem) * 1290 / 1417);
+		padding: max(6rem, calc(7.625rem - var(--hero-compression) * 0.5)) 1.5rem
 			max(
-				16px,
-				calc(64px - var(--hero-compression) * 0.5),
+				1rem,
+				calc(4rem - var(--hero-compression) * 0.5),
 				env(safe-area-inset-bottom)
 			);
 	}
 	.factoring-hero__inner {
-		gap: max(16px, calc(46px - var(--hero-compression) * 0.25));
+		gap: max(1rem, calc(2.875rem - var(--hero-compression) * 0.25));
 	}
 	.factoring-hero h1 {
-		font-size: clamp(32px, 10.3vw, 42px);
+		font-size: clamp(2rem, 10.3vw, 2.625rem);
 		line-height: 1.06;
-		letter-spacing: -0.8px;
+		letter-spacing: -0.05rem;
 	}
 	.factoring-hero__copy > p {
-		font-size: 16px;
+		font-size: 1rem;
 	}
 	.factoring-hero__actions {
-		gap: 12px;
+		gap: 0.75rem;
 	}
 	.factoring-hero__actions .button {
-		min-height: 44px;
+		min-height: 2.75rem;
 		min-width: 0;
-		font-size: 13px;
-		padding-inline: 17px;
+		font-size: 0.8125rem;
+		padding-inline: 1.0625rem;
 	}
 	.factoring-hero__visual {
-		max-height: calc((100vw - 48px) * 1290 / 1417);
-		border-radius: 30px;
+		max-height: calc((100vw - 3rem) * 1290 / 1417);
+		border-radius: 1.875rem;
 	}
 }
-@media (max-height: 700px) {
+@media (max-height: 43.75em) {
 	.factoring-hero {
-		padding-top: 108px;
-		padding-bottom: max(16px, env(safe-area-inset-bottom));
+		padding-top: 6.75rem;
+		padding-bottom: max(1rem, env(safe-area-inset-bottom));
 	}
 	.factoring-hero__copy > p {
-		margin-top: 16px;
+		margin-top: 1rem;
 	}
 	.factoring-hero__actions {
-		margin-top: 20px;
+		margin-top: 1.25rem;
 	}
 }
-@media (max-height: 700px) and (max-width: 1023px) {
+@media (max-height: 43.75em) and (max-width: 63.9375em) {
 	.factoring-hero h1 {
-		font-size: 32px;
+		font-size: 2rem;
 		line-height: 1.06;
 	}
 	.factoring-hero__copy > p {
-		font-size: 16px;
+		font-size: 1rem;
 	}
 	.factoring-hero__inner {
-		gap: 16px;
+		gap: 1rem;
 	}
 }
-@media (max-height: 700px) and (max-width: 767px) {
+@media (max-height: 43.75em) and (max-width: 47.9375em) {
 	.factoring-hero {
-		padding-top: 96px;
+		padding-top: 6rem;
 	}
 }
 
-@media (max-height: 500px) and (max-width: 1023px) {
+@media (max-height: 31.25em) and (max-width: 63.9375em) {
 	.factoring-hero__image {
 		object-position: center 18%;
 	}
 }
 
 .factoring-process {
-	padding: 96px 24px;
+	padding: 6rem 1.5rem;
 	background: var(--color-surface);
 }
 .factoring-section-heading {
 	text-align: center;
 }
 .factoring-section-heading h2 {
-	font-size: 44px;
+	font-size: 2.75rem;
 	font-weight: 700;
 	line-height: 1.12;
-	letter-spacing: -0.8px;
+	letter-spacing: -0.05rem;
 	color: var(--color-ink);
 }
 .factoring-section-heading h2 span {
@@ -231,66 +231,66 @@
 }
 .factoring-section-heading p {
 	max-width: 60ch;
-	margin: 14px auto 0;
-	font-size: 18px;
+	margin: 0.875rem auto 0;
+	font-size: 1.125rem;
 	line-height: 1.5;
 	color: var(--color-text);
 }
 .factoring-process__grid {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 24px;
-	width: min(100%, 1276px);
+	gap: 1.5rem;
+	width: min(100%, 79.75rem);
 	padding: 0;
-	margin: 44px auto 0;
+	margin: 2.75rem auto 0;
 	list-style: none;
 }
 .factoring-process__card {
 	min-width: 0;
-	padding: 30px 26px;
-	border-radius: 18px;
+	padding: 1.875rem 1.625rem;
+	border-radius: 1.125rem;
 	background: var(--color-white);
 }
 .factoring-process__card img {
 	display: block;
-	width: 60px;
-	height: 62px;
-	margin-bottom: 24px;
+	width: 3.75rem;
+	height: 3.875rem;
+	margin-bottom: 1.5rem;
 	object-fit: contain;
 }
 .factoring-process__card h3,
 .factoring-advantage-card h3 {
-	font-size: 20px;
+	font-size: 1.25rem;
 	font-weight: 650;
 	line-height: 1.25;
 	color: var(--color-ink);
 }
 .factoring-process__card p,
 .factoring-advantage-card > p {
-	margin-top: 12px;
-	font-size: 16px;
+	margin-top: 0.75rem;
+	font-size: 1rem;
 	line-height: 1.55;
 	color: var(--color-text);
 }
 .factoring-advantages {
-	padding: 96px 24px;
+	padding: 6rem 1.5rem;
 	background: var(--color-white);
 }
 .factoring-advantages__grid {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 24px;
-	width: min(100%, 1060px);
-	margin: 44px auto 0;
+	gap: 1.5rem;
+	width: min(100%, 66.25rem);
+	margin: 2.75rem auto 0;
 }
 .factoring-advantage-card {
-	padding: 30px;
-	border-radius: 18px;
+	padding: 1.875rem;
+	border-radius: 1.125rem;
 	background: var(--color-surface);
 }
 .factoring-advantage-card--profile {
 	grid-column: 1 / -1;
-	width: min(100%, 760px);
+	width: min(100%, 47.5rem);
 	justify-self: center;
 	background: var(--color-primary);
 }
@@ -301,20 +301,20 @@
 .factoring-profile-tag {
 	display: inline-flex;
 	align-items: center;
-	gap: 8px;
-	min-height: 32px;
-	padding: 6px 12px;
-	margin: 0 0 20px !important;
-	border-radius: 7px;
-	font-size: 14px !important;
+	gap: 0.5rem;
+	min-height: 2rem;
+	padding: 0.375rem 0.75rem;
+	margin: 0 0 1.25rem !important;
+	border-radius: 0.4375rem;
+	font-size: 0.875rem !important;
 	font-weight: 650;
 	line-height: 1.2 !important;
 	color: var(--color-primary) !important;
 	background: var(--color-white);
 }
 .factoring-profile-tag svg {
-	width: 18px;
-	height: 18px;
+	width: 1.125rem;
+	height: 1.125rem;
 	fill: none;
 	stroke: currentColor;
 	stroke-linecap: round;
@@ -322,67 +322,67 @@
 	stroke-width: 1.7;
 }
 .factoring-cta {
-	padding: 72px 24px;
+	padding: 4.5rem 1.5rem;
 	background: var(--color-surface);
 }
 .factoring-cta__inner {
 	text-align: center;
 }
 .factoring-cta h2 {
-	font-size: 40px;
+	font-size: 2.5rem;
 	font-weight: 700;
 	line-height: 1.12;
-	letter-spacing: -0.8px;
+	letter-spacing: -0.05rem;
 	color: var(--color-ink);
 }
 .factoring-cta p {
-	margin-top: 16px;
-	font-size: 18px;
+	margin-top: 1rem;
+	font-size: 1.125rem;
 	line-height: 1.5;
 	color: var(--color-text);
 }
 .factoring-cta .button {
-	min-height: 47px;
-	margin-top: 28px;
-	font-size: 16px;
+	min-height: 2.9375rem;
+	margin-top: 1.75rem;
+	font-size: 1rem;
 }
-@media (max-width: 1023px) {
+@media (max-width: 63.9375em) {
 	.factoring-process,
 	.factoring-advantages {
-		padding: 80px 48px;
+		padding: 5rem 3rem;
 	}
 	.factoring-process__grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
-@media (max-width: 640px) {
+@media (max-width: 40em) {
 	.factoring-process,
 	.factoring-advantages {
-		padding: 64px 24px;
+		padding: 4rem 1.5rem;
 	}
 	.factoring-section-heading h2,
 	.factoring-cta h2 {
-		font-size: 34px;
+		font-size: 2.125rem;
 	}
 	.factoring-section-heading p,
 	.factoring-cta p {
-		font-size: 17px;
+		font-size: 1.0625rem;
 	}
 	.factoring-process__grid,
 	.factoring-advantages__grid {
 		grid-template-columns: 1fr;
-		gap: 20px;
-		margin-top: 32px;
+		gap: 1.25rem;
+		margin-top: 2rem;
 	}
 	.factoring-process__card,
 	.factoring-advantage-card {
-		padding: 28px;
+		padding: 1.75rem;
 	}
 	.factoring-advantage-card--profile {
 		grid-column: auto;
 		width: 100%;
 	}
 	.factoring-cta {
-		padding: 56px 24px;
+		padding: 3.5rem 1.5rem;
 	}
 }
