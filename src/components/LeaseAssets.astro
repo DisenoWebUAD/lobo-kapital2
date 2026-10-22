@@ -5,6 +5,12 @@ import medicalImage from '../assets/editorial/medico.jpg';
 import machineryImage from '../assets/editorial/maquinaria.jpg';
 import technologyImage from '../assets/editorial/tecnologia.jpg';
 
+interface Props {
+	product?: 'lease' | 'finance-lease';
+}
+const { product = 'lease' } = Astro.props;
+const financial = product === 'finance-lease';
+
 const assets = [
 	{
 		title: "Flotas vehiculares",
@@ -40,11 +46,13 @@ const assets = [
 <section class="lease-assets" aria-labelledby="lease-assets-title">
 	<header class="lease-section-heading" data-page-reveal>
 		<h2 id="lease-assets-title">
-			<span>Activos</span> Disponibles para Arrendamiento
+			<span>Activos</span> para tu Operación
 		</h2>
 		<p>
-			Soluciones de financiamiento flexibles para una amplia gama de
-			sectores industriales y comerciales.
+			{financial
+				? 'Ejemplos de uso de equipo y vehículos que puedes evaluar mediante arrendamiento financiero, con alternativas al finalizar el contrato.'
+				: 'Ejemplos de uso de activos que puedes evaluar mediante arrendamiento puro, priorizando su utilización y renovación.'}{' '}
+			La elegibilidad depende del bien y del análisis de la operación.
 		</p>
 	</header>
 

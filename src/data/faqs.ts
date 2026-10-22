@@ -28,6 +28,7 @@ export const faqs: Faq[] = [
 		question: '¿Quiénes pueden solicitar financiamiento?',
 		paragraphs: [
 			'El crédito personal está dirigido a personas asalariadas, profesionistas o con ingresos comprobables en Durango. El empresarial se dirige a empresas con operación formal y flujo comprobable en Durango y Ciudad de México. Cada solicitud está sujeta a evaluación.',
+			'La cuenta corriente cubre capital de trabajo empresarial; los arrendamientos se dirigen a empresas y personas con actividad empresarial, y el factoraje a proveedores con cuentas por cobrar elegibles. Consulta los requisitos específicos de cada producto.',
 		],
 	},
 	{
@@ -50,7 +51,7 @@ export const faqs: Faq[] = [
 		id: 'requisitos-empresarial',
 		question: '¿Qué requisitos debe cumplir mi empresa?',
 		paragraphs: [
-			'Se requieren al menos 24 meses de operación, estados financieros y constancia de situación fiscal. La evaluación considera también el historial crediticio, la capacidad de pago y las garantías aplicables.',
+			'Para el crédito empresarial se requieren al menos 24 meses de operación, estados financieros y constancia de situación fiscal. La evaluación considera también el historial crediticio, la capacidad de pago y las garantías aplicables. Los demás productos empresariales tienen sus propios requisitos.',
 			'Según el monto y el perfil de la operación, pueden solicitarse garantías hipotecarias, prendarias, fiduciarias u obligado solidario. El asesor te indicará cuáles corresponden a tu caso.',
 		],
 		links: [{ label: 'Ver requisitos del crédito empresarial', href: '/creditos-pymes/#requisitos' }],
@@ -67,12 +68,47 @@ export const faqs: Faq[] = [
 		id: 'cuanto-pagaria',
 		question: '¿Cómo sé cuánto pagaría?',
 		paragraphs: [
-			'Los simuladores muestran una mensualidad estimada con supuestos de referencia. La tasa y la comisión definitivas siguen pendientes de publicación. Tu propuesta deberá detallar monto, plazo, tasa, CAT, comisiones y calendario de pagos antes de contratar.',
+			'Cada simulador muestra lo que corresponde al producto: mensualidad de crédito, pago mensual de referencia en cuenta corriente, rentas de arrendamiento o liquidez de factoraje. Los resúmenes separan los cargos iniciales y los pagos posteriores cuando corresponden. Utilizan supuestos de referencia; las tasas, comisiones y demás cargos definitivos deberán confirmarse en una propuesta antes de contratar.',
+			'Los seguros y servicios quedan excluidos de las estimaciones; esto no significa que sean gratuitos. Los resultados no son una cotización ni confirman aprobación.',
 		],
 		links: [
 			{ label: 'Simular crédito personal', href: '/credito-personal/#simulador' },
 			{ label: 'Simular crédito empresarial', href: '/creditos-pymes/#simulador' },
+			{ label: 'Simular cuenta corriente', href: '/credito-en-cuenta-corriente/#simulador' },
+			{ label: 'Simular arrendamiento financiero', href: '/arrendamiento-financiero/#simulador' },
+			{ label: 'Simular arrendamiento puro', href: '/arrendamiento/#simulador' },
+			{ label: 'Simular factoraje', href: '/factoraje/#simulador' },
 		],
+	},
+	{
+		id: 'cuenta-corriente',
+		question: '¿Cómo funciona el crédito en cuenta corriente?',
+		paragraphs: [
+			'Es una línea revolvente para necesidades recurrentes de capital de trabajo de una empresa. Las disposiciones y pagos se realizan dentro del límite autorizado y conforme al contrato; los intereses dependen del monto y del tiempo efectivamente utilizados.',
+			'La vigencia renovable publicada es de 12 a 36 meses, sujeta a evaluación y al comportamiento de la línea. Debe liquidarse el saldo total al menos una vez cada 12 meses.',
+			'El simulador estima una nueva línea dispuesta por completo. Muestra un pago mensual de referencia de 30 días y un pago final que incluye el capital y los intereses del último período; las comisiones iniciales aparecen aparte. No representa una mensualidad fija: los pagos reales dependen de las fechas y los movimientos de la línea.',
+		],
+		links: [{ label: 'Conocer la cuenta corriente', href: '/credito-en-cuenta-corriente/' }],
+	},
+	{
+		id: 'tipos-arrendamiento',
+		question: '¿Qué diferencia hay entre arrendamiento puro y financiero?',
+		paragraphs: [
+			'El puro se enfoca en el uso de activos mediante rentas. El financiero contempla alternativas al término del contrato, incluida una opción de compra conforme a las condiciones pactadas. Durante ambos contratos, la propiedad permanece con Lobos Gestión Empresarial.',
+			'La compra no es automática. El simulador financiero muestra las rentas y la compra opcional por separado; el puro no añade un pago de compra al término. Depósitos, efectos fiscales y condiciones definitivas deben revisarse en tu propuesta.',
+		],
+		links: [
+			{ label: 'Conocer arrendamiento puro', href: '/arrendamiento/' },
+			{ label: 'Conocer arrendamiento financiero', href: '/arrendamiento-financiero/' },
+		],
+	},
+	{
+		id: 'factoraje-liquidez',
+		question: '¿El simulador de factoraje confirma cuánto recibiré?',
+		paragraphs: [
+			'No. Con el valor y el vencimiento de tus facturas, compara la liquidez inicial con y sin recurso mediante supuestos ilustrativos. El anticipo autorizado, las comisiones y las facturas elegibles se definen en la evaluación y el contrato. La reserva no anticipada depende del cobro y de las condiciones de la operación.',
+		],
+		links: [{ label: 'Explorar el factoraje', href: '/factoraje/#simulador' }],
 	},
 	{
 		id: 'montos-y-plazos',

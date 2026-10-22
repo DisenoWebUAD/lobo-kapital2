@@ -8,13 +8,16 @@ import FactoringHero from '../components/FactoringHero.astro';
 import FactoringProcess from '../components/FactoringProcess.astro';
 import FactoringAdvantages from '../components/FactoringAdvantages.astro';
 import FactoringCta from '../components/FactoringCta.astro';
+import FinancingDetails from '../components/FinancingDetails.astro';
+import FinancingCalculator from '../components/FinancingCalculator.astro';
 import LeadForm from '../components/LeadForm.astro';
 import logoMark from '../assets/home/logo-mark.svg';
 import '../styles/global.css';
 import '../styles/factoraje.css';
+import '../styles/financing-products.css';
 
 const title = 'Factoraje | Lobo Kapital';
-const description = 'Convierte tus cuentas por cobrar en liquidez inmediata con factoraje para empresas.';
+const description = 'Anticipa cuentas por cobrar elegibles y explora una referencia de liquidez con factoraje para empresas.';
 ---
 
 <!doctype html>
@@ -37,6 +40,8 @@ const description = 'Convierte tus cuentas por cobrar en liquidez inmediata con 
 			<FactoringHero />
 			<FactoringProcess />
 			<FactoringAdvantages />
+			<FinancingDetails product="factoring" />
+			<FinancingCalculator product="factoring" />
 			<FactoringCta />
 			<LeadForm product="factoring" />
 		</main>

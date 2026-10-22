@@ -1,17 +1,20 @@
 ---
 import logoWordmark from "../assets/home/logo-wordmark.svg";
 
-const isPersonalPage = Astro.url.pathname.startsWith("/credito-personal");
-const isCardsPage = Astro.url.pathname.startsWith("/tarjetas");
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isPersonalPage = pathname === "/credito-personal";
+const isCardsPage = pathname === "/tarjetas";
 const isPersonalSection = isPersonalPage || isCardsPage;
-const isPymesPage = Astro.url.pathname.startsWith("/creditos-pymes");
-const isLeasePage = Astro.url.pathname.startsWith("/arrendamiento");
+const isPymesPage = pathname === "/creditos-pymes";
+const isRevolvingPage = pathname === "/credito-en-cuenta-corriente";
+const isLeasePage = pathname === "/arrendamiento";
+const isFinanceLeasePage = pathname === "/arrendamiento-financiero";
 const isFactoringPage = Astro.url.pathname.startsWith("/factoraje");
 const isFaqPage = Astro.url.pathname.startsWith("/faq");
 const isAboutPage = Astro.url.pathname.startsWith("/nosotros");
-const isPymesSection = isPymesPage || isLeasePage || isFactoringPage;
+const isPymesSection = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLeasePage || isFactoringPage;
 const hasContactSection = Astro.url.pathname === "/" || isPersonalSection || isFactoringPage;
-const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection ? "#contacto" : "/#contacto";
+const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLeasePage ? "#solicitud" : hasContactSection ? "#contacto" : "/#contacto";
 ---
 
 <header
@@ -95,9 +98,19 @@ const clientHref = isPymesPage || isLeasePage ? "#solicitud" : hasContactSection
 					>Créditos PyMEs</a
 				>
 				<a
+					href="/credito-en-cuenta-corriente/"
+					aria-current={isRevolvingPage ? "page" : undefined}
+					>Crédito en cuenta corriente</a
+				>
+				<a
 					href="/arrendamiento/"
 					aria-current={isLeasePage ? "page" : undefined}
-					>Arrendamiento</a
+					>Arrendamiento puro</a
+				>
+				<a
+					href="/arrendamiento-financiero/"
+					aria-current={isFinanceLeasePage ? "page" : undefined}
+					>Arrendamiento financiero</a
 				>
 				<a
 					href="/factoraje/"

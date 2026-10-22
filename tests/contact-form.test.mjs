@@ -28,6 +28,30 @@ test('requires name, email, an allowed product and explicit privacy consent', ()
 	}
 });
 
+test('distinguishes the new business products and preserves pure-lease aliases', () => {
+	for (const alias of ['lease', 'Arrendamiento', 'Arrendamiento puro']) {
+		assert.equal(resolveContactProduct(alias), 'lease');
+	}
+	for (const alias of ['revolving', 'Crédito Revolvente PyME', 'credito en cuenta corriente']) {
+		assert.equal(resolveContactProduct(alias), 'revolving');
+	}
+	for (const alias of ['finance-lease', 'arrendamiento financiero']) {
+		assert.equal(resolveContactProduct(alias), 'finance-lease');
+	}
+	for (const [product, label] of [
+		['revolving', 'Crédito en cuenta corriente'],
+		['finance-lease', 'Arrendamiento financiero'],
+		['lease', 'Arrendamiento puro'],
+	]) {
+		const link = new URL(buildContactMailto({
+			name: 'Ana Pérez', email: 'ana@example.com', product,
+			company: '', phone: '', amount: '', message: '',
+		}));
+		assert.equal(link.searchParams.get('subject'), `Consulta: ${label}`);
+		assert.ok(link.searchParams.get('body').includes(`Producto de interés: ${label}`));
+	}
+});
+
 test('enforces the field length limits without requiring optional fields', () => {
 	for (const [name, limit] of [['name', 100], ['company', 120], ['message', 800]]) {
 		assert.equal(validateContactField(name, 'a'.repeat(limit)), '', name);

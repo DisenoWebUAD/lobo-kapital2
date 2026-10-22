@@ -1,6 +1,6 @@
 import { legalLinks } from './legal.ts';
 
-export type ContactProduct = 'personal' | 'business' | 'cards' | 'lease' | 'factoring';
+export type ContactProduct = 'personal' | 'business' | 'cards' | 'revolving' | 'finance-lease' | 'lease' | 'factoring';
 
 interface ContactCopy {
 	title: string;
@@ -56,10 +56,34 @@ export const contactProducts: readonly ContactProductOption[] = [
 		showAmount: false,
 	},
 	{
+		id: 'revolving',
+		value: 'Crédito Revolvente PyME',
+		label: 'Crédito en cuenta corriente',
+		title: 'Hablemos de tu línea de crédito',
+		description: 'Cuéntanos sobre el ciclo de cobros y pagos de tu empresa para orientarte sobre una línea de capital de trabajo.',
+		activityLabel: 'Empresa o actividad (opcional)',
+		activityPlaceholder: 'Nombre de tu negocio o actividad',
+		messageLabel: '¿Para qué necesitas la línea? (opcional)',
+		messagePlaceholder: 'Por ejemplo: cubrir inventario mientras recibo el pago de mis clientes.',
+		showAmount: true,
+	},
+	{
+		id: 'finance-lease',
+		value: 'Arrendamiento financiero',
+		label: 'Arrendamiento financiero',
+		title: 'Hablemos de arrendamiento financiero',
+		description: 'Cuéntanos qué activo productivo necesita tu empresa y qué te gustaría conocer sobre las opciones al final del contrato.',
+		activityLabel: 'Empresa o actividad (opcional)',
+		activityPlaceholder: 'Nombre de tu negocio o actividad',
+		messageLabel: '¿Qué activo necesitas? (opcional)',
+		messagePlaceholder: 'Por ejemplo: maquinaria para ampliar mi producción.',
+		showAmount: true,
+	},
+	{
 		id: 'lease',
 		value: 'Arrendamiento',
-		label: 'Arrendamiento',
-		title: 'Hablemos de arrendamiento',
+		label: 'Arrendamiento puro',
+		title: 'Hablemos de arrendamiento puro',
 		description: 'Cuéntanos qué equipo o activo necesita tu negocio.',
 		activityLabel: 'Empresa o actividad (opcional)',
 		activityPlaceholder: 'Nombre de tu negocio o actividad',
