@@ -142,7 +142,7 @@ const products = [
 		height: 2.75rem;
 		place-items: center;
 		border-radius: 50%;
-		color: var(--color-primary);
+		color: inherit;
 		background: var(--color-white);
 		transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
 	}
@@ -152,8 +152,8 @@ const products = [
 	.business-solutions__link:focus-visible h4 { color: var(--color-primary); }
 	.business-solutions__link:hover .business-solutions__arrow,
 	.business-solutions__link:focus-visible .business-solutions__arrow {
-		color: var(--color-white);
-		background: var(--color-primary);
+		color: var(--color-primary);
+		background: var(--color-surface);
 		transform: translateX(.1875rem);
 	}
 	.business-solutions__link:focus-visible {
