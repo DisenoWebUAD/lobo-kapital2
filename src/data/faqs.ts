@@ -27,8 +27,8 @@ export const faqs: Faq[] = [
 		id: 'quien-puede-solicitar',
 		question: '¿Quiénes pueden solicitar financiamiento?',
 		paragraphs: [
-			'El crédito personal está dirigido a personas asalariadas, profesionistas o con ingresos comprobables en Durango. El empresarial se dirige a empresas con operación formal y flujo comprobable en Durango y Ciudad de México. Cada solicitud está sujeta a evaluación.',
-			'La cuenta corriente cubre capital de trabajo empresarial; los arrendamientos se dirigen a empresas y personas con actividad empresarial, y el factoraje a proveedores con cuentas por cobrar elegibles. Consulta los requisitos específicos de cada producto.',
+			'El crédito personal está dirigido a personas asalariadas, profesionistas o con ingresos comprobables en Durango. El crédito empresarial se dirige a negocios con operación formal y flujo comprobable en Durango y Ciudad de México. Cada solicitud está sujeta a evaluación.',
+			'La cuenta corriente cubre capital de trabajo del negocio; los arrendamientos se dirigen a negocios y personas con actividad empresarial, y el factoraje a proveedores con cuentas por cobrar elegibles. Consulta los requisitos específicos de cada producto.',
 		],
 	},
 	{
@@ -43,15 +43,15 @@ export const faqs: Faq[] = [
 		id: 'requisitos-personal',
 		question: '¿Qué necesito para solicitar un crédito personal?',
 		paragraphs: [
-			'Se solicita identificación oficial INE y comprobante de ingresos. También se evalúan tu historial crediticio y capacidad de pago. No necesitas tener una empresa. Si decides iniciar el trámite, un asesor te indicará el canal para enviar tus documentos.',
+			'Se solicita identificación oficial INE y comprobante de ingresos. También se evalúan tu historial crediticio y capacidad de pago. No necesitas tener un negocio. Si decides iniciar el trámite, un asesor te indicará el canal para enviar tus documentos.',
 		],
 		links: [{ label: 'Ver requisitos del crédito personal', href: '/credito-personal/#requisitos' }],
 	},
 	{
 		id: 'requisitos-empresarial',
-		question: '¿Qué requisitos debe cumplir mi empresa?',
+		question: '¿Qué requisitos debe cumplir mi negocio?',
 		paragraphs: [
-			'Para el crédito empresarial se requieren al menos 24 meses de operación, estados financieros y constancia de situación fiscal. La evaluación considera también el historial crediticio, la capacidad de pago y las garantías aplicables. Los demás productos empresariales tienen sus propios requisitos.',
+			'Para el crédito empresarial se requieren al menos 24 meses de operación, estados financieros y constancia de situación fiscal. La evaluación considera también el historial crediticio, la capacidad de pago y las garantías aplicables. Los demás productos para negocios tienen sus propios requisitos.',
 			'Según el monto y el perfil de la operación, pueden solicitarse garantías hipotecarias, prendarias, fiduciarias u obligado solidario. El asesor te indicará cuáles corresponden a tu caso.',
 		],
 		links: [{ label: 'Ver requisitos del crédito empresarial', href: '/creditos-pymes/#requisitos' }],
@@ -84,7 +84,7 @@ export const faqs: Faq[] = [
 		id: 'cuenta-corriente',
 		question: '¿Cómo funciona el crédito en cuenta corriente?',
 		paragraphs: [
-			'Es una línea revolvente para necesidades recurrentes de capital de trabajo de una empresa. Las disposiciones y pagos se realizan dentro del límite autorizado y conforme al contrato; los intereses dependen del monto y del tiempo efectivamente utilizados.',
+			'Es una línea revolvente para necesidades recurrentes de capital de trabajo de un negocio. Las disposiciones y pagos se realizan dentro del límite autorizado y conforme al contrato; los intereses dependen del monto y del tiempo efectivamente utilizados.',
 			'La vigencia renovable publicada es de 12 a 36 meses, sujeta a evaluación y al comportamiento de la línea. Debe liquidarse el saldo total al menos una vez cada 12 meses.',
 			'El simulador representa una sola disposición. Con la fecha inicial calcula el primer pago mensual y el pago que devuelve el capital al vencimiento; las comisiones iniciales aparecen aparte. En los ajustes puedes cambiar la línea de referencia, su vigencia y el seguro anual. La línea comienza igual al monto dispuesto y lo sigue hasta que la edites. El seguro capturado continúa durante toda la vigencia, incluso después de devolver el capital. No representa una mensualidad fija ni contempla nuevas disposiciones.',
 		],
@@ -112,13 +112,13 @@ export const faqs: Faq[] = [
 	},
 	{
 		id: 'elegir-financiamiento',
-		question: '¿Cómo elijo el financiamiento para mi empresa?',
+		question: '¿Cómo elijo el financiamiento para mi negocio?',
 		paragraphs: [
 			'La guía del inicio parte de tu necesidad y tus preferencias para mostrar alternativas. Las preguntas aparecen conforme avanzas y los resultados se actualizan al editar tus respuestas.',
 			'En crédito simple puedes indicar un monto de forma opcional. La guía confirma cuando está dentro del rango de referencia y muestra “Requiere revisar tu caso” si queda fuera, sin retirar el producto. El plazo se elige en los simuladores; los demás requisitos se consultan en cada ficha. La guía no evalúa tu crédito ni confirma una aprobación; tampoco determina qué opción te conviene económicamente.',
 			'Tus respuestas se procesan en la memoria del navegador y no se envían ni se guardan.',
 		],
-		links: [{ label: 'Explorar alternativas para mi empresa', href: '/#elige-tu-financiamiento' }],
+		links: [{ label: 'Explorar alternativas para mi negocio', href: '/#elige-tu-financiamiento' }],
 	},
 	{
 		id: 'montos-y-plazos',

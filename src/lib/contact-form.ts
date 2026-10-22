@@ -28,7 +28,7 @@ export function validateContactField(name: string, value: string | boolean): str
 		case 'need':
 			return resolveContactProduct(text) ? '' : 'Selecciona un producto de interés.';
 		case 'company':
-			return text.length > 120 ? 'Usa como máximo 120 caracteres para tu empresa o actividad.' : '';
+			return text.length > 120 ? 'Usa como máximo 120 caracteres para tu negocio o actividad.' : '';
 		case 'phone':
 			if (!text) return '';
 			return /^[+\d\s().-]{7,40}$/.test(text) && /^\d{7,15}$/.test(text.replace(/\D/g, ''))
@@ -65,7 +65,7 @@ export function buildContactMailto(draft: ContactDraft): string {
 		['Nombre', draft.name],
 		['Correo para recibir respuesta', draft.email],
 		['Producto de interés', product.label],
-		['Empresa o actividad', draft.company],
+		['Negocio o actividad', draft.company],
 		['Teléfono', draft.phone],
 		['Monto estimado (MXN)', draft.amount],
 	];

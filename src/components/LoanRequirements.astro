@@ -8,7 +8,7 @@ const { product } = Astro.props;
 const business = product === "business";
 const requirements = business
 	? [
-			`Empresa con al menos ${credits.business.minimumOperatingMonths} meses de operación.`,
+			`Negocio con al menos ${credits.business.minimumOperatingMonths} meses de operación.`,
 			"Estados financieros y constancia de situación fiscal. Historial crediticio y capacidad de pago sujetos a evaluación.",
 			"Garantía conforme al monto y al perfil de la operación.",
 		]
@@ -17,7 +17,7 @@ const requirements = business
 			"Puntaje de Buró de Crédito de al menos 600, sujeto a validación y análisis de capacidad de pago.",
 		];
 const intro = business
-	? "Para empresas con operación formal y flujo comprobable. La evaluación considera ingresos, historial y capacidad de pago."
+	? "Para negocios con operación formal y flujo comprobable. La evaluación considera ingresos, historial y capacidad de pago."
 	: "Para personas asalariadas, profesionistas o con ingresos comprobables. La autorización depende de tu historial crediticio y capacidad de pago.";
 ---
 
@@ -26,7 +26,7 @@ const intro = business
 		{
 			business ? (
 				<>
-					Requisitos <span>para tu empresa</span>
+					Requisitos <span>para tu negocio</span>
 				</>
 			) : (
 				<>

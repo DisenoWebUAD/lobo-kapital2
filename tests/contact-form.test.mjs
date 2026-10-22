@@ -97,7 +97,7 @@ test('builds an encoded draft email using the public product label and all suppl
 	assert.equal(link.pathname, 'contacto@lobokapital.mx');
 	assert.equal(link.searchParams.get('subject'), 'Consulta: Crédito personal');
 	const body = link.searchParams.get('body');
-	for (const text of ['Nombre: Ana Pérez', 'Correo para recibir respuesta: ana+consulta@example.com', 'Producto de interés: Crédito personal', 'Empresa o actividad: Diseño & servicios', 'Teléfono: +52 (618) 129-6093', 'Monto estimado (MXN): 125000.50', draft.message, 'He leído el aviso de privacidad']) {
+	for (const text of ['Nombre: Ana Pérez', 'Correo para recibir respuesta: ana+consulta@example.com', 'Producto de interés: Crédito personal', 'Negocio o actividad: Diseño & servicios', 'Teléfono: +52 (618) 129-6093', 'Monto estimado (MXN): 125000.50', draft.message, 'He leído el aviso de privacidad']) {
 		assert.ok(body.includes(text), text);
 	}
 	assert.ok(!body.includes('Préstamos Personales'));
@@ -106,7 +106,7 @@ test('builds an encoded draft email using the public product label and all suppl
 
 test('omits empty optional fields and refuses an unrecognized product in a draft', () => {
 	const body = new URL(buildContactMailto({ ...draft, company: '', phone: '', amount: '', message: '  ' })).searchParams.get('body');
-	for (const label of ['Empresa o actividad:', 'Teléfono:', 'Monto estimado', 'Consulta:']) {
+	for (const label of ['Negocio o actividad:', 'Teléfono:', 'Monto estimado', 'Consulta:']) {
 		assert.ok(!body.includes(label), label);
 	}
 	assert.throws(() => buildContactMailto({ ...draft, product: 'Producto no permitido' }), RangeError);
