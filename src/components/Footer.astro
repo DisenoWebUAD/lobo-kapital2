@@ -1,6 +1,7 @@
 ---
 import logoMark from "../assets/home/logo-mark.svg";
 import RegulatoryLogos from "./RegulatoryLogos.astro";
+import BackToTop from "./BackToTop.astro";
 import GroupLoboMark from "../assets/grupo-lobo-mark.svg";
 import { legalEntity, legalLinks, transparencyLinks } from "../data/legal";
 // Reused from santander-live, preserving the original paths and view boxes.
@@ -80,6 +81,8 @@ const year = new Date().getFullYear();
 		<p class="site-footer__copyright">Copyright © {year} Grupo Lobo</p>
 	</section>
 </footer>
+
+<BackToTop />
 
 <style>
 	.site-footer__group {

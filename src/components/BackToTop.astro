@@ -1,0 +1,150 @@
+<lobo-back-to-top class="back-to-top" inert aria-hidden="true">
+	<button class="back-to-top__button" type="button" aria-label="Volver arriba" disabled>
+		<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+			<path d="m6 11 6-6 6 6M12 5v14" />
+		</svg>
+		<span class="back-to-top__label" aria-hidden="true">Volver arriba</span>
+	</button>
+</lobo-back-to-top>
+
+<script>
+	import { registerBackToTop } from '../lib/back-to-top-client';
+	registerBackToTop();
+</script>
+
+<style>
+	.back-to-top {
+		position: fixed;
+		right: max(1.25rem, env(safe-area-inset-right));
+		bottom: max(1.25rem, env(safe-area-inset-bottom));
+		z-index: 15;
+		display: block;
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		transform: translateY(.625rem) scale(.94);
+		transition: opacity 160ms ease, transform 240ms cubic-bezier(.22, 1, .36, 1), visibility 0s linear 160ms;
+	}
+
+	.back-to-top[data-visible] {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+		transform: none;
+		transition-delay: 0s;
+	}
+
+	.back-to-top__button {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+		padding: 0;
+		border: 1px solid rgb(255 255 255 / 22%);
+		border-radius: 50%;
+		background: #242424;
+		color: var(--color-white);
+		box-shadow: 0 4px 16px rgb(0 0 0 / 16%);
+		cursor: pointer;
+		touch-action: manipulation;
+		transition: background-color 160ms ease, transform 140ms ease;
+	}
+
+	.back-to-top__button svg {
+		transition: transform 180ms cubic-bezier(.22, 1, .36, 1);
+	}
+
+	.back-to-top__button:focus-visible {
+		outline: 2px solid var(--color-white);
+		outline-offset: 3px;
+		box-shadow: 0 0 0 5px #242424;
+	}
+
+	.back-to-top__button:active {
+		background: #181818;
+		transform: scale(.94);
+	}
+
+	.back-to-top__label {
+		position: absolute;
+		right: calc(100% + .75rem);
+		width: max-content;
+		max-width: calc(100vw - 6rem);
+		padding: .5rem .75rem;
+		border-radius: 62.5rem;
+		background: #242424;
+		color: var(--color-white);
+		font-size: .8125rem;
+		font-weight: 500;
+		line-height: 1.4;
+		overflow-wrap: anywhere;
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: auto;
+		transform: translateX(.25rem);
+		transition: opacity 140ms ease, transform 180ms ease, visibility 0s linear 140ms;
+	}
+
+	.back-to-top__label::after {
+		position: absolute;
+		top: 0;
+		left: 100%;
+		width: .75rem;
+		height: 100%;
+		content: '';
+	}
+
+	.back-to-top__button:focus-visible .back-to-top__label {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition-delay: 0s;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.back-to-top__button:hover { background: #383838; }
+		.back-to-top__button:hover svg { transform: translateY(-2px); }
+		.back-to-top__button:hover .back-to-top__label {
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+			transition-delay: 0s;
+		}
+	}
+
+	.back-to-top[data-label-dismissed] .back-to-top__label {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	@media (min-width: 48em) {
+		.back-to-top {
+			right: max(2rem, env(safe-area-inset-right));
+			bottom: max(2rem, env(safe-area-inset-bottom));
+		}
+		.back-to-top__button { width: 3.25rem; height: 3.25rem; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.back-to-top,
+		.back-to-top__button,
+		.back-to-top__button svg,
+		.back-to-top__label { transform: none !important; }
+		.back-to-top { transition: opacity 100ms ease, visibility 0s linear 100ms; }
+		.back-to-top[data-visible] { transition-delay: 0s; }
+		.back-to-top__label { transition: opacity 100ms ease, visibility 0s linear 100ms; }
+		.back-to-top__button:focus-visible .back-to-top__label { transition-delay: 0s; }
+	}
+
+	@media (forced-colors: active) {
+		.back-to-top__button,
+		.back-to-top__label {
+			border: 1px solid ButtonText;
+			background: ButtonFace;
+			color: ButtonText;
+			box-shadow: none;
+		}
+		.back-to-top__button:focus-visible { outline-color: Highlight; }
+	}
+</style>
