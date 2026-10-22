@@ -807,12 +807,9 @@ const percent = (value: number) =>
 	}
 	.loan-calculator__term-options {
 		display: grid;
-		grid-template-columns: repeat(var(--term-count, 3), minmax(0, 1fr));
-		gap: 0.25rem;
-		padding: 0.25rem;
-		border: 0;
-		border-radius: 0.75rem;
-		background: #e7e7e5;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 5.5rem), 1fr));
+		grid-auto-rows: 1fr;
+		gap: 0.5rem;
 	}
 	.loan-calculator__term-option {
 		position: relative;
@@ -821,39 +818,66 @@ const percent = (value: number) =>
 	}
 	.loan-calculator__term-option span {
 		display: flex;
-		min-height: 2.75rem;
+		flex-wrap: wrap;
+		height: 100%;
+		min-height: 3rem;
 		align-items: center;
 		justify-content: center;
-		gap: 0.25rem;
-		padding: 0.625rem 0.75rem;
-		border: 1px solid transparent;
-		border-radius: 0.5rem;
+		gap: 0 0.25rem;
+		padding: 0.5rem 1rem;
+		border: 1px solid #8a8a86;
+		border-radius: 999px;
+		color: #242424;
+		background: var(--color-white);
 		font-size: 1rem;
 		font-weight: 500;
 		line-height: 1.4;
+		text-align: center;
 		white-space: normal;
+		overflow-wrap: anywhere;
 		transition:
-			color 160ms ease,
-			background-color 160ms ease,
-			border-color 160ms ease;
-	}
-	.loan-calculator__term-option:hover span {
-		color: var(--color-primary);
+			color 140ms ease,
+			background-color 140ms ease,
+			border-color 140ms ease,
+			transform 140ms ease;
 	}
 	.loan-calculator__term-option small {
 		font: inherit;
+		white-space: nowrap;
 	}
 	.loan-calculator__term-option input:checked + span {
-		border-color: var(--color-primary);
-		background: var(--color-white);
-		color: var(--color-primary);
+		border-color: #242424;
+		background: #242424;
+		color: var(--color-white);
 	}
 	.loan-calculator__term-option input:focus-visible + span {
-		outline: 2px solid var(--color-primary);
+		outline: 2px solid #242424;
 		outline-offset: 3px;
 	}
-	.loan-calculator__term-option input:disabled + span {
+	.loan-calculator__term-option:active input:enabled + span {
+		background: #e4e4e1;
+		transform: translateY(1px) scale(0.995);
+		transition-duration: 70ms;
+	}
+	.loan-calculator__term-option:active input:enabled:checked + span {
+		background: #181818;
+	}
+	.loan-calculator__term-option:has(input:disabled) {
 		cursor: not-allowed;
+	}
+	.loan-calculator__term-option input:disabled + span {
+		opacity: 0.55;
+		transition: none;
+	}
+	@media (hover: hover) {
+		.loan-calculator__term-option:hover:not(:active) input:enabled + span {
+			border-color: #73736e;
+			background: #f8f8f6;
+		}
+		.loan-calculator__term-option:hover:not(:active) input:enabled:checked + span {
+			border-color: #242424;
+			background: #303030;
+		}
 	}
 	.loan-calculator__number input {
 		width: var(--amount-width, 8ch);
@@ -1079,23 +1103,9 @@ const percent = (value: number) =>
 			flex-wrap: wrap;
 			gap: 0.75rem;
 		}
-		.loan-calculator__term-option span {
-			padding-inline: 0.25rem;
-			font-size: 0.875rem;
-		}
 		.loan-calculator[data-loan-product="business"]
-			.loan-calculator__term-option
-			span {
-			flex-direction: column;
-			gap: 0.125rem;
-			min-height: 3.75rem;
-			padding: 0.5rem 0.125rem;
-		}
-		.loan-calculator[data-loan-product="business"]
-			.loan-calculator__term-option
-			small {
-			font-size: 0.6875rem;
-			font-weight: 400;
+			.loan-calculator__term-options {
+			grid-template-columns: repeat(auto-fit, minmax(min(100%, max(5.5rem, calc((100% - 0.5rem) / 2))), 1fr));
 		}
 	}
 	@media (max-width: 22.4375em) {
@@ -1106,6 +1116,42 @@ const percent = (value: number) =>
 			.loan-calculator__payment {
 			font-size: 1.75rem;
 			letter-spacing: -0.05rem;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.loan-calculator__term-option span {
+			transition: color 80ms linear, background-color 80ms linear, border-color 80ms linear;
+		}
+		.loan-calculator__term-option:active input:enabled + span {
+			transform: none;
+			transition-duration: 80ms;
+		}
+	}
+	@media (prefers-contrast: more) {
+		.loan-calculator__term-option input:not(:checked) + span {
+			border-color: #73736e;
+		}
+	}
+	@media (forced-colors: active) {
+		.loan-calculator__term-option span {
+			forced-color-adjust: none;
+			border-color: ButtonText !important;
+			color: CanvasText !important;
+			background: Canvas !important;
+		}
+		.loan-calculator__term-option input:checked + span {
+			border-color: Highlight !important;
+			color: HighlightText !important;
+			background: Highlight !important;
+		}
+		.loan-calculator__term-option input:focus-visible + span {
+			outline-color: Highlight;
+		}
+		.loan-calculator__term-option input:disabled + span {
+			opacity: 1;
+			border-color: GrayText !important;
+			color: GrayText !important;
+			background: Canvas !important;
 		}
 	}
 </style>

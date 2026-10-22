@@ -230,7 +230,8 @@ input {
 	transition: opacity 180ms ease, transform 180ms ease;
 }
 
-.site-nav__pymes-menu a {
+.site-nav__pymes-menu a,
+.site-nav__pymes-menu .site-nav__disabled {
 	justify-content: flex-start;
 	min-height: 1.75rem;
 	padding: 0.25rem 0.875rem;
@@ -240,27 +241,80 @@ input {
 	transition: color 160ms ease, background-color 160ms ease;
 }
 
-.site-nav__pymes-menu .site-nav__guide {
-	margin-top: .5rem;
-	padding-top: .75rem;
-	color: var(--color-primary);
-	font-size: .8125rem;
-	font-weight: 500;
-	text-decoration: underline;
-	text-underline-offset: .2em;
+.site-nav__products {
+	display: grid;
+	min-width: 0;
+	gap: .0625rem;
 }
 
-.site-nav a:not(.site-nav__client) {
+.site-nav__pymes-menu .site-nav__guide {
+	display: grid;
+	justify-content: stretch;
+	gap: .25rem;
+	max-width: 14rem;
+	margin: .5rem .5rem 0;
+	padding: .75rem;
+	border-radius: .625rem;
+	color: var(--color-ink);
+	background: var(--color-surface);
+	font-size: .875rem;
+	font-weight: 600;
+	line-height: 1.4;
+	white-space: normal;
+	text-decoration: none;
+	transition: background-color 160ms ease;
+}
+
+.site-nav__guide strong {
+	font: inherit;
+}
+
+.site-nav__guide small {
+	color: var(--color-muted);
+	font-size: .8125rem;
+	font-weight: 400;
+	line-height: 1.4;
+}
+
+.site-nav__pymes-menu .site-nav__guide:hover,
+.site-nav__pymes-menu .site-nav__guide:focus-visible {
+	background: var(--color-soft);
+}
+
+.site-nav__pymes-menu .site-nav__guide:focus-visible {
+	outline: 2px solid var(--color-ink);
+	outline-offset: 2px;
+}
+
+.site-nav a:not(.site-nav__client):not(.site-nav__guide) {
 	transition: color 180ms ease;
 }
 
-.site-nav a:not(.site-nav__client):hover,
+.site-nav a:not(.site-nav__client):not(.site-nav__guide):hover,
 .site-nav a[aria-current='page'] {
 	color: var(--color-primary);
 }
 
+@media (min-width: 75em) {
+	.site-nav__pymes-menu--business {
+		width: 27.5rem;
+		grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+		gap: .5rem;
+		padding: .5rem;
+	}
+
+	.site-nav__pymes-menu--business .site-nav__guide {
+		min-width: 0;
+		max-width: none;
+		align-self: center;
+		margin: 0;
+		padding: 1rem;
+	}
+}
+
 .site-nav__disabled {
-	cursor: not-allowed;
+	color: var(--color-muted);
+	cursor: default;
 }
 
 .site-nav__client {
@@ -281,6 +335,7 @@ input {
 	.site-nav a,
 	.site-nav__pymes-trigger,
 	.site-nav__pymes-menu,
+	.site-nav__pymes-menu .site-nav__guide,
 	.site-nav__client {
 		transition-duration: 1ms;
 	}
@@ -1479,10 +1534,19 @@ input {
 		transition: max-height 180ms ease, padding 180ms ease, opacity 160ms ease;
 	}
 
-	.site-nav__pymes-menu a {
+	.site-nav__pymes-menu a,
+	.site-nav__pymes-menu .site-nav__disabled {
 		min-height: 2.375rem;
 		padding-inline: 0.875rem;
 		white-space: normal;
+	}
+
+	.site-nav__products {
+		gap: .1875rem;
+	}
+
+	.site-nav__pymes-menu .site-nav__guide {
+		max-width: none;
 	}
 
 	.hero {

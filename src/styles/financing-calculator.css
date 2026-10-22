@@ -33,12 +33,16 @@
 .financing-calculator__field { min-width: 0; }
 .financing-calculator__field label { display: block; margin-bottom: .5rem; font-size: .9375rem; line-height: 1.35; font-weight: 600; }
 .financing-calculator__choice legend { margin-bottom: .625rem; font-size: .9375rem; font-weight: 600; }
-.financing-calculator__segments { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; padding: .25rem; border-radius: .75rem; background: #e7e7e5; }
-.financing-calculator__segments label { margin: 0; cursor: pointer; }
-.financing-calculator__segments span { display: flex; height: 100%; min-height: 2.75rem; align-items: center; justify-content: center; padding: .625rem .5rem; border: 1px solid transparent; border-radius: .5rem; color: #555552; background: transparent; text-align: center; font-size: .9375rem; line-height: 1.35; transition: background 160ms ease, color 160ms ease, border-color 160ms ease; }
-.financing-calculator__segments input:checked + span { border-color: var(--color-primary); color: var(--color-primary); background: #fff; }
-.financing-calculator__segments input:focus-visible + span { outline: 2px solid var(--color-primary); outline-offset: 3px; }
-.financing-calculator__segments label:hover input:not(:checked) + span { color: #242424; background: #efefed; }
+.financing-calculator__segments { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); grid-auto-rows: 1fr; gap: .5rem; }
+.financing-calculator__segments label { position: relative; display: flex; min-width: 0; margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.financing-calculator__segments span { display: flex; width: 100%; min-width: 0; min-height: 3rem; align-items: center; justify-content: center; padding: .5rem 1rem; border: 1px solid #8a8a86; border-radius: 999px; color: #242424; background: #fff; text-align: center; font-size: 1rem; font-weight: 500; line-height: 1.4; overflow-wrap: anywhere; transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, transform 140ms ease; }
+.financing-calculator__segments input:checked + span { border-color: #242424; color: #fff; background: #242424; }
+.financing-calculator__segments input:focus-visible + span { outline: 2px solid #242424; outline-offset: 3px; }
+.financing-calculator__segments input:focus-visible { outline: 0; }
+.financing-calculator__segments label:active input:not(:disabled) + span { background: #e4e4e1; transform: translateY(1px) scale(.995); transition-duration: 70ms; }
+.financing-calculator__segments label:active input:checked:not(:disabled) + span { background: #181818; }
+.financing-calculator__segments label:has(input:disabled) { cursor: default; }
+.financing-calculator__segments input:disabled + span { opacity: .55; transform: none; transition: none; }
 .financing-calculator__field-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; }
 .financing-calculator__field-heading > label { flex: 1 1 10rem; min-width: 0; margin: 0; font-size: 1rem; line-height: 1.4; font-weight: 500; }
 .financing-calculator__field--manual .financing-calculator__field-heading { display: grid; grid-template-columns: minmax(0, 1fr); gap: .625rem; }
@@ -67,8 +71,8 @@
 .financing-calculator__adjustments > summary { min-height: 2.75rem; padding-block: .625rem; color: var(--color-primary); }
 .financing-calculator__adjustments > .financing-calculator__hint { margin-top: .25rem; }
 .financing-calculator__adjustments > .financing-calculator__fields { margin-top: 1.25rem; gap: 1.25rem; }
-.financing-calculator__segments--terms { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.financing-calculator__segments--terms span { padding-inline: .25rem; font-size: .8125rem; }
+.financing-calculator__segments--terms { grid-template-columns: repeat(auto-fit, minmax(min(100%, 6.5rem), 1fr)); }
+.financing-calculator__segments--terms span { font-size: .9375rem; }
 .financing-calculator__field .financing-calculator__checkbox { display: flex; min-height: 2.75rem; align-items: center; gap: .75rem; margin-bottom: 0; cursor: pointer; font-size: .9375rem; line-height: 1.5; font-weight: 500; }
 .financing-calculator__checkbox input { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; margin: 0; accent-color: var(--color-primary); }
 .financing-calculator__checkbox input:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
@@ -115,6 +119,10 @@
 .financing-calculator__reference summary { font-size: .8125rem; color: #555552; }
 .financing-calculator__reference details p { margin-top: .625rem; }
 .financing-calculator [hidden] { display: none !important; }
+@media (hover: hover) {
+	.financing-calculator__segments label:hover:not(:active) input:not(:disabled) + span { border-color: #73736e; background: #f8f8f6; }
+	.financing-calculator__segments label:hover:not(:active) input:checked:not(:disabled) + span { border-color: #242424; background: #303030; }
+}
 @media (max-width: 63.9375em) {
 	.financing-calculator { width: min(calc(100% - 3rem), 79.75rem); }
 	.financing-calculator__grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; align-items: start; }
@@ -150,5 +158,31 @@
 	.financing-calculator__breakdown dd { text-align: left; }
 }
 @media (prefers-reduced-motion: reduce) {
- .financing-calculator__input, .financing-calculator__segments span { transition: none; }
+	.financing-calculator__input { transition: none; }
+	.financing-calculator__segments span { transition: color 80ms linear, background-color 80ms linear, border-color 80ms linear; transition-duration: 80ms !important; }
+	.financing-calculator__segments label:active input:not(:disabled) + span { transform: none; }
+	.financing-calculator__segments input:disabled + span { transition: none; }
+}
+@media (prefers-contrast: more) {
+	.financing-calculator__segments span { border-color: #73736e; }
+	.financing-calculator__segments input:checked + span { border-color: #242424; }
+}
+@media (forced-colors: active) {
+	.financing-calculator__segments span,
+	.financing-calculator__segments label:hover:not(:active) input:not(:disabled) + span,
+	.financing-calculator__segments label:active input:not(:disabled) + span {
+		forced-color-adjust: none;
+		border-color: ButtonText;
+		color: CanvasText;
+		background: Canvas;
+	}
+	.financing-calculator__segments input:checked + span,
+	.financing-calculator__segments label:hover:not(:active) input:checked:not(:disabled) + span,
+	.financing-calculator__segments label:active input:checked:not(:disabled) + span {
+		border-color: Highlight;
+		color: HighlightText;
+		background: Highlight;
+	}
+	.financing-calculator__segments input:focus-visible + span { outline-color: Highlight; }
+	.financing-calculator__segments input:disabled + span { border-color: GrayText; color: GrayText; background: Canvas; opacity: 1; }
 }

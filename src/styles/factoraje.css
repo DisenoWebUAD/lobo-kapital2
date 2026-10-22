@@ -293,11 +293,13 @@
 	grid-column: 1 / -1;
 	width: min(100%, 47.5rem);
 	justify-self: center;
-	background: var(--color-primary);
+	background: #242424;
 }
-.factoring-advantage-card--profile h3,
-.factoring-advantage-card--profile > p {
+.factoring-advantage-card--profile h3 {
 	color: var(--color-white);
+}
+.factoring-advantage-card--profile > p {
+	color: var(--color-soft);
 }
 .factoring-profile-tag {
 	display: inline-flex;
@@ -310,7 +312,7 @@
 	font-size: 0.875rem !important;
 	font-weight: 650;
 	line-height: 1.2 !important;
-	color: var(--color-primary) !important;
+	color: #242424 !important;
 	background: var(--color-white);
 }
 .factoring-profile-tag svg {
