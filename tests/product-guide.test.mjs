@@ -1,64 +1,114 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { getProductRecommendations, validateProductGuide } from '../src/lib/product-guide.ts';
+import { getProductGuideContext, getProductRecommendations, validateProductGuide } from '../src/lib/product-guide.ts';
 
-const fields = (overrides = {}) => ({ objective: 'project', amount: '', termMonths: '', operatingHistory: '', ...overrides });
+const fields = (overrides = {}) => ({ need: 'capital', capitalUse: 'one-time', equipmentUse: '', amount: '', ...overrides });
+const ids = (input) => getProductRecommendations(input).map(({ id }) => id);
+const allProducts = ['business', 'revolving', 'finance-lease', 'lease', 'factoring'];
 
-test('each objective recommends its corresponding service; an undecided objective shows all five', () => {
-	const choices = {
-		project: ['business'], liquidity: ['revolving'], purchase: ['finance-lease'],
-		use: ['lease'], invoices: ['factoring'], undecided: ['business', 'revolving', 'finance-lease', 'lease', 'factoring'],
-	};
-	for (const [objective, expected] of Object.entries(choices)) {
-		const results = getProductRecommendations({ objective });
-		assert.deepEqual(results.map(({ id }) => id), expected);
-		assert.ok(results.every(({ warnings, href, title, description }) => warnings.length === 0 && href.startsWith('/') && title && description));
-	}
-});
+const routes = [
+	{ input: { need: 'capital' }, products: ['business', 'revolving'], optionalFields: [] },
+	{ input: { need: 'capital', capitalUse: '' }, products: ['business', 'revolving'], optionalFields: [] },
+	{ input: { need: 'capital', capitalUse: 'undecided' }, products: ['business', 'revolving'], optionalFields: [] },
+	{ input: { need: 'capital', capitalUse: 'one-time' }, products: ['business'], optionalFields: ['amount'] },
+	{ input: { need: 'capital', capitalUse: 'recurring' }, products: ['revolving'], optionalFields: [] },
+	{ input: { need: 'equipment' }, products: ['business', 'finance-lease', 'lease'], optionalFields: [] },
+	{ input: { need: 'equipment', equipmentUse: '' }, products: ['business', 'finance-lease', 'lease'], optionalFields: [] },
+	{ input: { need: 'equipment', equipmentUse: 'undecided' }, products: ['business', 'finance-lease', 'lease'], optionalFields: [] },
+	{ input: { need: 'equipment', equipmentUse: 'buy-now' }, products: ['business'], optionalFields: ['amount'] },
+	{ input: { need: 'equipment', equipmentUse: 'lease-buy' }, products: ['finance-lease'], optionalFields: [] },
+	{ input: { need: 'equipment', equipmentUse: 'use-only' }, products: ['lease'], optionalFields: [] },
+	{ input: { need: 'invoices' }, products: ['factoring'], optionalFields: [] },
+	{ input: { need: 'undecided' }, products: allProducts, optionalFields: [] },
+];
 
-test('optional answers add only the applicable cautions, without filtering or reordering recommendations', () => {
-	const results = getProductRecommendations({ objective: 'undecided', amount: 1, termMonths: 3, operatingHistory: 'under-24' });
-	assert.deepEqual(results.map(({ id }) => id), ['business', 'revolving', 'finance-lease', 'lease', 'factoring']);
-	assert.deepEqual(results.map(({ warnings }) => warnings.map(({ code }) => code)), [
-		['amount', 'term', 'history'], ['term'], [], ['term'], ['history'],
-	]);
-	assert.match(results[0].warnings[0].text, /250,000.*10,150,000/);
-	assert.match(results[0].warnings[2].text, /24 meses/);
-	assert.match(results[1].warnings[0].text, /12 a 36.*cada disposición/);
-	assert.match(results[3].warnings[0].text, /18 a 36/);
-});
-
-test('amount and term boundaries come from product references and do not produce cautions at their limits', () => {
-	for (const amount of [250_000, 10_150_000]) {
-		for (const termMonths of [12, 36]) {
-			assert.deepEqual(getProductRecommendations({ objective: 'project', amount, termMonths, operatingHistory: '24-or-more' })[0].warnings, []);
+test('every need and active preference routes to its alternatives in a stable order', () => {
+	for (const { input, products, optionalFields } of routes) {
+		assert.deepEqual(getProductGuideContext(input), { products, optionalFields }, JSON.stringify(input));
+		assert.deepEqual(ids(input), products);
+		for (const result of getProductRecommendations(input)) {
+			assert.equal(result.status, 'explore');
+			assert.deepEqual(result.warnings, []);
+			assert.equal(result.amountMatch, null);
+			assert.ok(result.reasons.length > 0 && result.reasons.every((reason) => typeof reason === 'string' && reason.length > 0));
+			assert.ok(result.href.startsWith('/') && result.title && result.description);
 		}
 	}
-	for (const amount of [249_999, 10_150_001]) {
-		assert.deepEqual(getProductRecommendations({ objective: 'project', amount })[0].warnings.map(({ code }) => code), ['amount']);
-	}
-	for (const termMonths of [12, 18, 24, 36]) assert.deepEqual(getProductRecommendations({ objective: 'liquidity', termMonths })[0].warnings, []);
-	for (const termMonths of [18, 24, 36]) assert.deepEqual(getProductRecommendations({ objective: 'use', termMonths })[0].warnings, []);
-	for (const objective of ['project', 'liquidity', 'use']) {
-		assert.ok(getProductRecommendations({ objective, termMonths: 48 })[0].warnings.some(({ code }) => code === 'term'));
-	}
-	assert.deepEqual(getProductRecommendations({ objective: 'invoices', operatingHistory: '24-or-more' })[0].warnings, []);
 });
 
-test('the guide requires a supported objective and accepts optional empty answers', () => {
-	for (const objective of ['', 'personal', 'unknown']) {
-		const result = validateProductGuide(fields({ objective }));
+test('unknown needs have no context, and only active preference values are validated', () => {
+	for (const need of ['', 'personal', 'unknown']) {
+		assert.deepEqual(getProductGuideContext({ need }), { products: [], optionalFields: [] });
+		const validation = validateProductGuide(fields({ need, capitalUse: 'garbage', equipmentUse: 'garbage', amount: 'bad' }));
+		assert.equal(validation.valid, false);
+		assert.deepEqual(Object.keys(validation.errors), ['need']);
+	}
+	for (const [need, key] of [['capital', 'capitalUse'], ['equipment', 'equipmentUse']]) {
+		const result = validateProductGuide(fields({ need, [key]: 'invalid' }));
 		assert.equal(result.valid, false);
-		assert.ok(result.errors.objective);
+		assert.deepEqual(Object.keys(result.errors), [key]);
 	}
-	assert.deepEqual(validateProductGuide(fields()), {
-		valid: true, value: { objective: 'project', amount: null, termMonths: null, operatingHistory: null },
-	});
-	assert.equal(validateProductGuide(fields({ amount: '$' })).valid, true);
+	assert.equal(validateProductGuide(fields({ equipmentUse: 'invalid' })).valid, true);
+	assert.equal(validateProductGuide(fields({ need: 'equipment', capitalUse: 'invalid' })).valid, true);
 });
 
-test('amount capture accepts only positive whole pesos up to the public guide maximum', () => {
-	for (const amount of ['1', '$250,000', '$999,999,999', '  $1,000 MXN  ']) assert.equal(validateProductGuide(fields({ amount })).valid, true);
+test('a missing preference is exploratory and normalized active/inactive answers cannot leak across branches', () => {
+	const result = validateProductGuide(fields({ capitalUse: '', equipmentUse: 'lease-buy', amount: 'bad' }));
+	assert.deepEqual(result, { valid: true, value: { need: 'capital', capitalUse: null, equipmentUse: null, amount: null } });
+	for (const { input, optionalFields } of routes) {
+		const raw = fields({ ...input, capitalUse: input.capitalUse ?? '', equipmentUse: input.equipmentUse ?? '', amount: '1000000' });
+		const validation = validateProductGuide(raw);
+		assert.equal(validation.valid, true);
+		assert.equal(validation.value.amount, optionalFields.includes('amount') ? 1000000 : null);
+	}
+});
+
+test('inactive optional answers, even malformed API values, do not add warnings or change results', () => {
+	const stale = { amount: NaN };
+	for (const input of [
+		{ need: 'capital' }, { need: 'capital', capitalUse: 'undecided' }, { need: 'capital', capitalUse: 'recurring' },
+		{ need: 'equipment' }, { need: 'equipment', equipmentUse: 'lease-buy' }, { need: 'invoices' }, { need: 'undecided' },
+	]) {
+		assert.deepEqual(getProductRecommendations({ ...input, ...stale }), getProductRecommendations(input));
+	}
+	assert.deepEqual(getProductRecommendations({ need: 'invoices', amount: -1, equipmentUse: 'invalid', capitalUse: 'invalid' }), getProductRecommendations({ need: 'invoices' }));
+	assert.deepEqual(getProductRecommendations({ need: 'equipment', equipmentUse: 'use-only', amount: NaN }), getProductRecommendations({ need: 'equipment', equipmentUse: 'use-only' }));
+});
+
+test('business discrepancies mark review without replacing, removing or reordering the selected product', () => {
+	for (const input of [{ need: 'capital', capitalUse: 'one-time' }, { need: 'equipment', equipmentUse: 'buy-now' }]) {
+		const result = getProductRecommendations({ ...input, amount: 1 });
+		assert.deepEqual(result.map(({ id }) => id), ['business']);
+		assert.equal(result[0].status, 'review');
+		assert.deepEqual(result[0].warnings.map(({ code }) => code), ['amount']);
+		assert.equal(result[0].reasons.length, 1);
+		assert.equal(result[0].amountMatch, null);
+		assert.match(result[0].warnings[0].text, /250,000.*10,150,000/);
+	}
+});
+
+test('a business amount match is explicit at both boundaries, without approval claims', () => {
+	for (const amount of [250_000, 1_000_000, 10_150_000]) {
+		const result = getProductRecommendations({ need: 'capital', capitalUse: 'one-time', amount })[0];
+		assert.equal(result.status, 'explore');
+		assert.deepEqual(result.warnings, []);
+		assert.equal(result.reasons.length, 1);
+		assert.match(result.amountMatch, /rango publicado.*250,000.*10,150,000/);
+		assert.doesNotMatch(result.amountMatch, /aprob|autoriz|elegib/i);
+	}
+	for (const amount of [249_999, 10_150_001]) {
+		const [result] = getProductRecommendations({ need: 'capital', capitalUse: 'one-time', amount });
+		assert.deepEqual(result.warnings.map(({ code }) => code), ['amount']);
+		assert.equal(result.amountMatch, null);
+	}
+	const [purchase] = getProductRecommendations({ need: 'equipment', equipmentUse: 'buy-now', amount: 250_000 });
+	assert.equal(purchase.status, 'explore');
+	assert.deepEqual(purchase.warnings, []);
+	assert.match(purchase.amountMatch, /250,000.*10,150,000/);
+});
+
+test('active amount capture accepts empty or positive whole pesos up to the guide maximum', () => {
+	for (const amount of ['', '$', '1', '$250,000', '$999,999,999', '  $1,000 MXN  ']) assert.equal(validateProductGuide(fields({ amount })).valid, true);
 	for (const amount of ['0', '-1', '1.5', '$1,000.00', '1e6', '999999999.5', '1,000,000,000', 'NaN', 'Infinity', 'abc']) {
 		const result = validateProductGuide(fields({ amount }));
 		assert.equal(result.valid, false, amount);
@@ -66,21 +116,9 @@ test('amount capture accepts only positive whole pesos up to the public guide ma
 	}
 });
 
-test('only the offered optional terms and operating history are accepted', () => {
-	for (const termMonths of ['', '3', '6', '12', '18', '24', '36', '48', '60']) assert.equal(validateProductGuide(fields({ termMonths })).valid, true);
-	for (const termMonths of ['0', '-1', '12.5', '120', 'foo']) assert.equal(validateProductGuide(fields({ termMonths })).valid, false);
-	for (const operatingHistory of ['', 'under-24', '24-or-more']) assert.equal(validateProductGuide(fields({ operatingHistory })).valid, true);
-	for (const operatingHistory of ['24', 'new', 'foo']) assert.equal(validateProductGuide(fields({ operatingHistory })).valid, false);
-});
-
-test('the recommendation API rejects malformed values instead of silently recommending from invalid data', () => {
+test('the recommendation API rejects invalid active answers rather than producing misleading alternatives', () => {
 	for (const input of [
-		{ objective: 'invalid' },
-		{ objective: 'project', amount: 0 },
-		{ objective: 'project', amount: Infinity },
-		{ objective: 'project', amount: 1.5 },
-		{ objective: 'project', amount: 1_000_000_000 },
-		{ objective: 'project', termMonths: 11 },
-		{ objective: 'project', operatingHistory: 'invalid' },
+		{ need: 'invalid' }, { need: 'capital', capitalUse: 'invalid' }, { need: 'equipment', equipmentUse: 'invalid' },
+		...[0, Infinity, 1.5, 1_000_000_000].map((amount) => ({ need: 'capital', capitalUse: 'one-time', amount })),
 	]) assert.throws(() => getProductRecommendations(input), RangeError);
 });

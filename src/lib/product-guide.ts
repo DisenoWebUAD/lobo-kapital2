@@ -1,48 +1,80 @@
-import { credits } from '../data/credits.ts';
-import { financingProducts } from '../data/financing-products.ts';
 import {
-	guideMaxAmount, guideObjectives, guideProductOrder, guideProducts, guideTermOptions,
-	type GuideObjective, type GuideProduct,
+	guideMaxAmount, guideNeeds, guideCapitalUses, guideEquipmentUses,
+	guideProductOrder, guideProducts,
+	type GuideNeed, type GuideCapitalUse, type GuideEquipmentUse, type GuideProduct,
 } from '../data/product-guide.ts';
 import { loanSimulations } from './loan-simulation.ts';
 import { parseCurrencyInput } from './currency-input.ts';
 
 export interface ProductGuideInput {
-	objective: GuideObjective;
+	need: GuideNeed;
+	capitalUse?: GuideCapitalUse | null;
+	equipmentUse?: GuideEquipmentUse | null;
 	amount?: number | null;
-	termMonths?: number | null;
-	operatingHistory?: 'under-24' | '24-or-more' | null;
 }
 
 export interface ProductGuideFields {
-	objective: string;
+	need: string;
+	capitalUse: string;
+	equipmentUse: string;
 	amount: string;
-	termMonths: string;
-	operatingHistory: string;
+}
+
+export type GuideOptionalField = 'amount';
+export interface ProductGuideContext {
+	products: readonly GuideProduct[];
+	optionalFields: readonly GuideOptionalField[];
+}
+
+/** Routing by expressed need, never by a score or inferred approval criteria. */
+export function getProductGuideContext(input: { need: string; capitalUse?: string; equipmentUse?: string }): ProductGuideContext {
+	let products: readonly GuideProduct[];
+	if (input.need === 'capital') {
+		products = input.capitalUse === 'one-time' ? ['business'] : input.capitalUse === 'recurring' ? ['revolving'] : ['business', 'revolving'];
+	} else if (input.need === 'equipment') {
+		products = input.equipmentUse === 'buy-now' ? ['business'] : input.equipmentUse === 'lease-buy' ? ['finance-lease'] : input.equipmentUse === 'use-only' ? ['lease'] : ['business', 'finance-lease', 'lease'];
+	} else if (input.need === 'invoices') {
+		products = ['factoring'];
+	} else if (input.need === 'undecided') {
+		products = guideProductOrder;
+	} else {
+		return { products: [], optionalFields: [] };
+	}
+	const only = products.length === 1 ? products[0] : undefined;
+	const optionalFields: readonly GuideOptionalField[] = only === 'business'
+		? ['amount']
+		: [];
+	return { products, optionalFields };
 }
 
 export type ProductGuideErrors = Partial<Record<keyof ProductGuideFields, string>>;
 export type ProductGuideValidation = { valid: true; value: ProductGuideInput } | { valid: false; errors: ProductGuideErrors };
 
+/** Only active answers are validated; hidden answers cannot affect another branch. */
 export function validateProductGuide(fields: ProductGuideFields): ProductGuideValidation {
 	const errors: ProductGuideErrors = {};
-	if (!guideObjectives.some(({ value }) => value === fields.objective)) errors.objective = 'Selecciona qué quieres lograr.';
-	const emptyAmount = !fields.amount.trim() || fields.amount.trim() === '$';
-	const amount = emptyAmount ? null : parseCurrencyInput(fields.amount);
-	if (amount !== null && (!Number.isSafeInteger(amount) || amount < 1 || amount > guideMaxAmount)) {
-		errors.amount = 'Captura un monto en pesos enteros de $1 a $999,999,999, o deja el campo vacío.';
+	if (!guideNeeds.some(({ value }) => value === fields.need)) errors.need = 'Selecciona qué necesita tu negocio.';
+	const capitalUse = fields.need === 'capital' && fields.capitalUse ? fields.capitalUse : null;
+	const equipmentUse = fields.need === 'equipment' && fields.equipmentUse ? fields.equipmentUse : null;
+	if (capitalUse !== null && !guideCapitalUses.some(({ value }) => value === capitalUse)) errors.capitalUse = 'Selecciona cómo utilizarías el capital, o déjalo sin definir.';
+	if (equipmentUse !== null && !guideEquipmentUses.some(({ value }) => value === equipmentUse)) errors.equipmentUse = 'Selecciona cómo quieres incorporar el activo, o déjalo sin definir.';
+	const { optionalFields } = getProductGuideContext({ need: fields.need, capitalUse: capitalUse ?? '', equipmentUse: equipmentUse ?? '' });
+	let amount: number | null = null;
+	if (optionalFields.includes('amount')) {
+		const empty = !fields.amount.trim() || fields.amount.trim() === '$';
+		amount = empty ? null : parseCurrencyInput(fields.amount);
+		if (amount !== null && (!Number.isSafeInteger(amount) || amount < 1 || amount > guideMaxAmount)) {
+			errors.amount = `Captura un monto en pesos enteros de $1 a $${new Intl.NumberFormat('es-MX').format(guideMaxAmount)}, o deja el campo vacío.`;
+		}
 	}
-	const termMonths = fields.termMonths === '' ? null : Number(fields.termMonths);
-	if (termMonths !== null && !guideTermOptions.some((months) => months === termMonths)) errors.termMonths = 'Selecciona uno de los plazos disponibles, o déjalo sin definir.';
-	if (fields.operatingHistory && !['under-24', '24-or-more'].includes(fields.operatingHistory)) errors.operatingHistory = 'Selecciona la antigüedad de tu empresa, o déjala sin definir.';
 	if (Object.keys(errors).length) return { valid: false, errors };
 	return {
 		valid: true,
 		value: {
-			objective: fields.objective as GuideObjective,
+			need: fields.need as GuideNeed,
+			capitalUse: capitalUse as GuideCapitalUse | null,
+			equipmentUse: equipmentUse as GuideEquipmentUse | null,
 			amount,
-			termMonths,
-			operatingHistory: fields.operatingHistory ? fields.operatingHistory as ProductGuideInput['operatingHistory'] : null,
 		},
 	};
 }
@@ -52,50 +84,56 @@ export interface ProductRecommendation {
 	title: string;
 	href: string;
 	description: string;
-	warnings: { code: 'amount' | 'term' | 'history'; text: string }[];
+	reasons: string[];
+	amountMatch: string | null;
+	status: 'explore' | 'review';
+	warnings: { code: 'amount'; text: string }[];
 }
 
-const objectiveProducts: Record<GuideObjective, readonly GuideProduct[]> = {
-	project: ['business'], liquidity: ['revolving'], purchase: ['finance-lease'],
-	use: ['lease'], invoices: ['factoring'], undecided: guideProductOrder,
-};
 const pesos = (value: number) => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(value);
 
-/** Optional answers add context; they never remove the alternative selected by the goal. */
+function needReason(id: GuideProduct, input: ProductGuideInput): string {
+	if (input.need === 'capital') {
+		if (id === 'business') return input.capitalUse === 'one-time' ? 'Buscas capital para una inversión o necesidad puntual.' : 'Puede servir para una inversión específica con monto y plazo definidos.';
+		return input.capitalUse === 'recurring' ? 'Buscas liquidez recurrente para la operación de tu negocio.' : 'Una línea revolvente puede atender necesidades recurrentes de capital de trabajo.';
+	}
+	if (input.need === 'equipment') {
+		if (id === 'business') return input.equipmentUse === 'buy-now' ? 'Buscas comprar el activo desde el inicio mediante un crédito.' : 'Un crédito simple puede destinarse a adquirir maquinaria o equipo.';
+		if (id === 'finance-lease') return input.equipmentUse === 'lease-buy' ? 'Buscas utilizar el activo con opción de compra al terminar.' : 'Permite incorporar equipo mediante rentas y una opción terminal contractual.';
+		return input.equipmentUse === 'use-only' ? 'Buscas utilizar el activo sin comprarlo.' : 'Permite usar activos mediante rentas y planear su renovación.';
+	}
+	if (input.need === 'invoices') return 'Buscas anticipar el cobro de facturas de tus clientes.';
+	const exploratory: Record<GuideProduct, string> = {
+		business: 'Una alternativa si necesitas capital para una inversión específica.',
+		revolving: 'Una alternativa si tu operación necesita liquidez de forma recurrente.',
+		'finance-lease': 'Una alternativa para usar equipo con opción de compra al terminar.',
+		lease: 'Una alternativa para utilizar activos mediante rentas sin una compra automática.',
+		factoring: 'Una alternativa si tienes facturas por cobrar elegibles para anticiparlas.',
+	};
+	return exploratory[id];
+}
+
+/** Contextual matches and known discrepancies explain the route; neither changes its products or order. */
 export function getProductRecommendations(input: ProductGuideInput): ProductRecommendation[] {
 	const validation = validateProductGuide({
-		objective: input.objective,
+		need: input.need,
+		capitalUse: input.capitalUse ?? '', equipmentUse: input.equipmentUse ?? '',
 		amount: input.amount == null ? '' : String(input.amount),
-		termMonths: input.termMonths == null ? '' : String(input.termMonths),
-		operatingHistory: input.operatingHistory ?? '',
 	});
 	if (!validation.valid) throw new RangeError(Object.values(validation.errors).join(' '));
-
-	return objectiveProducts[input.objective].map((id) => {
+	const normalized = validation.value;
+	const { products } = getProductGuideContext({ need: normalized.need, capitalUse: normalized.capitalUse ?? '', equipmentUse: normalized.equipmentUse ?? '' });
+	return products.map((id) => {
 		const warnings: ProductRecommendation['warnings'] = [];
+		const reasons = [needReason(id, normalized)];
+		let amountMatch: string | null = null;
 		if (id === 'business') {
-			const { amount, term } = loanSimulations.business;
-			if (input.amount != null && (input.amount < amount.min || input.amount > amount.max)) {
-				warnings.push({ code: 'amount', text: `El rango de referencia es de ${pesos(amount.min)} a ${pesos(amount.max)}. Revisa con un asesor si se ajusta a tu proyecto.` });
-			}
-			if (input.termMonths != null && (input.termMonths < Math.min(...term.options) || input.termMonths > Math.max(...term.options))) {
-				warnings.push({ code: 'term', text: `El plazo de referencia es de ${Math.min(...term.options)} a ${Math.max(...term.options)} meses, sujeto a evaluación.` });
-			}
-			if (input.operatingHistory === 'under-24') {
-				warnings.push({ code: 'history', text: `Este producto requiere al menos ${credits.business.minimumOperatingMonths} meses de operación. Un asesor puede revisar tu situación.` });
+			const { amount } = loanSimulations.business;
+			if (normalized.amount != null) {
+				if (normalized.amount < amount.min || normalized.amount > amount.max) warnings.push({ code: 'amount', text: `El rango de referencia es de ${pesos(amount.min)} a ${pesos(amount.max)}. Revisa con un asesor si se ajusta a tu proyecto.` });
+				else amountMatch = `Tu monto está en el rango publicado: ${pesos(amount.min)} a ${pesos(amount.max)}.`;
 			}
 		}
-		if (id === 'revolving' && input.termMonths != null) {
-			const { min, max } = financingProducts.revolving.lineMonths;
-			if (input.termMonths < min || input.termMonths > max) warnings.push({ code: 'term', text: `La vigencia de referencia de la línea es de ${min} a ${max} meses; cada disposición tiene su propio plazo.` });
-		}
-		if (id === 'lease' && input.termMonths != null) {
-			const { min, max } = financingProducts.lease.termMonths;
-			if (input.termMonths < min || input.termMonths > max) warnings.push({ code: 'term', text: `El plazo de referencia del arrendamiento puro es de ${min} a ${max} meses, sujeto a evaluación.` });
-		}
-		if (id === 'factoring' && input.operatingHistory === 'under-24') {
-			warnings.push({ code: 'history', text: `El cedente de las facturas debe tener al menos ${financingProducts.factoring.minimumOperatingMonths} meses de antigüedad.` });
-		}
-		return { id, ...guideProducts[id], warnings };
+		return { id, ...guideProducts[id], reasons, amountMatch, status: warnings.length ? 'review' : 'explore', warnings };
 	});
 }
