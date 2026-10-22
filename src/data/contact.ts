@@ -1,4 +1,5 @@
 import { legalLinks } from './legal.ts';
+import { cardsEnabled } from './cards.ts';
 
 export type ContactProduct = 'personal' | 'business' | 'cards' | 'revolving' | 'finance-lease' | 'lease' | 'factoring';
 
@@ -36,8 +37,8 @@ export const contactProducts: readonly ContactProductOption[] = [
 		value: 'Créditos PyMEs',
 		label: 'Crédito empresarial',
 		title: 'Hablemos de tu crédito empresarial',
-		description: 'Cuéntanos qué necesita tu empresa para orientarte sobre los requisitos y los siguientes pasos.',
-		activityLabel: 'Empresa o actividad (opcional)',
+		description: 'Cuéntanos qué necesita tu negocio para orientarte sobre los requisitos y los siguientes pasos.',
+		activityLabel: 'Negocio o actividad (opcional)',
 		activityPlaceholder: 'Nombre de tu negocio o actividad',
 		messageLabel: '¿Qué necesitas financiar? (opcional)',
 		messagePlaceholder: 'Por ejemplo: comprar inventario para atender un nuevo pedido.',
@@ -60,8 +61,8 @@ export const contactProducts: readonly ContactProductOption[] = [
 		value: 'Crédito Revolvente PyME',
 		label: 'Crédito en cuenta corriente',
 		title: 'Hablemos de tu línea de crédito',
-		description: 'Cuéntanos sobre el ciclo de cobros y pagos de tu empresa para orientarte sobre una línea de capital de trabajo.',
-		activityLabel: 'Empresa o actividad (opcional)',
+		description: 'Cuéntanos sobre el ciclo de cobros y pagos de tu negocio para orientarte sobre una línea de capital de trabajo.',
+		activityLabel: 'Negocio o actividad (opcional)',
 		activityPlaceholder: 'Nombre de tu negocio o actividad',
 		messageLabel: '¿Para qué necesitas la línea? (opcional)',
 		messagePlaceholder: 'Por ejemplo: cubrir inventario mientras recibo el pago de mis clientes.',
@@ -72,8 +73,8 @@ export const contactProducts: readonly ContactProductOption[] = [
 		value: 'Arrendamiento financiero',
 		label: 'Arrendamiento financiero',
 		title: 'Hablemos de arrendamiento financiero',
-		description: 'Cuéntanos qué activo productivo necesita tu empresa y qué te gustaría conocer sobre las opciones al final del contrato.',
-		activityLabel: 'Empresa o actividad (opcional)',
+		description: 'Cuéntanos qué activo productivo necesita tu negocio y qué te gustaría conocer sobre las opciones al final del contrato.',
+		activityLabel: 'Negocio o actividad (opcional)',
 		activityPlaceholder: 'Nombre de tu negocio o actividad',
 		messageLabel: '¿Qué activo necesitas? (opcional)',
 		messagePlaceholder: 'Por ejemplo: maquinaria para ampliar mi producción.',
@@ -85,7 +86,7 @@ export const contactProducts: readonly ContactProductOption[] = [
 		label: 'Arrendamiento puro',
 		title: 'Hablemos de arrendamiento puro',
 		description: 'Cuéntanos qué equipo o activo necesita tu negocio.',
-		activityLabel: 'Empresa o actividad (opcional)',
+		activityLabel: 'Negocio o actividad (opcional)',
 		activityPlaceholder: 'Nombre de tu negocio o actividad',
 		messageLabel: '¿Qué necesitas arrendar? (opcional)',
 		messagePlaceholder: 'Por ejemplo: equipo o vehículos para mi negocio.',
@@ -96,19 +97,23 @@ export const contactProducts: readonly ContactProductOption[] = [
 		value: 'Factoraje',
 		label: 'Factoraje',
 		title: 'Hablemos de factoraje',
-		description: 'Cuéntanos sobre las necesidades de liquidez de tu empresa.',
-		activityLabel: 'Empresa o actividad (opcional)',
+		description: 'Cuéntanos sobre las necesidades de liquidez de tu negocio.',
+		activityLabel: 'Negocio o actividad (opcional)',
 		activityPlaceholder: 'Nombre de tu negocio o actividad',
 		messageLabel: 'Tu consulta (opcional)',
-		messagePlaceholder: 'Cuéntanos qué necesita tu empresa.',
+		messagePlaceholder: 'Cuéntanos qué necesita tu negocio.',
 		showAmount: true,
 	},
 ];
 
+export const availableContactProducts = contactProducts.filter(
+	(product) => cardsEnabled || product.id !== 'cards',
+);
+
 export const defaultContactCopy: ContactCopy = {
 	title: 'Hablemos de tus planes',
 	description: 'Elige un producto y cuéntanos qué necesitas para orientarte sobre los siguientes pasos.',
-	activityLabel: 'Empresa o actividad (opcional)',
+	activityLabel: 'Negocio o actividad (opcional)',
 	activityPlaceholder: 'Por ejemplo: profesionista o nombre de tu negocio',
 	messageLabel: 'Tu consulta (opcional)',
 	messagePlaceholder: '¿En qué podemos orientarte?',

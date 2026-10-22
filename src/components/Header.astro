@@ -1,5 +1,6 @@
 ---
 import logoWordmark from "../assets/home/logo-wordmark.svg";
+import { cardsEnabled } from "../data/cards";
 
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isPersonalPage = pathname === "/credito-personal";
@@ -19,7 +20,7 @@ const isPymesSection =
 	isFinanceLeasePage ||
 	isFactoringPage;
 const hasContactSection =
-	Astro.url.pathname === "/" || isPersonalSection || isFactoringPage;
+	Astro.url.pathname === "/" || isPersonalPage || (isCardsPage && cardsEnabled) || isFactoringPage;
 const clientHref =
 	isPymesPage || isRevolvingPage || isLeasePage || isFinanceLeasePage
 		? "#solicitud"
@@ -67,39 +68,42 @@ const clientHref =
 				PyMEs
 			</button>
 			<div
-				class="site-nav__pymes-menu"
+				class="site-nav__pymes-menu site-nav__pymes-menu--business"
 				id="pymes-navigation"
 				aria-label="Soluciones para PyMEs"
 				aria-hidden="true"
 			>
-				<a
-					href="/creditos-pymes/"
-					aria-current={isPymesPage ? "page" : undefined}
-					>Crédito simple</a
-				>
-				<a
-					href="/credito-en-cuenta-corriente/"
-					aria-current={isRevolvingPage ? "page" : undefined}
-					>Crédito en cuenta corriente</a
-				>
-				<a
-					href="/arrendamiento-financiero/"
-					aria-current={isFinanceLeasePage ? "page" : undefined}
-					>Arrendamiento financiero</a
-				>
-				<a
-					href="/arrendamiento/"
-					aria-current={isLeasePage ? "page" : undefined}
-					>Arrendamiento puro</a
-				>
-				<a
-					href="/factoraje/"
-					aria-current={isFactoringPage ? "page" : undefined}
-					>Factoraje</a
-				>
-				<a class="site-nav__guide" href="/#elige-tu-financiamiento"
-					>¿Cómo elijo el que necesito?</a
-				>
+				<div class="site-nav__products">
+					<a
+						href="/creditos-pymes/"
+						aria-current={isPymesPage ? "page" : undefined}
+						>Crédito simple</a
+					>
+					<a
+						href="/credito-en-cuenta-corriente/"
+						aria-current={isRevolvingPage ? "page" : undefined}
+						>Crédito en cuenta corriente</a
+					>
+					<a
+						href="/arrendamiento-financiero/"
+						aria-current={isFinanceLeasePage ? "page" : undefined}
+						>Arrendamiento financiero</a
+					>
+					<a
+						href="/arrendamiento/"
+						aria-current={isLeasePage ? "page" : undefined}
+						>Arrendamiento puro</a
+					>
+					<a
+						href="/factoraje/"
+						aria-current={isFactoringPage ? "page" : undefined}
+						>Factoraje</a
+					>
+				</div>
+				<a class="site-nav__guide" href="/#elige-tu-financiamiento">
+					<strong>Ayúdame a elegir</strong>
+					<small>Explora opciones para tu negocio</small>
+				</a>
 			</div>
 		</div>
 		<div
@@ -127,10 +131,11 @@ const clientHref =
 					aria-current={isPersonalPage ? "page" : undefined}
 					>Crédito personal</a
 				>
-				<a
-					href="/tarjetas/"
-					aria-current={isCardsPage ? "page" : undefined}>Tarjetas</a
-				>
+				{cardsEnabled ? (
+					<a href="/tarjetas/" aria-current={isCardsPage ? "page" : undefined}>Tarjetas</a>
+				) : (
+					<span class="site-nav__disabled" role="link" aria-disabled="true">TDC (próximamente)</span>
+				)}
 			</div>
 		</div>
 		<a

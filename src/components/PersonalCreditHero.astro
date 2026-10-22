@@ -2,6 +2,11 @@
 import { Picture } from "astro:assets";
 import "../styles/credit-heroes.css";
 import heroImage from "../assets/personal-credit/hero.jpg";
+
+interface Props {
+	comingSoon?: boolean;
+}
+const { comingSoon = false } = Astro.props;
 ---
 
 <section
@@ -11,26 +16,42 @@ import heroImage from "../assets/personal-credit/hero.jpg";
 >
 	<div class="credit-hero__inner personal-hero__inner">
 		<div class="credit-hero__copy personal-hero__copy">
-			<h1 id="personal-hero-title">
-				<span>Libertad Financiera</span>
-				<span class="credit-hero__muted personal-hero__muted"
-					>con Beneficios</span
-				>
-				<span>Exclusivos</span>
-			</h1>
-			<p>
-				Diseñadas para adaptarse a tu estilo de vida y potenciar el
-				crecimiento de tu negocio. Seguridad institucional, recompensas
-				excepcionales y aceptación global.
-			</p>
-			<div class="credit-hero__actions personal-hero__actions">
-				<a class="button button--primary" href="#contacto"
-					>Solicitar ahora <span aria-hidden="true">→</span></a
-				>
-				<a class="button button--outline" href="#beneficios"
-					>Conoce los beneficios</a
-				>
-			</div>
+			{comingSoon ? (
+				<>
+					<h1 id="personal-hero-title">
+						<span>Tarjetas de crédito</span>
+						<span class="credit-hero__muted personal-hero__muted">Próximamente</span>
+					</h1>
+					<p>Estamos preparando nuestras tarjetas de crédito. Aquí podrás conocer su información cuando estén disponibles.</p>
+					<div class="credit-hero__actions personal-hero__actions">
+						<a class="button button--primary" href="/credito-personal/">Ver crédito personal</a>
+						<a class="button button--outline" href="/">Volver al inicio</a>
+					</div>
+				</>
+			) : (
+				<>
+					<h1 id="personal-hero-title">
+						<span>Libertad Financiera</span>
+						<span class="credit-hero__muted personal-hero__muted"
+							>con Beneficios</span
+						>
+						<span>Exclusivos</span>
+					</h1>
+					<p>
+						Diseñadas para adaptarse a tu estilo de vida y potenciar el
+						crecimiento de tu negocio. Seguridad institucional, recompensas
+						excepcionales y aceptación global.
+					</p>
+					<div class="credit-hero__actions personal-hero__actions">
+						<a class="button button--primary" href="#contacto"
+							>Solicitar ahora <span aria-hidden="true">→</span></a
+						>
+						<a class="button button--outline" href="#beneficios"
+							>Conoce los beneficios</a
+						>
+					</div>
+				</>
+			)}
 		</div>
 
 		<div class="credit-hero__visual personal-hero__visual">

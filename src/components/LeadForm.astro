@@ -1,7 +1,7 @@
 ---
 import FormSelect from "./FormSelect.astro";
 import {
-	contactProducts,
+	availableContactProducts as contactProducts,
 	defaultContactCopy,
 	privacyUrl,
 	contactEmail,
@@ -203,7 +203,7 @@ const fieldId = (name: string) => `${sectionId}-${name}`;
 </section>
 
 <script>
-	import { contactProducts, defaultContactCopy } from "../data/contact";
+	import { availableContactProducts as contactProducts, defaultContactCopy } from "../data/contact";
 	import {
 		buildContactMailto,
 		resolveContactProduct,
