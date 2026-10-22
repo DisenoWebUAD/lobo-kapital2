@@ -45,6 +45,14 @@ const durationUnit = (value: number, field: string) =>
 			: "meses";
 const duration = (value: number, field: string) =>
 	`${value} ${durationUnit(value, field)}`;
+const fieldDescription = (field: Field) =>
+	[
+		`${prefix}-${field.name}-hint`,
+		`${prefix}-${field.name}-error`,
+		...(product === "finance-lease" && field.name === "termMonths"
+			? [`${prefix}-term-adjustment`]
+			: []),
+	].join(" ");
 const vat = percent(financingAssumptions.vatRate);
 const revolving = financingAssumptions.revolving;
 const lease = financingAssumptions.lease;
@@ -287,7 +295,7 @@ const exclusions =
 			<div class="financing-calculator__controls">
 				<header class="financing-calculator__heading">
 					<h2 id={`${prefix}-title`}>
-						{headings[product][0]}
+						{headings[product][0]}{" "}
 						<span>{headings[product][1]}</span>
 					</h2>
 					<p>{introductions[product]}</p>
@@ -428,7 +436,7 @@ const exclusions =
 															}
 															autocomplete="off"
 															required
-															aria-describedby={`${prefix}-${field.name}-hint ${prefix}-${field.name}-error`}
+															aria-describedby={fieldDescription(field)}
 														/>
 														{field.type !==
 															"date" && (
@@ -469,7 +477,7 @@ const exclusions =
 																field.name
 															}
 															aria-labelledby={`${prefix}-${field.name}-label`}
-															aria-describedby={`${prefix}-${field.name}-hint ${prefix}-${field.name}-error`}
+															aria-describedby={fieldDescription(field)}
 															aria-valuetext={duration(
 																Number(
 																	field.value,
@@ -511,6 +519,14 @@ const exclusions =
 												>
 													{field.hint}
 												</p>
+												{product === "finance-lease" && field.name === "termMonths" && (
+													<p
+														id={`${prefix}-term-adjustment`}
+														class="financing-calculator__hint"
+														data-term-adjustment
+														hidden
+													/>
+												)}
 											</>
 										)}
 										<p

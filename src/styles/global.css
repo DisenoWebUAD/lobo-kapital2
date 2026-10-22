@@ -1579,7 +1579,8 @@ input {
 
 	.hero {
 		--hero-design-height: 48rem;
-		padding-block: 6.5rem max(2rem, env(safe-area-inset-bottom));
+		align-items: flex-end;
+		padding-block: 18rem max(2rem, env(safe-area-inset-bottom));
 	}
 
 	.hero__media { object-position: 37% center; }
