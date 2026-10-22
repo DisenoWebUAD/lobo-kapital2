@@ -114,9 +114,11 @@ export const faqs: Faq[] = [
 		id: 'elegir-financiamiento',
 		question: '¿Cómo elijo el financiamiento para mi empresa?',
 		paragraphs: [
-			'La guía del inicio muestra alternativas según tu objetivo. El monto, el plazo y la antigüedad son opcionales y sólo agregan observaciones sobre las referencias de cada producto; no descartan opciones ni evalúan tu crédito. Tus respuestas se procesan en el navegador y no se envían ni se guardan.',
+			'La guía del inicio parte de tu necesidad y tus preferencias para mostrar alternativas. Las preguntas aparecen conforme avanzas y los resultados se actualizan al editar tus respuestas.',
+			'En crédito simple puedes indicar un monto de forma opcional. La guía confirma cuando está dentro del rango de referencia y muestra “Requiere revisar tu caso” si queda fuera, sin retirar el producto. El plazo se elige en los simuladores; los demás requisitos se consultan en cada ficha. La guía no evalúa tu crédito ni confirma una aprobación; tampoco determina qué opción te conviene económicamente.',
+			'Tus respuestas se procesan en la memoria del navegador y no se envían ni se guardan.',
 		],
-		links: [{ label: 'Elegir una alternativa para mi objetivo', href: '/#elige-tu-financiamiento' }],
+		links: [{ label: 'Explorar alternativas para mi empresa', href: '/#elige-tu-financiamiento' }],
 	},
 	{
 		id: 'montos-y-plazos',
