@@ -72,6 +72,7 @@ class FinancingCalculator extends HTMLElement {
 	private controller?: AbortController;
 	private form?: HTMLFormElement;
 	private initialized = false;
+	private dateInitialized = false;
 	private product?: FinancingProduct;
 	private statusTimer?: ReturnType<typeof setTimeout>;
 	private lineEdited = false;
@@ -92,6 +93,15 @@ class FinancingCalculator extends HTMLElement {
 		this.product = product as FinancingProduct;
 		this.form = this.querySelector('form') ?? undefined;
 		if (!this.form) return;
+		if (this.product === 'revolving' && !this.dateInitialized) {
+			this.dateInitialized = true;
+			const startDate = this.control('startDate');
+			if (!startDate.value && !startDate.validity.badInput) {
+				const today = new Date();
+				startDate.value = [today.getFullYear(), today.getMonth() + 1, today.getDate()]
+					.map((part, index) => String(part).padStart(index === 0 ? 4 : 2, '0')).join('-');
+			}
+		}
 		this.initialized = true;
 		this.controller?.abort();
 		this.controller = new AbortController();
@@ -106,6 +116,7 @@ class FinancingCalculator extends HTMLElement {
 			const input = event.target;
 			if (!(input instanceof HTMLInputElement) || input.hasAttribute('data-money') || input.name === 'asset') return;
 			if (input.dataset.rangeFor) this.control(input.dataset.rangeFor).value = input.value;
+			if (input.name === 'termMonths' || input.dataset.rangeFor === 'termMonths') this.setTermAdjustment(false);
 			this.calculate();
 		}, { signal });
 		this.form.addEventListener('change', event => {
@@ -113,11 +124,17 @@ class FinancingCalculator extends HTMLElement {
 			if (event.target.name === 'asset') {
 				const kind = this.product === 'lease' ? 'pure' : 'finance';
 				const asset = event.target.value as LeaseAsset;
-				this.control('termMonths').max = kind === 'pure' ? '36' : asset === 'machinery' ? '60' : '120';
+				const term = this.control('termMonths');
+				const adjustTerm = kind === 'finance' && asset === 'machinery' && term.validity.valid && term.valueAsNumber > 60;
+				term.max = kind === 'pure' ? '36' : asset === 'machinery' ? '60' : '120';
+				if (adjustTerm) term.value = '60';
+				this.setTermAdjustment(adjustTerm);
 				this.control('residualPercent').value = String(getLeaseDefaults(kind, asset).residualPercent);
 				const finalExtras = kind === 'finance' && asset === 'machinery';
 				this.element('[data-adjustment-label="insurance"]').textContent = finalExtras ? 'Seguro mensual, importe final' : 'Seguro mensual antes de IVA';
 				this.element('[data-adjustment-label="services"]').textContent = finalExtras ? 'Servicios mensuales, importe final' : 'Servicios mensuales antes de IVA';
+			} else if (event.target.name === 'termMonths' || event.target.dataset.rangeFor === 'termMonths') {
+				this.setTermAdjustment(false);
 			}
 			this.calculate(event.target.name === 'asset' ? 'all' : undefined);
 		}, { signal });
@@ -136,6 +153,13 @@ class FinancingCalculator extends HTMLElement {
 	}
 
 	private element<T extends HTMLElement = HTMLElement>(selector: string) { return this.querySelector<T>(selector)!; }
+	private setTermAdjustment(visible: boolean) {
+		const note = this.querySelector<HTMLElement>('[data-term-adjustment]');
+		if (note) {
+			note.textContent = visible ? 'Ajustamos el plazo a 60 meses, el máximo para maquinaria o equipo.' : '';
+			note.hidden = !visible;
+		}
+	}
 	private control(name: string): HTMLInputElement {
 		const control = this.form!.elements.namedItem(name);
 		return control instanceof RadioNodeList ? ([...control].find(item => item instanceof HTMLInputElement && item.checked) ?? control[0]) as HTMLInputElement : control as HTMLInputElement;
