@@ -68,8 +68,8 @@ export const faqs: Faq[] = [
 		id: 'cuanto-pagaria',
 		question: '¿Cómo sé cuánto pagaría?',
 		paragraphs: [
-			'Cada simulador muestra lo que corresponde al producto: mensualidad de crédito, pago mensual de referencia en cuenta corriente, rentas de arrendamiento o liquidez de factoraje. Los resúmenes separan los cargos iniciales y los pagos posteriores cuando corresponden. Utilizan supuestos de referencia; las tasas, comisiones y demás cargos definitivos deberán confirmarse en una propuesta antes de contratar.',
-			'Los seguros y servicios quedan excluidos de las estimaciones; esto no significa que sean gratuitos. Los resultados no son una cotización ni confirman aprobación.',
+			'Cada simulador muestra lo que corresponde al producto: mensualidad de crédito, primer pago mensual de cuenta corriente según la fecha de disposición, rentas de arrendamiento o liquidez de factoraje. Los resúmenes separan los cargos iniciales y los pagos posteriores cuando corresponden. Utilizan supuestos de referencia; las tasas, comisiones y demás cargos definitivos deberán confirmarse en una propuesta antes de contratar.',
+			'Los seguros y servicios comienzan en cero y quedan excluidos mientras no captures un importe en los ajustes; esto no significa que sean gratuitos. Puedes modificar los supuestos disponibles y revisar su efecto en el resumen. Los resultados no son una cotización ni confirman aprobación.',
 		],
 		links: [
 			{ label: 'Simular crédito personal', href: '/credito-personal/#simulador' },
@@ -86,7 +86,7 @@ export const faqs: Faq[] = [
 		paragraphs: [
 			'Es una línea revolvente para necesidades recurrentes de capital de trabajo de una empresa. Las disposiciones y pagos se realizan dentro del límite autorizado y conforme al contrato; los intereses dependen del monto y del tiempo efectivamente utilizados.',
 			'La vigencia renovable publicada es de 12 a 36 meses, sujeta a evaluación y al comportamiento de la línea. Debe liquidarse el saldo total al menos una vez cada 12 meses.',
-			'El simulador estima una nueva línea dispuesta por completo. Muestra un pago mensual de referencia de 30 días y un pago final que incluye el capital y los intereses del último período; las comisiones iniciales aparecen aparte. No representa una mensualidad fija: los pagos reales dependen de las fechas y los movimientos de la línea.',
+			'El simulador representa una sola disposición. Con la fecha inicial calcula el primer pago mensual y el pago que devuelve el capital al vencimiento; las comisiones iniciales aparecen aparte. En los ajustes puedes cambiar la línea de referencia, su vigencia y el seguro anual. La línea comienza igual al monto dispuesto y lo sigue hasta que la edites. El seguro capturado continúa durante toda la vigencia, incluso después de devolver el capital. No representa una mensualidad fija ni contempla nuevas disposiciones.',
 		],
 		links: [{ label: 'Conocer la cuenta corriente', href: '/credito-en-cuenta-corriente/' }],
 	},
@@ -106,9 +106,17 @@ export const faqs: Faq[] = [
 		id: 'factoraje-liquidez',
 		question: '¿El simulador de factoraje confirma cuánto recibiré?',
 		paragraphs: [
-			'No. Con el valor y el vencimiento de tus facturas, compara la liquidez inicial con y sin recurso mediante supuestos ilustrativos. El anticipo autorizado, las comisiones y las facturas elegibles se definen en la evaluación y el contrato. La reserva no anticipada depende del cobro y de las condiciones de la operación.',
+			'No. Con el valor y el vencimiento de tus facturas, compara la liquidez inicial con y sin recurso mediante supuestos ilustrativos. Los ajustes permiten cambiar la línea de referencia, incluir o excluir la apertura y modificar el anticipo, los cargos de administración y los gastos externos. La línea se utiliza para estimar la apertura; no equivale a una autorización. El anticipo autorizado, las comisiones y las facturas elegibles se definen en la evaluación y el contrato. La reserva no anticipada depende del cobro y de las condiciones de la operación.',
 		],
 		links: [{ label: 'Explorar el factoraje', href: '/factoraje/#simulador' }],
+	},
+	{
+		id: 'elegir-financiamiento',
+		question: '¿Cómo elijo el financiamiento para mi empresa?',
+		paragraphs: [
+			'La guía del inicio muestra alternativas según tu objetivo. El monto, el plazo y la antigüedad son opcionales y sólo agregan observaciones sobre las referencias de cada producto; no descartan opciones ni evalúan tu crédito. Tus respuestas se procesan en el navegador y no se envían ni se guardan.',
+		],
+		links: [{ label: 'Elegir una alternativa para mi objetivo', href: '/#elige-tu-financiamiento' }],
 	},
 	{
 		id: 'montos-y-plazos',

@@ -1,11 +1,11 @@
 export type PrivacyBlock =
-	| { kind: 'paragraph'; text: string }
-	| { kind: 'list'; items: readonly string[] };
+  | { kind: 'paragraph'; text: string }
+  | { kind: 'list'; items: readonly string[] };
 
 export interface PrivacySection {
-	id: string;
-	title: string;
-	blocks: readonly PrivacyBlock[];
+  id: string;
+  title: string;
+  blocks: readonly PrivacyBlock[];
 }
 
 export const privacySections: readonly PrivacySection[] = [
