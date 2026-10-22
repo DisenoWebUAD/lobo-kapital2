@@ -250,7 +250,7 @@ const assumptions =
 			]
 		: isLease
 			? [
-					`Tasa anual ilustrativa del ${percent(lease.annualRate)}; renta calculada como anualidad con el residual capturado. Apertura del ${percent(lease.openingFeeRate)} del valor del activo sin IVA, más IVA, por separado al inicio.`,
+					`Tasa anual ilustrativa del ${percent(lease.annualRate)}; renta calculada como anualidad con el residual capturado. El modelo calcula rentas mensuales. Apertura del ${percent(lease.openingFeeRate)} del valor del activo sin IVA, más IVA, por separado al inicio.`,
 					product === "finance-lease"
 						? `Residual inicial editable: ${percent(getLeaseDefaults("finance", "vehicle").residualPercent / 100)} en vehículo y ${percent(getLeaseDefaults("finance", "machinery").residualPercent / 100)} en maquinaria. La compra opcional es ese residual más IVA. El anticipo reduce el principal; no se estima otro tratamiento fiscal del anticipo.`
 						: "El residual es un supuesto editable del cálculo de rentas. No se incluye un anticipo ni una compra al terminar. El depósito contractual está pendiente y queda excluido.",

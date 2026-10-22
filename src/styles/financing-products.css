@@ -105,24 +105,31 @@
 .financing-overview__connector--vertical { display: none; }
 .financing-details h2 { color: var(--color-ink); font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; letter-spacing: -.04em; }
 .financing-requirements ul { display: grid; gap: 1rem; margin-top: 1.5rem; padding: 0; list-style: none; }
-.financing-requirements li { display: flex; gap: .875rem; align-items: baseline; color: var(--color-text); font-size: 1rem; line-height: 1.6; }
+.financing-requirements li { display: flex; gap: .875rem; align-items: baseline; color: var(--color-text); font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
 .financing-requirements li span { flex-shrink: 0; color: var(--color-primary); font-weight: 600; }
 .financing-requirements li svg { flex-shrink: 0; align-self: flex-start; margin-top: .25rem; color: var(--color-primary); }
 .financing-details { padding-block: 6rem; }
 .financing-details__grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
-.financing-requirements { padding-top: 1.5rem; }
+.financing-requirements { min-width: 0; padding-top: 1.5rem; }
 .financing-requirements > p { margin-top: 1.25rem; color: var(--color-muted); font-size: 1rem; line-height: 1.65; }
 .financing-requirements > p.financing-small { margin-top: 1.5rem; font-size: .8125rem; }
 .financing-conditions { min-width: 0; padding: 2rem; border-radius: 1rem; background: var(--color-surface); }
 .financing-conditions h3 { color: var(--color-ink); font-size: 1.75rem; line-height: 1.2; letter-spacing: -.035em; }
-.financing-conditions dl { margin: 1.5rem 0 0; }
-.financing-conditions dl > div { display: grid; grid-template-columns: .7fr 1.3fr; gap: 1.25rem; padding-block: 1rem; border-bottom: 1px solid #e0e0de; }
-.financing-conditions dt { color: var(--color-muted); font-size: .8125rem; line-height: 1.6; }
-.financing-conditions dd { margin: 0; color: var(--color-text); font-size: .9375rem; line-height: 1.6; }
+.financing-conditions__list { display: grid; gap: 1rem; margin-top: 1.5rem; padding-left: 1.25rem; color: var(--color-text); font-size: 1rem; line-height: 1.6; }
+.financing-conditions__list li { min-width: 0; padding-left: .25rem; overflow-wrap: anywhere; }
+.financing-conditions__list li::marker { color: var(--color-primary); }
+.financing-conditions__references { display: grid; gap: 1rem; margin: 1.5rem 0 0; font-size: .875rem; line-height: 1.6; }
+.financing-conditions__references dt { color: var(--color-ink); font-weight: 600; }
+.financing-conditions__references dd { margin: .25rem 0 0; color: var(--color-text); }
+.financing-conditions__note { margin-top: 1.5rem; color: var(--color-muted); font-size: .875rem; line-height: 1.65; }
 .financing-small, .financing-cat p { margin-top: 1rem; color: var(--color-muted); font-size: .8125rem; line-height: 1.65; }
-.financing-cat { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid #d9d9d6; }
-.financing-cat summary { min-height: 2.75rem; color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; cursor: pointer; }
-.financing-cat summary small { display: block; margin: .25rem 0 0 1rem; color: var(--color-muted); font-size: .75rem; font-weight: 400; }
+.financing-cat { margin-top: 1.5rem; padding-top: 1.25rem; }
+.financing-cat summary { min-height: 2.75rem; color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; overflow-wrap: anywhere; cursor: pointer; }
+.financing-cat summary small { display: block; margin: .25rem 0 0 1rem; color: var(--color-muted); font-size: .8125rem; font-weight: 400; }
+.financing-cat--static { color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; }
+.financing-cat__modalities { display: grid; gap: 1.25rem; margin-top: 1rem; }
+.financing-cat__modalities h4 { margin: 0; color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; }
+.financing-cat__modalities p { margin-top: .5rem; }
 @media (max-width: 56.1875em) and (orientation: portrait) {
 	/* Keep hands and the productive activity visible in the new portrait scenes. */
 	.credit-hero.financing-hero { --hero-photo-min-height: var(--hero-photo-height); }
@@ -145,7 +152,7 @@
 	}
 }
 @media (max-width: 56.25em) {
-	.financing-details__grid { grid-template-columns: 1fr; }
+	.financing-details__grid { grid-template-columns: minmax(0, 1fr); }
 	.financing-requirements { padding-top: 0; }
 }
 @media (max-width: 47.9375em) {
@@ -161,14 +168,10 @@
 	.financing-details { padding-block: 4rem; }
 	.financing-conditions { padding: 1.5rem; }
 	.financing-conditions h3 { font-size: 1.5rem; }
-	.financing-conditions dl > div { grid-template-columns: .7fr 1.3fr; gap: 1rem; }
 }
 @container financing-flow (max-width: 16rem) {
 	/* Enlarged type gets the full reading width instead of a narrow icon column. */
 	.financing-overview__stage { grid-template-columns: 1fr; gap: 1.25rem; }
 	.financing-overview__graphic { width: min(7rem, 40%); justify-self: start; }
 	.financing-overview__connector--vertical { display: none; }
-}
-@media (max-width: 23em) {
-	.financing-conditions dl > div { grid-template-columns: 1fr; gap: .375rem; }
 }

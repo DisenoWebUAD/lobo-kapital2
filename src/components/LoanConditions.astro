@@ -7,53 +7,45 @@ interface Props {
 const { product: productId } = Astro.props;
 const product = credits[productId];
 const titleId = `${productId}-loan-conditions-title`;
+const conditionRows = [
+	{ label: 'Monto (MXN)', value: product.amount, className: 'loan-conditions__amount' },
+	{ label: productId === 'personal' ? 'Plazo base' : 'Plazo', value: product.term, note: productId === 'personal' ? product.termNote : undefined },
+	{ label: 'Cobertura', value: product.coverage },
+	...('guarantees' in product ? [{ label: 'Garantías', value: product.guarantees }] : []),
+	{ label: 'Tasa de interés', value: product.contractualPricing.status, className: 'loan-conditions__pending' },
+	{ label: 'Comisión de apertura', value: product.contractualPricing.status, className: 'loan-conditions__pending' },
+	{ label: 'CAT informativo', value: `${product.cat} anual (sin IVA)`, note: product.catModality },
+];
 ---
 
 <div class="loan-conditions" aria-labelledby={titleId} data-page-reveal="fade">
-	<h3 id={titleId}>Montos y condiciones</h3>
+	<h3 id={titleId}>Condiciones del producto</h3>
 
-	<table aria-labelledby={titleId}>
-		<tbody>
-			<tr
-				><th scope="row">Monto (MXN)</th><td
-					class="loan-conditions__amount">{product.amount}</td
-				></tr
-			>
-			<tr>
-				<th scope="row">Plazo</th>
-				<td>{product.termRange}</td>
-			</tr>
-			<tr><th scope="row">Cobertura</th><td>{product.coverage}</td></tr>
-			<tr
-				><th scope="row">Tasa de interés</th><td
-					class="loan-conditions__pending"
-					>{product.contractualPricing.status}</td
-				></tr
-			>
-			<tr
-				><th scope="row">Comisión de apertura</th><td
-					class="loan-conditions__pending"
-					>{product.contractualPricing.status}</td
-				></tr
-			>
-			<tr>
-				<th scope="row">CAT informativo</th>
-				<td
-					>{product.cat} anual (sin IVA)<small
-						>{product.catModality}</small
-					></td
-				>
-			</tr>
+	<table role="table" aria-labelledby={titleId}>
+		<tbody role="rowgroup">
+			{conditionRows.map((row) => (
+				<tr role="row">
+					<th role="rowheader" scope="row">{row.label}</th>
+					<td role="cell" class={row.className}>
+						{row.value}{row.note && <small>{row.note}</small>}
+					</td>
+				</tr>
+			))}
 		</tbody>
 	</table>
 
 	<footer class="loan-conditions__footnote">
-		<p>{product.catDisclosure}</p>
+		<p>{product.conditionsNote}</p>
+		<details class="loan-conditions__cat">
+			<summary>Referencia y vigencia del CAT</summary>
+			<p>{product.catDisclosure}</p>
+		</details>
 	</footer>
 </div>
 
 <style>
 	.loan-conditions {
+		container-type: inline-size;
 		min-width: 0;
 		padding: 2rem;
 		border-radius: 1rem;
@@ -126,6 +118,30 @@ const titleId = `${productId}-loan-conditions-title`;
 		color: #696967;
 	}
 
+	.loan-conditions__cat {
+		margin-top: 1rem;
+	}
+
+	.loan-conditions__cat summary {
+		padding-block: 0.5rem;
+		font-weight: 500;
+		cursor: pointer;
+	}
+
+	.loan-conditions__cat summary:hover {
+		color: var(--color-ink);
+	}
+
+	.loan-conditions__cat summary:focus-visible {
+		outline: 2px solid var(--color-ink);
+		outline-offset: 0.25rem;
+		border-radius: 0.25rem;
+	}
+
+	.loan-conditions__cat p {
+		margin-top: 0.5rem;
+	}
+
 	@media (max-width: 47.9375em) {
 		.loan-conditions {
 			padding: 1.5rem;
@@ -141,6 +157,39 @@ const titleId = `${productId}-loan-conditions-title`;
 
 		th {
 			padding-right: 1rem;
+		}
+	}
+
+	@media (max-width: 23.9375em) {
+		.loan-conditions {
+			padding: 1rem;
+		}
+	}
+
+	/* Preserve readable cells when enlarged text leaves very little inline space. */
+	@container (max-width: 12rem) {
+		table,
+		tbody,
+		tr,
+		th,
+		td {
+			display: block;
+		}
+
+		tr {
+			padding-block: 1rem;
+			border-bottom: 1px solid #e0e0de;
+		}
+
+		th,
+		td {
+			width: 100%;
+			padding: 0;
+			border: 0;
+		}
+
+		td {
+			margin-top: 0.375rem;
 		}
 	}
 </style>

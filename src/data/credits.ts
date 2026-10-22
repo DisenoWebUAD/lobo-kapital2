@@ -11,6 +11,7 @@ export const credits = {
 		termRange: '12 a 24 meses según perfil',
 		termNote: '18 o 24 meses según perfil.',
 		coverage: 'Durango',
+		conditionsNote: 'Monto, plazo y condiciones sujetos a evaluación. Solicita una propuesta con tasa, comisiones, seguros aplicables y costo total antes de contratar.',
 		contractualPricing: {
 			annualInterestRate: null,
 			openingFeeRate: null,
@@ -54,6 +55,8 @@ export const credits = {
 		termRange: '12 a 36 meses',
 		termNote: 'Sujeto a evaluación.',
 		coverage: 'Durango y Ciudad de México',
+		guarantees: 'Hipotecaria, prendaria, fiduciaria u obligado solidario, según evaluación.',
+		conditionsNote: 'Monto, plazo y garantías sujetos a evaluación. Solicita una propuesta con tasa, comisiones, seguros aplicables y costo total antes de contratar.',
 		contractualPricing: {
 			annualInterestRate: null,
 			openingFeeRate: null,
