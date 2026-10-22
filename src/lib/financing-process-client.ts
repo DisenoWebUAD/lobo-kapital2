@@ -133,8 +133,9 @@ class FinancingProcess extends HTMLElement {
 		const distance = this.positions[this.positions.length - 1] - first;
 		if (distance <= 0) return;
 		const viewportHeight = window.innerHeight;
-		// Match the reference's offsets: first marker at 80%, last marker at 50%.
-		const progress = clampProgress((viewportHeight * .8 - bounds.top - first) / (distance + viewportHeight * .3));
+		// Follow the 65% viewport line from the first marker through the last.
+		const activationLine = viewportHeight * .65;
+		const progress = clampProgress((activationLine - bounds.top - first) / distance);
 		this.renderProgress(progress);
 	}
 
