@@ -330,17 +330,6 @@ input {
 	transform: translateY(-0.0625rem);
 }
 
-@media (prefers-reduced-motion: reduce) {
-	.site-nav,
-	.site-nav a,
-	.site-nav__pymes-trigger,
-	.site-nav__pymes-menu,
-	.site-nav__pymes-menu .site-nav__guide,
-	.site-nav__client {
-		transition-duration: 1ms;
-	}
-}
-
 .menu-toggle {
 	display: none;
 	width: 3.25rem;
@@ -2003,40 +1992,5 @@ body[data-page='home'] .card-promo__image[data-parallax-active] {
 	body[data-page='home'] {
 		--home-reveal-distance: 1rem;
 		--home-reveal-blur: 2px;
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.site-header,
-	body[data-page='home'] [data-reveal],
-	body[data-page='home'] .product-card[data-spotlight],
-	body[data-page='home'] .product-card__icon,
-	body[data-page='home'] .button,
-	body[data-page='home'] .button > span {
-		animation: none !important;
-		transition: none !important;
-	}
-
-	body[data-page='home'] [data-reveal],
-	body[data-page='home'] .no-fee .no-fee__underline {
-		opacity: 1 !important;
-		filter: none !important;
-		transform: none !important;
-		clip-path: none !important;
-	}
-
-	body[data-page='home'] .card-promo__image {
-		transform: none !important;
-	}
-
-	*,
-	*::before,
-	*::after {
-		scroll-behavior: auto !important;
-		transition-duration: 0.01ms !important;
-		transition-delay: 0ms !important;
-		animation-duration: 0.01ms !important;
-		animation-delay: 0ms !important;
-		animation-iteration-count: 1 !important;
 	}
 }

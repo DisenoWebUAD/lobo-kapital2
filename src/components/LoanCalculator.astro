@@ -1118,15 +1118,6 @@ const percent = (value: number) =>
 			letter-spacing: -0.05rem;
 		}
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.loan-calculator__term-option span {
-			transition: color 80ms linear, background-color 80ms linear, border-color 80ms linear;
-		}
-		.loan-calculator__term-option:active input:enabled + span {
-			transform: none;
-			transition-duration: 80ms;
-		}
-	}
 	@media (prefers-contrast: more) {
 		.loan-calculator__term-option input:not(:checked) + span {
 			border-color: #73736e;

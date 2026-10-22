@@ -58,8 +58,7 @@ export function registerProductGuide() {
 			const slots = Object.fromEntries(contextKeys.map((key) => [key, this.querySelector<HTMLElement>(`[data-guide-slot="${key}"]`)]));
 			if (fieldKeys.some((key) => !fields[key].length || !wrappers[key] || !errors[key]) || contextKeys.some((key) => !slots[key]?.querySelector('[data-guide-inner]'))) return;
 			const amount = fields.amount[0]!;
-			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-			const motion = new GuideMotion(() => reducedMotion.matches);
+			const motion = new GuideMotion();
 			const positions = new Map<HTMLElement, Animation>();
 			const cards = new Map<string, ProductCard>();
 			const slotStates = new Map<ContextKey, boolean>();
@@ -252,7 +251,7 @@ export function registerProductGuide() {
 					if (entering) motion.fade(card.content, true);
 				});
 				showContent(true);
-				if (!reducedMotion.matches) for (const { item, active } of cards.values()) {
+				for (const { item, active } of cards.values()) {
 					const previous = before.get(item);
 					if (!active || !previous) continue;
 					const delta = previous.top - item.getBoundingClientRect().top;
@@ -350,7 +349,6 @@ export function registerProductGuide() {
 			form.addEventListener('keydown', (event) => {
 				if (event.key === 'Enter' && event.target === amount && !event.isComposing) { event.preventDefault(); update(true); }
 			}, { signal });
-			reducedMotion.addEventListener('change', () => { stopPositions(); motion.settle(); }, { signal });
 			// A repeated Astro page-load initializes cleanly without duplicate nodes or event handlers.
 			list.replaceChildren();
 			results.hidden = true;

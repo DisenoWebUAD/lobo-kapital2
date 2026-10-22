@@ -184,7 +184,7 @@ const steps = [
 			margin-top: 0;
 		}
 	}
-	@media (min-width: 64em) and (prefers-reduced-motion: no-preference) {
+	@media (min-width: 64em) {
 		lobo-financing-process[data-desktop-sequence='playing'] .financing-process__marker {
 			color: var(--color-white);
 			background: var(--color-dark);
@@ -204,15 +204,6 @@ const steps = [
 		.financing-process__heading { margin-bottom: 2rem; }
 		lobo-financing-process {
 			--process-step-gap: 1.75rem;
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.financing-process__fill { display: none; }
-		.financing-process__marker,
-		.financing-process__marker[data-reached] {
-			color: var(--color-text);
-			background: var(--color-soft);
-			transition: none;
 		}
 	}
 </style>

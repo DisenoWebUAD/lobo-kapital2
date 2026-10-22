@@ -47,7 +47,6 @@ interface FadeMotion {
 
 /** Local, interruptible geometry coordinator. Observe content, never the animated wrapper. */
 export class GuideMotion {
-	private reducedMotion: () => boolean;
 	private heights = new Map<HTMLElement, HeightMotion>();
 	private fades = new Map<HTMLElement, FadeMotion>();
 	private observer: ResizeObserver;
@@ -55,8 +54,7 @@ export class GuideMotion {
 	private lastTime = 0;
 	private destroyed = false;
 
-	constructor(reducedMotion: () => boolean) {
-		this.reducedMotion = reducedMotion;
+	constructor() {
 		this.observer = new ResizeObserver((entries) => {
 			for (const observed of entries) {
 				for (const motion of this.heights.values()) {
@@ -135,12 +133,11 @@ export class GuideMotion {
 		element.inert = !visible;
 		if (visible) element.removeAttribute('aria-hidden');
 		else element.setAttribute('aria-hidden', 'true');
-		const reduced = this.reducedMotion();
 		const animation = element.animate([
-			{ opacity: Number.isFinite(opacity) ? opacity : 1, transform: reduced ? 'none' : transform },
-			{ opacity: visible ? 1 : 0, transform: reduced ? 'none' : `translateY(${visible ? 0 : 6}px)` },
+			{ opacity: Number.isFinite(opacity) ? opacity : 1, transform },
+			{ opacity: visible ? 1 : 0, transform: `translateY(${visible ? 0 : 6}px)` },
 		], {
-			duration: reduced ? 80 : visible ? 220 : 140,
+			duration: visible ? 220 : 140,
 			easing: visible ? 'cubic-bezier(.2,.7,.2,1)' : 'ease-out',
 			fill: 'both',
 		});
@@ -150,9 +147,9 @@ export class GuideMotion {
 		};
 	}
 
-	/** Snap geometry and remove transient animation resources when the motion preference changes. */
+	/** Snap geometry and remove transient animation resources during cleanup. */
 	settle(): void {
-		// Discard queued measurements from the previous motion mode before observing afresh.
+		// Discard queued measurements before observing afresh.
 		this.observer.disconnect();
 		if (this.frame) cancelAnimationFrame(this.frame);
 		this.frame = 0;
@@ -175,7 +172,7 @@ export class GuideMotion {
 	}
 
 	private redirect(motion: HeightMotion): void {
-		if (this.reducedMotion() || (Math.abs(motion.position - motion.target) < 0.1 && Math.abs(motion.velocity) < 0.5)) {
+		if (Math.abs(motion.position - motion.target) < 0.1 && Math.abs(motion.velocity) < 0.5) {
 			this.finishHeight(motion);
 			return;
 		}

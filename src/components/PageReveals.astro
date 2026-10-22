@@ -18,12 +18,8 @@
 		);
 		if (!elements.length) return;
 
-		const reducedMotion = window.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		);
 		const wideViewport = window.matchMedia("(min-width: 48em)");
 		if (
-			reducedMotion.matches ||
 			!("IntersectionObserver" in window) ||
 			typeof Element.prototype.animate !== "function" ||
 			!CSS.supports("translate", "0 1px")
@@ -225,13 +221,6 @@
 			);
 			window.addEventListener("hashchange", () => showHash(), { signal });
 			window.addEventListener("beforeprint", dispose, { signal });
-			reducedMotion.addEventListener(
-				"change",
-				() => {
-					if (reducedMotion.matches) dispose();
-				},
-				{ signal },
-			);
 			window.addEventListener(
 				"resize",
 				() => {
@@ -272,9 +261,7 @@
 
 <style is:global>
 	/* Only a successfully initialized controller prepares off-screen content. */
-	@media screen and (prefers-reduced-motion: no-preference) {
-		[data-page-reveal][data-page-reveal-pending] {
-			opacity: 0;
-		}
+	[data-page-reveal][data-page-reveal-pending] {
+		opacity: 0;
 	}
 </style>

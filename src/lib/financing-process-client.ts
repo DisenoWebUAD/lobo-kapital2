@@ -10,7 +10,6 @@ class FinancingProcess extends HTMLElement {
 	private markers: HTMLElement[] = [];
 	private fills: HTMLElement[] = [];
 	private lastProgress = Number.NaN;
-	private reducedMotion?: MediaQueryList;
 	private desktopMode = false;
 	private desktopObserver?: IntersectionObserver;
 	private observedViewportHeight = 0;
@@ -28,7 +27,6 @@ class FinancingProcess extends HTMLElement {
 
 		this.controller = new AbortController();
 		const { signal } = this.controller;
-		this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 		const desktopViewport = window.matchMedia('(min-width: 64em)');
 		this.desktopMode = desktopViewport.matches;
 		const refresh = () => {
@@ -44,11 +42,6 @@ class FinancingProcess extends HTMLElement {
 		window.addEventListener('scroll', () => this.scheduleUpdate(), { passive: true, signal });
 		window.addEventListener('resize', refresh, { passive: true, signal });
 		desktopViewport.addEventListener('change', refresh, { signal });
-		this.reducedMotion.addEventListener('change', () => {
-			if (this.desktopState === 'playing') this.completeDesktopSequence();
-			this.resetProgress();
-			refresh();
-		}, { signal });
 		const lastMarker = this.markers[this.markers.length - 1];
 		lastMarker.addEventListener('transitionend', event => {
 			if (event.target === lastMarker && event.propertyName === 'background-color'
@@ -68,7 +61,7 @@ class FinancingProcess extends HTMLElement {
 	}
 
 	private observeDesktopEntry() {
-		if (!this.desktopMode || this.reducedMotion?.matches || this.desktopState !== 'idle') {
+		if (!this.desktopMode || this.desktopState !== 'idle') {
 			this.disconnectDesktopObserver();
 			return;
 		}
@@ -91,7 +84,7 @@ class FinancingProcess extends HTMLElement {
 
 	private startDesktopSequence() {
 		if (!this.controller || !this.isConnected || !this.desktopMode
-			|| this.reducedMotion?.matches || this.desktopState !== 'idle') return;
+			|| this.desktopState !== 'idle') return;
 		this.disconnectDesktopObserver();
 		this.desktopState = 'playing';
 		this.setAttribute('data-desktop-sequence', 'playing');
@@ -114,7 +107,7 @@ class FinancingProcess extends HTMLElement {
 	}
 
 	private scheduleUpdate(measure = false) {
-		if (!this.controller || this.desktopMode || this.reducedMotion?.matches) return;
+		if (!this.controller || this.desktopMode) return;
 		this.measurePending ||= measure;
 		if (this.frame !== undefined) return;
 		this.frame = requestAnimationFrame(() => {
@@ -124,7 +117,7 @@ class FinancingProcess extends HTMLElement {
 	}
 
 	private update() {
-		if (!this.isConnected || !this.controller || this.desktopMode || this.reducedMotion?.matches) return;
+		if (!this.isConnected || !this.controller || this.desktopMode) return;
 		const bounds = this.getBoundingClientRect();
 		if (this.measurePending || this.positions.length !== this.markers.length) {
 			// Markers stay outside reveal transforms, so only layout changes affect their spacing.
@@ -180,7 +173,6 @@ class FinancingProcess extends HTMLElement {
 		this.controller = undefined;
 		this.resizeObserver?.disconnect();
 		this.resizeObserver = undefined;
-		this.reducedMotion = undefined;
 		this.resetProgress();
 		this.positions = [];
 		this.markers = [];

@@ -10,9 +10,6 @@
 		);
 		if (!page) return;
 
-		const reducedMotion = window.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		);
 		const finePointer = window.matchMedia(
 			"(hover: hover) and (pointer: fine)",
 		);
@@ -29,10 +26,6 @@
 				element.getBoundingClientRect(),
 			]),
 		);
-		reducedMotion.addEventListener("change", initializeHomeMotion, {
-			once: true,
-			signal,
-		});
 
 		const updateRevealDelays = () => {
 			const mobile = !wideViewport.matches;
@@ -62,7 +55,7 @@
 		};
 		updateRevealDelays();
 
-		if (reducedMotion.matches || !("IntersectionObserver" in window)) {
+		if (!("IntersectionObserver" in window)) {
 			page.dataset.motion = "reduced";
 			revealElements.forEach((element) =>
 				element.toggleAttribute("data-revealed", true),

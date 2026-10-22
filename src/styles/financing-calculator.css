@@ -157,12 +157,6 @@
 	.financing-calculator__breakdown > div { grid-template-columns: minmax(0, 1fr); }
 	.financing-calculator__breakdown dd { text-align: left; }
 }
-@media (prefers-reduced-motion: reduce) {
-	.financing-calculator__input { transition: none; }
-	.financing-calculator__segments span { transition: color 80ms linear, background-color 80ms linear, border-color 80ms linear; transition-duration: 80ms !important; }
-	.financing-calculator__segments label:active input:not(:disabled) + span { transform: none; }
-	.financing-calculator__segments input:disabled + span { transition: none; }
-}
 @media (prefers-contrast: more) {
 	.financing-calculator__segments span { border-color: #73736e; }
 	.financing-calculator__segments input:checked + span { border-color: #242424; }

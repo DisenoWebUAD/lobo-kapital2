@@ -443,15 +443,6 @@ const preferences = [
 		.product-guide__amount input { font-size: 1.375rem; padding-inline: .875rem 3.25rem; }
 		.product-guide__amount > span { right: .875rem; }
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.product-guide__choice {
-			transition: color 80ms linear, background-color 80ms linear, border-color 80ms linear;
-			transition-duration: 80ms !important;
-		}
-		.product-guide__amount input,
-		.product-guide__results :global(.product-guide__product-link) { transition: background-color 80ms linear, border-color 80ms linear; }
-		.product-guide__choice:active { transform: none; }
-	}
 	@media (prefers-contrast: more) {
 		.product-guide__choice { border-color: #73736e; }
 		.product-guide__choice:has(input:checked) { border-color: var(--guide-control-ink); }
