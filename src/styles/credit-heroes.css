@@ -1,4 +1,4 @@
-/* Shared composition and type scale for personal credit and cards. */
+/* Shared composition and type scale for personal credit, business financing and cards. */
 .credit-hero {
 	--hero-design-height: clamp(50rem, 65.625vw, 78.75rem);
 	--hero-photo-height: min(48.75vw, 58.5rem);

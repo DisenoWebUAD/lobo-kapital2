@@ -2,69 +2,6 @@
 	background: var(--color-white);
 }
 
-.pymes-hero {
-	position: relative;
-	height: min(56.8vw, 68.1875rem);
-	overflow: hidden;
-	background: var(--color-white);
-}
-
-.pymes-hero__copy {
-	position: relative;
-	z-index: 1;
-	width: min(100% - 3rem, 68.75rem);
-	padding-top: clamp(11.5625rem, 11vw, 13.1875rem);
-	margin: 0 auto;
-	text-align: center;
-}
-
-.pymes-hero h1 {
-	font-size: clamp(2.625rem, 2.61vw, 3.125rem);
-	font-weight: 700;
-	line-height: 1.08;
-	letter-spacing: -0.0625rem;
-	color: #000;
-}
-
-.pymes-hero h1 span {
-	color: var(--color-primary);
-}
-
-.pymes-hero__copy p {
-	margin-top: 1.0625rem;
-	font-size: 1.5rem;
-	line-height: 1.2;
-	color: var(--color-muted);
-}
-
-.pymes-hero__copy .button {
-	min-height: 2.8125rem;
-	margin-top: 1.5rem;
-	padding-inline: 1.4375rem;
-	font-size: 1rem;
-}
-
-.pymes-hero__actions {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: 0 1rem;
-}
-
-.pymes-hero__media-frame {
-	display: contents;
-}
-
-.pymes-hero__media {
-	position: absolute;
-	top: min(24.12vw, 28.9375rem);
-	left: 0;
-	display: block;
-	width: 100%;
-	height: auto;
-	aspect-ratio: 1920 / 532.39;
-}
-
 .pymes-solutions {
 	padding: 5.5rem 0;
 	background: var(--color-white);
@@ -343,16 +280,6 @@
 }
 
 @media (max-width: 99.9375em) and (min-width: 75em) {
-	.pymes-hero {
-		height: 56.8vw;
-		min-height: 0;
-	}
-
-	.pymes-hero__copy {
-		padding-top: 11vw;
-	}
-
-	.pymes-hero__copy p,
 	.pymes-lead__copy > p {
 		font-size: clamp(1.125rem, 1.25vw, 1.5rem);
 	}
@@ -373,32 +300,7 @@
 	}
 }
 
-@media (max-width: 99.9375em) {
-	.pymes-hero {
-		height: auto;
-		min-height: 0;
-	}
-
-	.pymes-hero__media {
-		position: relative;
-		top: auto;
-		margin-top: 3rem;
-	}
-}
-
 @media (max-width: 74.9375em) {
-	.pymes-hero__copy {
-		padding-top: 9.75rem;
-	}
-
-	.pymes-hero h1 {
-		font-size: clamp(2.375rem, 4.2vw, 3rem);
-	}
-
-	.pymes-hero__copy p {
-		font-size: 1.1875rem;
-	}
-
 	.pymes-lead {
 		min-height: 0;
 		padding: 6rem 3rem 5.375rem;
@@ -428,44 +330,6 @@
 }
 
 @media (max-width: 47.9375em) {
-	.pymes-desktop-break {
-		display: none;
-	}
-
-	.pymes-hero__copy {
-		width: calc(100% - 2.5rem);
-		padding-top: 7rem;
-	}
-
-	.pymes-hero h1 {
-		font-size: clamp(2.125rem, 9vw, 2.625rem);
-		line-height: 1.04;
-	}
-
-	.pymes-hero__copy p {
-		margin-top: 1rem;
-		font-size: 1.0625rem;
-		line-height: 1.28;
-	}
-
-	.pymes-hero__copy .button {
-		margin-top: 1.375rem;
-	}
-
-	.pymes-hero__media-frame {
-		display: block;
-		overflow: hidden;
-		margin-top: 2.25rem;
-		border-radius: clamp(2.5rem, 12vw, 5.625rem) clamp(2.5rem, 12vw, 5.625rem) 0 0;
-	}
-
-	.pymes-hero__media {
-		width: 135%;
-		max-width: none;
-		margin-top: 0;
-		margin-left: -17.5%;
-	}
-
 	.pymes-lead {
 		padding: 4.5rem 1.5rem 4.75rem;
 	}

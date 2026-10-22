@@ -24,7 +24,7 @@ export const financingProducts = {
 		intro: 'Para empresas con necesidades variables de capital de trabajo, temporadas de mayor demanda o diferencias entre sus fechas de cobro y pago.',
 		uses: ['Compra de inventario y materias primas.', 'Pagos a proveedores, nómina y gastos de operación.', 'Pedidos extraordinarios y oportunidades de corto plazo.'],
 		process: [
-			{ title: 'Define tu ciclo de efectivo', description: 'Revisamos los ingresos, compromisos y necesidades de liquidez de tu empresa para evaluar una línea.' },
+			{ title: 'Define tu ciclo de efectivo', description: 'Revisamos tu ciclo de efectivo y necesidades de inventario, proveedores, nómina o pedidos de corto plazo.' },
 			{ title: 'Dispón dentro de tu límite', description: 'Una vez autorizada y formalizada, utilizas los recursos conforme a los términos de la línea.' },
 			{ title: 'Paga y recupera disponibilidad', description: 'Los pagos y nuevas disposiciones se realizan conforme al contrato y a la vigencia autorizada.' },
 		],
