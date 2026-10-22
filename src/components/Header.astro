@@ -201,7 +201,9 @@ const clientHref =
 		}));
 
 		const isHomePage = document.body.dataset.page === "home";
-		const scrollTolerance = 8;
+		const hideScrollTolerance = 8;
+		const mobileRevealScrollTolerance = 32;
+		let viewportWidth = window.innerWidth;
 		let scrollFrame: number | undefined;
 		let measureOnNextFrame = false;
 		let scrollThreshold = 0;
@@ -254,8 +256,13 @@ const clientHref =
 			if (measureOnNextFrame) {
 				measureOnNextFrame = false;
 				measureHeader();
-				resetScrollTracking();
-				return;
+				if (viewportWidth !== window.innerWidth) {
+					viewportWidth = window.innerWidth;
+					resetScrollTracking();
+					return;
+				}
+				// Browser chrome can resize a mobile viewport without an upward gesture.
+				lastScrollY = getScrollY();
 			}
 			const scrollY = getScrollY();
 			const delta = scrollY - lastScrollY;
@@ -282,6 +289,10 @@ const clientHref =
 				direction = nextDirection;
 				directionalDistance = 0;
 			}
+			// Require a deliberate upward movement on the compact navigation.
+			const scrollTolerance = direction < 0 && !desktopNavigation.matches
+				? mobileRevealScrollTolerance
+				: hideScrollTolerance;
 			directionalDistance = Math.min(
 				scrollTolerance,
 				directionalDistance + Math.abs(delta),
@@ -323,7 +334,8 @@ const clientHref =
 			{ passive: true, signal },
 		);
 		header.addEventListener("focusin", resetScrollTracking, { signal });
-		header.addEventListener("focusout", resetScrollTracking, { signal });
+		// Releasing touch focus must not reveal a header hidden by scrolling.
+		header.addEventListener("focusout", scheduleScrollUpdate, { signal });
 
 		const setDropdownOpen = (
 			dropdown: (typeof dropdowns)[number],
