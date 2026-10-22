@@ -1,16 +1,12 @@
 ---
 import { Picture } from "astro:assets";
-import heroImage from "../assets/home/hero.jpg";
+import heroImage from "../assets/pymes/hero.jpg";
+import logoMark from "../assets/home/logo-mark.svg";
 import RegulatoryLogos from "./RegulatoryLogos.astro";
 
 // Include the rendered width of the cover crop, not just the image element.
-const imageSizes = [
-	"(max-width: 47.9375em) max(100vw, min(85.375rem, 190svh))",
-	"(min-width: 48em) and (max-width: 74.9375em) and (min-aspect-ratio: 4/3) max(calc(100vw + 17.5rem), min(94.875rem, 190svh))",
-	"(max-width: 74.9375em) max(100vw, min(94.875rem, 190svh))",
-	"(min-width: 75em) and (max-width: 89.9375em) and (min-aspect-ratio: 4/3) calc(105rem - 16.667vw)",
-	"100vw",
-].join(", ");
+const imageSizes =
+	"(max-width: 47.9375em) max(100vw, min(67.5rem, 150svh)), 100vw";
 ---
 
 <div class="hero-stage">
@@ -28,23 +24,38 @@ const imageSizes = [
 		/>
 		<div class="hero__shade" aria-hidden="true"></div>
 		<div class="hero__content" data-reveal-group="90">
+			<img
+				class="hero__mark"
+				src={logoMark.src}
+				alt="Lobo Kapital"
+				width="130"
+				height="134"
+				data-reveal
+			/>
 			<h1 id="hero-title" data-reveal data-reveal-delay="80">
-				Impulsa tu futuro con{" "}<br />financiamiento inteligente.
+				Impulsa tu futuro con{" "}<br />financiamiento inteligente para
+				ti y tu negocio.
 			</h1>
 			<p data-reveal>
-				Créditos a tu medida con la transparencia que mereces. Soluciones
-				financieras diseñadas<br class="desktop-only" /> para hacer crecer tu
-				patrimonio y tu negocio.
+				Créditos a tu medida con la transparencia que mereces.
+				Soluciones financieras diseñadas<br class="desktop-only" /> para hacer
+				crecer tu patrimonio y tu negocio.
 			</p>
 			<div class="hero__actions" data-reveal>
 				<a class="button button--primary" href="#contacto"
-					>Solicitar ahora <span aria-hidden="true">→</span></a
+					>Solicita tu crédito hoy</a
 				>
-				<a class="button button--light" href="#soluciones">Conocer más</a>
+				<a class="button button--light" href="#contacto"
+					>Habla con un asesor</a
+				>
 			</div>
 		</div>
 	</section>
-	<div class="hero-regulatory" role="group" aria-labelledby="hero-regulatory-label">
+	<div
+		class="hero-regulatory"
+		role="group"
+		aria-labelledby="hero-regulatory-label"
+	>
 		<p id="hero-regulatory-label">Regulada y supervisada por:</p>
 		<RegulatoryLogos variant="band" />
 	</div>

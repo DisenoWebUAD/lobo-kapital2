@@ -1,27 +1,27 @@
 ---
-import EditorialCard from './EditorialCard.astro';
-import homeImage from '../assets/editorial/hogar.jpg';
-import studiesImage from '../assets/editorial/estudios.jpg';
-import projectImage from '../assets/editorial/proyecto.jpg';
+import EditorialCard from "./EditorialCard.astro";
+import homeImage from "../assets/editorial/hogar.jpg";
+import studiesImage from "../assets/editorial/estudios.jpg";
+import projectImage from "../assets/editorial/proyecto.jpg";
 
 const uses = [
 	{
-		title: 'Tu hogar',
-		description: 'Mejoras y adecuaciones para tu casa.',
+		title: "Tu hogar",
+		description: "Mejoras y adecuaciones para tu casa.",
 		image: homeImage,
-		alt: 'Una pareja eligiendo acabados durante una mejora de su hogar',
+		alt: "Una pareja eligiendo acabados durante una mejora de su hogar",
 	},
 	{
-		title: 'Tus estudios',
-		description: 'Un siguiente paso en tu formación.',
+		title: "Tus estudios",
+		description: "Un siguiente paso en tu formación.",
 		image: studiesImage,
-		alt: 'Una mujer estudiando y tomando apuntes en casa',
+		alt: "Una mujer estudiando y tomando apuntes en casa",
 	},
 	{
-		title: 'Tu proyecto',
-		description: 'Para gastos de salud y otros proyectos personales.',
+		title: "Tu proyecto",
+		description: "Para gastos de salud y otros proyectos personales.",
 		image: projectImage,
-		alt: 'Una mujer trabajando en un proyecto personal de cerámica',
+		alt: "Una mujer trabajando en un proyecto personal de cerámica",
 	},
 ];
 ---
@@ -29,7 +29,9 @@ const uses = [
 <section class="personal-loan-uses" aria-labelledby="personal-loan-uses-title">
 	<div class="personal-loan-uses__inner">
 		<header class="personal-loan-uses__heading" data-page-reveal>
-			<h2 id="personal-loan-uses-title">Impulsa tus <span>planes</span></h2>
+			<h2 id="personal-loan-uses-title">
+				Impulsa tus <span>planes</span>
+			</h2>
 			<p>Financiamiento para tus proyectos personales.</p>
 		</header>
 		<ul class="personal-loan-uses__grid" role="list" data-page-reveal-group>

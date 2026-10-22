@@ -1,28 +1,39 @@
 ---
-import condusefLogo from '../assets/regulators/condusef-transparente.png';
-import cnbvLogo from '../assets/regulators/cnbv.png';
-import buroLogo from '../assets/regulators/buro.png';
+import condusefLogo from "../assets/regulators/condusef-transparente.png";
+import cnbvLogo from "../assets/regulators/cnbv.png";
+import buroLogo from "../assets/regulators/buro.png";
 
 interface Props {
-	variant?: 'footer' | 'band';
+	variant?: "footer" | "band";
 }
 
-const { variant = 'footer' } = Astro.props;
+const { variant = "footer" } = Astro.props;
 const logos = [
-	{ image: condusefLogo, label: 'CONDUSEF' },
-	{ image: cnbvLogo, label: 'Comisión Nacional Bancaria y de Valores, CNBV' },
-	{ image: buroLogo, label: 'Buró de Entidades Financieras' },
+	{ image: condusefLogo, label: "CONDUSEF" },
+	{ image: cnbvLogo, label: "Comisión Nacional Bancaria y de Valores, CNBV" },
+	{ image: buroLogo, label: "Buró de Entidades Financieras" },
 ];
 ---
 
 <div
-	class:list={['regulatory-logos', { 'regulatory-logos--band': variant === 'band' }]}
+	class:list={[
+		"regulatory-logos",
+		{ "regulatory-logos--band": variant === "band" },
+	]}
 	role="group"
 	aria-label="Organismos y registros financieros"
 >
-	{logos.map(({ image, label }) => (
-		<img src={image.src} alt={label} width={image.width} height={image.height} loading="lazy" />
-	))}
+	{
+		logos.map(({ image, label }) => (
+			<img
+				src={image.src}
+				alt={label}
+				width={image.width}
+				height={image.height}
+				loading="lazy"
+			/>
+		))
+	}
 </div>
 
 <style>

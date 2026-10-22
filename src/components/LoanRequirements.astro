@@ -1,24 +1,40 @@
 ---
+import { credits } from "../data/credits";
+
 interface Props {
-	product: 'personal' | 'business';
+	product: "personal" | "business";
 }
 const { product } = Astro.props;
-const business = product === 'business';
-const requirements = business ? [
-	'Empresa con al menos 24 meses de operación.',
-	'Estados financieros y constancia de situación fiscal. Historial crediticio y capacidad de pago sujetos a evaluación.',
-	'Garantía conforme al monto y al perfil de la operación.',
-] : [
-	'Identificación oficial INE y comprobante de ingresos.',
-	'Puntaje de Buró de Crédito de al menos 600, sujeto a validación y análisis de capacidad de pago.',
-];
+const business = product === "business";
+const requirements = business
+	? [
+			`Empresa con al menos ${credits.business.minimumOperatingMonths} meses de operación.`,
+			"Estados financieros y constancia de situación fiscal. Historial crediticio y capacidad de pago sujetos a evaluación.",
+			"Garantía conforme al monto y al perfil de la operación.",
+		]
+	: [
+			"Identificación oficial INE y comprobante de ingresos.",
+			"Puntaje de Buró de Crédito de al menos 600, sujeto a validación y análisis de capacidad de pago.",
+		];
 const intro = business
-	? 'Para empresas con operación formal y flujo comprobable. La evaluación considera ingresos, historial y capacidad de pago.'
-	: 'Para personas asalariadas, profesionistas o con ingresos comprobables. La autorización depende de tu historial crediticio y capacidad de pago.';
+	? "Para empresas con operación formal y flujo comprobable. La evaluación considera ingresos, historial y capacidad de pago."
+	: "Para personas asalariadas, profesionistas o con ingresos comprobables. La autorización depende de tu historial crediticio y capacidad de pago.";
 ---
 
 <div class="loan-requirements" id="requisitos" data-page-reveal>
-	<h2 id="credit-details-title">¿Puede ser <span>{business ? 'para tu empresa' : 'para ti'}</span>?</h2>
+	<h2 id="credit-details-title">
+		{
+			business ? (
+				<>
+					Requisitos <span>para tu empresa</span>
+				</>
+			) : (
+				<>
+					¿Puede ser <span>para ti</span>?
+				</>
+			)
+		}
+	</h2>
 	<p class="loan-requirements__intro">
 		{intro}
 	</p>

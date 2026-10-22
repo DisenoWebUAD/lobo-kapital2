@@ -13,17 +13,22 @@
 			...document.querySelectorAll<HTMLElement>(
 				"#main-content [data-page-reveal]",
 			),
-		].filter((element) => !element.parentElement?.closest("[data-page-reveal]"));
+		].filter(
+			(element) => !element.parentElement?.closest("[data-page-reveal]"),
+		);
 		if (!elements.length) return;
 
-		const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+		const reducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		);
 		const wideViewport = window.matchMedia("(min-width: 48em)");
 		if (
 			reducedMotion.matches ||
 			!("IntersectionObserver" in window) ||
 			typeof Element.prototype.animate !== "function" ||
 			!CSS.supports("translate", "0 1px")
-		) return;
+		)
+			return;
 
 		const controller = new AbortController();
 		const { signal } = controller;
@@ -50,16 +55,26 @@
 		};
 		disposePageReveals = dispose;
 
-		const showRelated = (target: EventTarget | null, includeChildren = false) => {
+		const showRelated = (
+			target: EventTarget | null,
+			includeChildren = false,
+		) => {
 			if (!(target instanceof Element)) return;
 			elements.forEach((element) => {
-				if (element.contains(target) || (includeChildren && target.contains(element))) show(element);
+				if (
+					element.contains(target) ||
+					(includeChildren && target.contains(element))
+				)
+					show(element);
 			});
 		};
 		const showHash = (hash = location.hash) => {
 			if (!hash) return;
 			try {
-				showRelated(document.getElementById(decodeURIComponent(hash.slice(1))), true);
+				showRelated(
+					document.getElementById(decodeURIComponent(hash.slice(1))),
+					true,
+				);
 			} catch {
 				// A malformed fragment must not interrupt navigation or initialization.
 			}
@@ -79,9 +94,12 @@
 				to.translate = "0 0";
 			}
 			const animation = element.animate([from, to], {
-				duration: kind === "image"
-					? revealMotion.duration.image
-					: rise ? revealMotion.duration.rise : revealMotion.duration.fade,
+				duration:
+					kind === "image"
+						? revealMotion.duration.image
+						: rise
+							? revealMotion.duration.rise
+							: revealMotion.duration.fade,
 				delay,
 				easing: revealMotion.easing,
 				fill: "backwards",
@@ -91,28 +109,44 @@
 			element.removeAttribute("data-page-reveal-pending");
 			element.setAttribute("data-page-revealed", "");
 			observer?.unobserve(element);
-			void animation.finished.then(() => {
-				if (animations.get(element) !== animation) return;
-				animations.delete(element);
-				animation.cancel();
-			}, () => {
-				if (animations.get(element) === animation) animations.delete(element);
-			});
+			void animation.finished.then(
+				() => {
+					if (animations.get(element) !== animation) return;
+					animations.delete(element);
+					animation.cancel();
+				},
+				() => {
+					if (animations.get(element) === animation)
+						animations.delete(element);
+				},
+			);
 		};
 
 		const onIntersect: IntersectionObserverCallback = (entries) => {
 			try {
-				const rows = new Map<Element, { top: number; count: number }[]>();
+				const rows = new Map<
+					Element,
+					{ top: number; count: number }[]
+				>();
 				entries.forEach((entry) => {
 					const element = entry.target as HTMLElement;
 					if (!entry.isIntersecting || !pending.has(element)) return;
 					let delay = 0;
-					const group = element.parentElement?.closest("[data-page-reveal-group]");
+					const group = element.parentElement?.closest(
+						"[data-page-reveal-group]",
+					);
 					if (group && wideViewport.matches) {
 						const groupRows = rows.get(group) ?? [];
-						let row = groupRows.find(({ top }) => Math.abs(top - entry.boundingClientRect.top) < 24);
+						let row = groupRows.find(
+							({ top }) =>
+								Math.abs(top - entry.boundingClientRect.top) <
+								24,
+						);
 						if (!row) {
-							row = { top: entry.boundingClientRect.top, count: 0 };
+							row = {
+								top: entry.boundingClientRect.top,
+								count: 0,
+							};
 							groupRows.push(row);
 							rows.set(group, groupRows);
 						}
@@ -139,9 +173,17 @@
 		try {
 			observePending();
 			// Read all positions before preparing hidden states, never hiding the initial view.
-			const positions = elements.map((element) => ({ element, rect: element.getBoundingClientRect() }));
+			const positions = elements.map((element) => ({
+				element,
+				rect: element.getBoundingClientRect(),
+			}));
 			positions.forEach(({ element, rect }) => {
-				if (element.hasAttribute("data-page-revealed") || rect.top < innerHeight || !rect.width || !rect.height) {
+				if (
+					element.hasAttribute("data-page-revealed") ||
+					rect.top < innerHeight ||
+					!rect.width ||
+					!rect.height
+				) {
 					show(element);
 					return;
 				}
@@ -150,35 +192,68 @@
 				observer?.observe(element);
 			});
 			showHash();
-			if (document.activeElement !== document.body) showRelated(document.activeElement);
+			if (document.activeElement !== document.body)
+				showRelated(document.activeElement);
 
-			document.addEventListener("focusin", (event) => showRelated(event.target), { signal, capture: true });
-			document.addEventListener("pointerdown", (event) => showRelated(event.target), { signal, capture: true });
-			document.addEventListener("click", (event) => {
-				const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
-				if (!link) return;
-				const url = new URL(link.href, location.href);
-				if (url.origin === location.origin && url.pathname === location.pathname && url.search === location.search) showHash(url.hash);
-			}, { signal, capture: true });
+			document.addEventListener(
+				"focusin",
+				(event) => showRelated(event.target),
+				{ signal, capture: true },
+			);
+			document.addEventListener(
+				"pointerdown",
+				(event) => showRelated(event.target),
+				{ signal, capture: true },
+			);
+			document.addEventListener(
+				"click",
+				(event) => {
+					const link =
+						event.target instanceof Element
+							? event.target.closest<HTMLAnchorElement>("a[href]")
+							: null;
+					if (!link) return;
+					const url = new URL(link.href, location.href);
+					if (
+						url.origin === location.origin &&
+						url.pathname === location.pathname &&
+						url.search === location.search
+					)
+						showHash(url.hash);
+				},
+				{ signal, capture: true },
+			);
 			window.addEventListener("hashchange", () => showHash(), { signal });
 			window.addEventListener("beforeprint", dispose, { signal });
-			reducedMotion.addEventListener("change", () => {
-				if (reducedMotion.matches) dispose();
-			}, { signal });
-			window.addEventListener("resize", () => {
-				if (resizeFrame !== undefined || !pending.size) return;
-				resizeFrame = requestAnimationFrame(() => {
-					resizeFrame = undefined;
-					try {
-						pending.forEach((element) => {
-							if (element.getBoundingClientRect().top < innerHeight) show(element);
-						});
-						if (pending.size) observePending();
-					} catch {
-						dispose();
-					}
-				});
-			}, { signal, passive: true });
+			reducedMotion.addEventListener(
+				"change",
+				() => {
+					if (reducedMotion.matches) dispose();
+				},
+				{ signal },
+			);
+			window.addEventListener(
+				"resize",
+				() => {
+					if (resizeFrame !== undefined || !pending.size) return;
+					resizeFrame = requestAnimationFrame(() => {
+						resizeFrame = undefined;
+						try {
+							pending.forEach((element) => {
+								if (
+									element.getBoundingClientRect().top <
+									innerHeight
+								)
+									show(element);
+							});
+							if (pending.size) observePending();
+						} catch {
+							dispose();
+						}
+					});
+				},
+				{ signal, passive: true },
+			);
 			if (!pending.size) observer?.disconnect();
 		} catch {
 			dispose();
@@ -186,7 +261,9 @@
 	};
 
 	document.addEventListener("astro:page-load", initializePageReveals);
-	document.addEventListener("astro:before-swap", () => disposePageReveals?.());
+	document.addEventListener("astro:before-swap", () =>
+		disposePageReveals?.(),
+	);
 	window.addEventListener("pagehide", () => disposePageReveals?.());
 	window.addEventListener("pageshow", (event) => {
 		if (event.persisted) initializePageReveals();

@@ -1,15 +1,15 @@
 ---
-import EditorialCard from './EditorialCard.astro';
-import fleetsImage from '../assets/editorial/vehiculos.jpg';
-import medicalImage from '../assets/editorial/medico.jpg';
-import machineryImage from '../assets/editorial/maquinaria.jpg';
-import technologyImage from '../assets/editorial/tecnologia.jpg';
+import EditorialCard from "./EditorialCard.astro";
+import fleetsImage from "../assets/editorial/vehiculos.jpg";
+import medicalImage from "../assets/editorial/medico.jpg";
+import machineryImage from "../assets/editorial/maquinaria.jpg";
+import technologyImage from "../assets/editorial/tecnologia.jpg";
 
 interface Props {
-	product?: 'lease' | 'finance-lease';
+	product?: "lease" | "finance-lease";
 }
-const { product = 'lease' } = Astro.props;
-const financial = product === 'finance-lease';
+const { product = "lease" } = Astro.props;
+const financial = product === "finance-lease";
 
 const assets = [
 	{
@@ -17,28 +17,28 @@ const assets = [
 		description:
 			"Autos ejecutivos, utilitarios y vehículos de carga ligera.",
 		image: fleetsImage,
-		alt: 'Vehículos de reparto durante la carga de pedidos',
+		alt: "Vehículos de reparto durante la carga de pedidos",
 	},
 	{
 		title: "Equipo médico",
 		description:
 			"Resonadores, equipo de diagnóstico y mobiliario clínico especializado.",
 		image: medicalImage,
-		alt: 'Una profesional preparando equipo de diagnóstico en una clínica',
+		alt: "Una profesional preparando equipo de diagnóstico en una clínica",
 	},
 	{
 		title: "Maquinaria pesada",
 		description:
 			"Equipamiento para construcción, minería, agricultura y manufactura.",
 		image: machineryImage,
-		alt: 'Una excavadora en una obra de construcción',
+		alt: "Una excavadora en una obra de construcción",
 	},
 	{
 		title: "Tecnología",
 		description:
 			"Servidores, redes, equipo de cómputo y sistemas de comunicación avanzados.",
 		image: technologyImage,
-		alt: 'Un técnico revisando los servidores de una empresa',
+		alt: "Un técnico revisando los servidores de una empresa",
 	},
 ];
 ---
@@ -49,9 +49,11 @@ const assets = [
 			<span>Activos</span> para tu Operación
 		</h2>
 		<p>
-			{financial
-				? 'Ejemplos de uso de equipo y vehículos que puedes evaluar mediante arrendamiento financiero, con alternativas al finalizar el contrato.'
-				: 'Ejemplos de uso de activos que puedes evaluar mediante arrendamiento puro, priorizando su utilización y renovación.'}{' '}
+			{
+				financial
+					? "Ejemplos de uso de equipo y vehículos que puedes evaluar mediante arrendamiento financiero, con alternativas al finalizar el contrato."
+					: "Ejemplos de uso de activos que puedes evaluar mediante arrendamiento puro, priorizando su utilización y renovación."
+			}{" "}
 			La elegibilidad depende del bien y del análisis de la operación.
 		</p>
 	</header>

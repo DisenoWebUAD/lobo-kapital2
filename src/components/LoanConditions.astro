@@ -9,19 +9,14 @@ const product = credits[productId];
 const titleId = `${productId}-loan-conditions-title`;
 ---
 
-<div
-	class="loan-conditions"
-	aria-labelledby={titleId}
-	data-page-reveal="fade"
->
+<div class="loan-conditions" aria-labelledby={titleId} data-page-reveal="fade">
 	<h3 id={titleId}>Montos y condiciones</h3>
 
 	<table aria-labelledby={titleId}>
 		<tbody>
 			<tr
 				><th scope="row">Monto (MXN)</th><td
-					class="loan-conditions__amount"
-					>{product.amount}</td
+					class="loan-conditions__amount">{product.amount}</td
 				></tr
 			>
 			<tr>

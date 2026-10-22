@@ -163,8 +163,8 @@ input {
 	flex: 1;
 	align-items: center;
 	justify-content: flex-end;
-	gap: 2.375rem;
-	padding: 0 1.625rem 0 2.125rem;
+	gap: clamp(1rem, 1.7vw, 2rem);
+	padding: 0 1.625rem;
 	font-size: 1rem;
 	font-weight: 600;
 	color: var(--color-text);
@@ -227,7 +227,7 @@ input {
 	pointer-events: auto;
 	transform: translate(0, 0) scale(1);
 	visibility: visible;
-	transition-delay: 0s;
+	transition: opacity 180ms ease, transform 180ms ease;
 }
 
 .site-nav__pymes-menu a {
@@ -238,6 +238,16 @@ input {
 	font-weight: 400;
 	line-height: 1.1;
 	transition: color 160ms ease, background-color 160ms ease;
+}
+
+.site-nav__pymes-menu .site-nav__guide {
+	margin-top: .5rem;
+	padding-top: .75rem;
+	color: var(--color-primary);
+	font-size: .8125rem;
+	font-weight: 500;
+	text-decoration: underline;
+	text-underline-offset: .2em;
 }
 
 .site-nav a:not(.site-nav__client) {
@@ -316,13 +326,12 @@ input {
 .hero {
 	--hero-design-height: 78.8125rem;
 	position: relative;
-	display: grid;
-	grid-template-rows: minmax(0, 1.36fr) auto minmax(0, 1fr);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	height: min(var(--hero-design-height), var(--hero-viewport));
-	/* Let readable content override the viewport budget on very short screens. */
 	min-height: min-content;
-	padding-block: 6.75rem max(1.5rem, env(safe-area-inset-bottom));
-	overflow: visible;
+	padding-block: 7.5rem max(3rem, env(safe-area-inset-bottom));
 	color: var(--color-white);
 	background: var(--color-dark);
 }
@@ -345,41 +354,61 @@ input {
 .hero__media {
 	max-width: none;
 	object-fit: cover;
-	object-position: left center;
+	object-position: 40% center;
 }
 
 .hero__shade {
-	background: rgb(51 51 51 / 29%);
+	background: rgb(26 26 26 / 38%);
 }
 
 .hero__content {
 	position: relative;
 	z-index: 2;
-	width: min(72.5rem, calc(100% - 40.625rem));
-	grid-row: 2;
-	margin-left: max(7vw, calc((100vw - 80rem) / 2));
+	width: min(87.5rem, calc(100% - 6rem));
+	margin-inline: auto;
+	text-align: center;
+}
+
+.hero__mark {
+	width: clamp(5rem, 8.5vw, 8.125rem);
+	height: auto;
+	margin: 0 auto 1.125rem;
 }
 
 .hero h1 {
-	overflow-wrap: anywhere;
-	font-size: clamp(2.875rem, 3.88vw, 4.65625rem);
+	font-size: clamp(2.125rem, 3.3vw, 3.75rem);
 	font-weight: 700;
-	line-height: 1.04;
-	letter-spacing: -0.02em;
+	line-height: 1.08;
+	letter-spacing: -.025em;
+	text-wrap: balance;
 }
 
 .hero__content > p {
-	margin-top: 0.5625rem;
-	font-size: clamp(1.125rem, 1.25vw, 1.5rem);
-	font-weight: 400;
-	line-height: 1.2;
-	letter-spacing: -0.009375rem;
+	max-width: 72ch;
+	margin: 1rem auto 0;
+	font-size: clamp(1rem, 1.25vw, 1.375rem);
+	line-height: 1.4;
 }
 
 .hero__actions {
 	display: flex;
-	gap: 1.125rem;
-	margin-top: 1.5625rem;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 1.5rem;
+}
+
+.product-guide-link {
+	display: inline-block;
+	max-width: 100%;
+	margin-top: 1.25rem;
+	padding-block: .5rem;
+	color: var(--color-primary);
+	font-size: .9375rem;
+	font-weight: 600;
+	line-height: 1.4;
+	text-decoration: underline;
+	text-underline-offset: .2em;
 }
 
 .button {
@@ -1322,17 +1351,12 @@ input {
 	}
 
 	.site-nav {
-		gap: clamp(1.0625rem, 2vw, 2rem);
+		gap: clamp(.875rem, 1.5vw, 1.5rem);
 		padding-inline: 1.375rem;
 	}
 
 	.hero {
 		--hero-design-height: clamp(51.25rem, 65.68vw, 78.8125rem);
-	}
-
-	.hero__content {
-		width: 70%;
-		margin-left: 13vw;
 	}
 
 	.brand-tab {
@@ -1408,7 +1432,7 @@ input {
 		pointer-events: auto;
 		transform: translateY(0) scale(1);
 		visibility: visible;
-		transition-delay: 0s;
+		transition: opacity 180ms ease, transform 180ms ease;
 	}
 
 	.site-nav a,
@@ -1452,7 +1476,7 @@ input {
 		opacity: 1;
 		pointer-events: auto;
 		visibility: visible;
-		transition-delay: 0s;
+		transition: max-height 180ms ease, padding 180ms ease, opacity 160ms ease;
 	}
 
 	.site-nav__pymes-menu a {
@@ -1463,23 +1487,6 @@ input {
 
 	.hero {
 		--hero-design-height: 50rem;
-	}
-
-	.hero__media {
-		object-position: 40% center;
-	}
-
-	.hero__shade {
-		background: linear-gradient(90deg, rgb(26 26 26 / 62%), rgb(26 26 26 / 12%));
-	}
-
-	.hero__content {
-		width: min(43.75rem, calc(100% - 6rem));
-		margin-left: 3rem;
-	}
-
-	.hero__content > p {
-		max-width: 46ch;
 	}
 
 	.hero__content > p .desktop-only {
@@ -1543,15 +1550,6 @@ input {
 	}
 }
 
-/* Reserve more of the left side for copy in intermediate landscape layouts.
-   Taper the crop back to the original framing before the wide desktop layout. */
-@media (min-width: 48em) and (max-width: 89.9375em) and (min-aspect-ratio: 4/3) {
-	.hero__media {
-		width: calc(100% + clamp(0rem, calc(105rem - 116.667vw), 17.5rem));
-		object-position: left 20%;
-	}
-}
-
 @media (max-width: 47.9375em) {
 	.site-header {
 		--header-top: 0.75rem;
@@ -1580,45 +1578,18 @@ input {
 	}
 
 	.hero {
-		--hero-design-height: 45rem;
-		grid-template-rows: minmax(0, 1fr) auto;
-		padding-block: 6rem
-			max(
-				1.5rem,
-				min(4.25rem, calc(var(--hero-viewport) * .08)),
-				env(safe-area-inset-bottom)
-			);
+		--hero-design-height: 48rem;
+		padding-block: 6.5rem max(2rem, env(safe-area-inset-bottom));
 	}
 
-	.hero__media {
-		object-position: 47% center;
-	}
-
-	.hero__shade {
-		background: linear-gradient(0deg, rgb(26 26 26 / 78%) 0%, rgb(26 26 26 / 13%) 66%);
-	}
-
-	.hero__content {
-		width: auto;
-		padding: 0;
-		margin: 0 1.5rem;
-	}
-
-	.hero h1 {
-		font-size: clamp(2rem, 9.2vw, 2.875rem);
-		line-height: 1.06;
-		letter-spacing: -0.0625rem;
-		text-wrap: balance;
-	}
-
-	.hero h1 br {
-		display: none;
-	}
-
-	.hero__content > p {
-		font-size: 1.0625rem;
-		line-height: 1.3;
-	}
+	.hero__media { object-position: 37% center; }
+	.hero__shade { background: rgb(26 26 26 / 48%); }
+	.hero__content { width: calc(100% - 3rem); }
+	.hero__mark { width: clamp(3.75rem, 18vw, 5.25rem); margin-bottom: 1rem; }
+	.hero h1 { font-size: clamp(1.75rem, 7.7vw, 2.875rem); line-height: 1.08; }
+	.hero h1 br { display: none; }
+	.hero__content > p { font-size: 1rem; line-height: 1.4; }
+	.hero__actions { gap: .75rem; margin-top: 1.25rem; }
 
 	.desktop-only {
 		display: none;
@@ -1759,10 +1730,6 @@ body[data-page='home'] {
 	.hero h1 {
 		font-size: 2rem;
 	}
-	.hero__content > p {
-		margin-top: 1rem;
-		font-size: 1rem;
-	}
 	.hero__actions {
 		gap: 0.75rem;
 		margin-top: 1.25rem;
@@ -1775,10 +1742,6 @@ body[data-page='home'] {
 @media (max-height: 37.5em) and (min-width: 48em) {
 	.hero h1 {
 		font-size: 2.5rem;
-	}
-	.hero__content > p {
-		font-size: 1rem;
-		margin-top: 1rem;
 	}
 	.hero__actions {
 		margin-top: 1.25rem;

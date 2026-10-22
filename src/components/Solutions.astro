@@ -1,20 +1,20 @@
 ---
-import { Image } from 'astro:assets';
-import personalImage from '../assets/editorial/hogar.jpg';
-import businessImage from '../assets/editorial/capital.jpg';
+import { Image } from "astro:assets";
+import personalImage from "../assets/editorial/hogar.jpg";
+import businessImage from "../assets/editorial/capital.jpg";
 import { credits } from "../data/credits";
-import BusinessSolutions from './BusinessSolutions.astro';
+import BusinessSolutions from "./BusinessSolutions.astro";
 
 const products = [
 	{
-		...credits.personal,
-		image: personalImage,
-		alt: 'Una pareja preparando mejoras para su hogar',
-	},
-	{
 		...credits.business,
 		image: businessImage,
-		alt: 'Un equipo atendiendo los pedidos de su negocio',
+		alt: "Un equipo atendiendo los pedidos de su negocio",
+	},
+	{
+		...credits.personal,
+		image: personalImage,
+		alt: "Una pareja preparando mejoras para su hogar",
 	},
 ];
 ---
@@ -60,7 +60,10 @@ const products = [
 								<dt>Hasta</dt>
 								<dd>
 									{product.maxAmount}
-									<span class="product-card__currency"> MXN</span>
+									<span class="product-card__currency">
+										{" "}
+										MXN
+									</span>
 								</dd>
 							</div>
 							<div>
