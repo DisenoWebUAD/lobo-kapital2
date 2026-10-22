@@ -1,0 +1,144 @@
+.financing-calculator {
+	width: min(calc(100% - 6rem), 79.75rem);
+	margin-inline: auto;
+	padding-block: 2rem 5.5rem;
+	scroll-margin-top: 7rem;
+}
+.financing-calculator .visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.financing-calculator__panel {
+	display: block;
+	padding: clamp(1.5rem, 3.2vw, 2.5rem);
+	border-radius: 1rem;
+	background: var(--color-surface);
+}
+.financing-calculator__controls { min-width: 0; }
+.financing-calculator__heading { max-width: 40ch; margin-bottom: 2rem; }
+.financing-calculator__heading h2 { color: #000; font-size: clamp(1.75rem, 3vw, 2rem); font-weight: 700; line-height: 1.2; letter-spacing: -.0375rem; }
+.financing-calculator__heading h2 span { color: var(--color-primary); }
+.financing-calculator__heading p { margin-top: .875rem; color: var(--color-muted); font-size: 1rem; line-height: 1.6; }
+.financing-calculator__grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(2rem, 4vw, 3.5rem); align-items: center; }
+.financing-calculator form, .financing-calculator fieldset { min-width: 0; }
+.financing-calculator fieldset { margin: 0; padding: 0; border: 0; }
+.financing-calculator__fields { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+.financing-calculator__field { min-width: 0; }
+.financing-calculator__field label { display: block; margin-bottom: .5rem; font-size: .9375rem; line-height: 1.35; font-weight: 600; }
+.financing-calculator__choice legend { margin-bottom: .625rem; font-size: .9375rem; font-weight: 600; }
+.financing-calculator__segments { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; padding: .25rem; border-radius: .75rem; background: #e7e7e5; }
+.financing-calculator__segments label { margin: 0; cursor: pointer; }
+.financing-calculator__segments span { display: flex; height: 100%; min-height: 2.75rem; align-items: center; justify-content: center; padding: .625rem .5rem; border: 1px solid transparent; border-radius: .5rem; color: #555552; background: transparent; text-align: center; font-size: .9375rem; line-height: 1.35; transition: background 160ms ease, color 160ms ease, border-color 160ms ease; }
+.financing-calculator__segments input:checked + span { border-color: var(--color-primary); color: var(--color-primary); background: #fff; }
+.financing-calculator__segments input:focus-visible + span { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+.financing-calculator__segments label:hover input:not(:checked) + span { color: #242424; background: #efefed; }
+.financing-calculator__field-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; }
+.financing-calculator__field-heading > label { flex: 1 1 10rem; min-width: 0; margin: 0; font-size: 1rem; line-height: 1.4; font-weight: 500; }
+.financing-calculator__field--manual .financing-calculator__field-heading { display: grid; grid-template-columns: minmax(0, 1fr); gap: .625rem; }
+.financing-calculator__input { display: flex; flex: 0 1 auto; min-width: 0; min-height: 2.75rem; max-width: 100%; align-items: center; justify-content: flex-end; gap: .375rem; margin-left: auto; padding-inline: .75rem; border: 1px solid transparent; border-radius: .5rem; background: transparent; }
+.financing-calculator__input--money { width: min(100%, 17rem); }
+.financing-calculator__input--duration { width: auto; }
+.financing-calculator__input input { width: 5ch; min-width: 0; min-height: 2.75rem; max-width: 100%; padding: .25rem 0; border: 0; border-radius: 0; outline: none; color: var(--color-text); background: transparent; font: inherit; font-size: 1.25rem; font-weight: 600; line-height: 1.4; text-align: right; font-variant-numeric: tabular-nums; }
+.financing-calculator__input--money input { width: 18ch; }
+.financing-calculator__input input[type='number'] { appearance: textfield; }
+.financing-calculator__input input::-webkit-inner-spin-button, .financing-calculator__input input::-webkit-outer-spin-button { margin: 0; appearance: none; }
+.financing-calculator__input input:focus, .financing-calculator__input input[aria-invalid='true'] { box-shadow: 0 2px 0 var(--color-primary); caret-color: var(--color-primary); }
+.financing-calculator__input > span { flex-shrink: 0; color: #696967; font-size: .875rem; }
+.financing-calculator__input--manual { width: 100%; min-height: 3.75rem; margin: 0; padding-inline: 1rem; border-color: #858581; border-radius: .75rem; background: var(--color-white); }
+.financing-calculator__input--manual input { flex: 1 1 auto; width: 100%; min-height: 3.5rem; font-size: 1.5rem; text-align: left; }
+.financing-calculator__input--manual:hover { border-color: #555552; }
+.financing-calculator__input--manual:focus-within { border-color: var(--color-primary); outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.financing-calculator__input--manual:has(input[aria-invalid='true']) { border-color: var(--color-primary); }
+.financing-calculator__input--manual input:focus, .financing-calculator__input--manual input[aria-invalid='true'] { box-shadow: none; }
+.financing-calculator__field--secondary { width: 100%; max-width: 22rem; }
+.financing-calculator__field--secondary .financing-calculator__input--manual { min-height: 3rem; padding-inline: .75rem; border-radius: .5rem; }
+.financing-calculator__field--secondary .financing-calculator__input--manual input { min-height: 2.75rem; font-size: 1.25rem; font-weight: 500; }
+.financing-calculator__field--secondary .financing-calculator__input--money input { font-size: 1.125rem; }
+.financing-calculator__field--secondary .financing-calculator__input--duration { max-width: 11rem; }
+.financing-calculator__range-wrap { min-width: 0; margin-top: .375rem; }
+.financing-calculator__range { appearance: none; display: block; width: 100%; height: 2.75rem; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.financing-calculator__range::-webkit-slider-runnable-track { height: .25rem; border-radius: 62.4375rem; background: linear-gradient(to right, var(--color-primary) 0% var(--range-progress), #d9d9d7 var(--range-progress) 100%); }
+.financing-calculator__range::-moz-range-track { height: .25rem; border-radius: 62.4375rem; background: linear-gradient(to right, var(--color-primary) 0% var(--range-progress), #d9d9d7 var(--range-progress) 100%); }
+.financing-calculator__range::-webkit-slider-thumb { appearance: none; box-sizing: border-box; width: 1.25rem; height: 1.25rem; margin-top: -.5rem; border: 3px solid var(--color-primary); border-radius: 50%; background: var(--color-white); }
+.financing-calculator__range::-moz-range-thumb { box-sizing: border-box; width: 1.25rem; height: 1.25rem; border: 3px solid var(--color-primary); border-radius: 50%; background: var(--color-white); }
+.financing-calculator__range:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: .375rem; }
+.financing-calculator__bounds { display: flex; justify-content: space-between; gap: .75rem; margin-top: .25rem; color: #696967; font-size: .75rem; line-height: 1.5; }
+.financing-calculator__hint { margin-top: .5rem; color: #686865; font-size: .8125rem; line-height: 1.5; }
+.financing-calculator__hint:empty { display: none; }
+.financing-calculator__hint a { color: var(--color-primary); text-decoration: underline; text-underline-offset: .2em; }
+.financing-calculator__error { margin-top: .5rem; color: #a10229; font-size: .8125rem; line-height: 1.4; }
+.financing-calculator summary { width: fit-content; cursor: pointer; font-size: .9375rem; font-weight: 600; line-height: 1.4; }
+.financing-calculator__live-hint { margin-top: 1.5rem; color: #686865; font-size: .8125rem; line-height: 1.5; }
+.financing-calculator__result { min-width: 0; padding: clamp(1.5rem, 3vw, 2rem); border-radius: 1rem; background: var(--color-white); }
+.financing-calculator__result-label { color: #555552; font-size: .9375rem; font-weight: 500; line-height: 1.5; }
+.financing-calculator__empty-title { margin-block: 1.25rem; color: #202020; font-size: clamp(1.75rem, 2.5vw, 2.25rem); line-height: 1.15; font-weight: 600; letter-spacing: -.025em; }
+.financing-calculator__result [data-empty] > p:last-child { max-width: 27rem; color: var(--color-muted); font-size: .9375rem; line-height: 1.6; }
+.financing-calculator__payment { margin-top: .75rem; color: var(--color-primary); font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.15; font-weight: 700; letter-spacing: -.025em; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.financing-calculator__payment small { display: block; margin-top: .35rem; color: #696967; font-size: .8125rem; font-weight: 400; letter-spacing: 0; }
+.financing-calculator__context { margin-top: .75rem; color: #696967; font-size: .8125rem; line-height: 1.5; }
+.financing-calculator__comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.75rem; }
+.financing-calculator__modality { min-width: 0; }
+.financing-calculator__modality h4 { margin: 0; font-size: .9375rem; font-weight: 600; }
+.financing-calculator__modality .financing-calculator__payment { font-size: clamp(1.5rem, 2.25vw, 2rem); }
+.financing-calculator__modality[data-unavailable] .financing-calculator__payment { color: #696967; }
+.financing-calculator__breakdown { margin-top: 1.5rem; }
+.financing-calculator__breakdown > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem 1rem; padding-block: .75rem; border-bottom: 1px solid #ebebe8; font-size: .875rem; line-height: 1.5; }
+.financing-calculator__breakdown dt { color: #696967; overflow-wrap: anywhere; }
+.financing-calculator__breakdown dd { margin: 0; max-width: 100%; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; overflow-wrap: anywhere; }
+.financing-calculator__breakdown > div[data-total] { margin-top: .5rem; padding: .875rem 1rem; border: 0; border-radius: .5rem; background: var(--color-surface); }
+.financing-calculator__breakdown > div[data-total] + div[data-total] { margin-top: .375rem; }
+.financing-calculator__breakdown > div[data-total] dt { color: #242424; font-weight: 600; }
+.financing-calculator__costs { margin-top: 1.25rem; }
+.financing-calculator__costs summary { padding-block: .5rem; color: var(--color-primary); font-size: .8125rem; }
+.financing-calculator__costs .financing-calculator__breakdown { margin-top: .5rem; }
+.financing-calculator__costs h4 { margin-top: 1.5rem; font-size: .875rem; font-weight: 600; }
+.financing-calculator__reference { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #d9d9d7; color: #686865; font-size: .8125rem; line-height: 1.65; }
+.financing-calculator__reference > p, .financing-calculator__reference > div { min-width: 0; }
+.financing-calculator__reference details { margin-top: .75rem; }
+.financing-calculator__reference summary { font-size: .8125rem; color: #555552; }
+.financing-calculator__reference details p { margin-top: .625rem; }
+.financing-calculator [hidden] { display: none !important; }
+@media (max-width: 63.9375em) {
+	.financing-calculator { width: min(calc(100% - 3rem), 79.75rem); }
+	.financing-calculator__grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; align-items: start; }
+	.financing-calculator__heading { max-width: 48ch; }
+}
+@media (max-width: 47.9375em) {
+	.financing-calculator { width: calc(100% - 2.5rem); padding-block: 1rem 3.5rem; }
+	.financing-calculator__panel { padding: 1.5rem 1.25rem; }
+	.financing-calculator__heading { margin-bottom: 1.75rem; }
+	.financing-calculator__grid { grid-template-columns: 1fr; gap: 1.75rem; }
+	.financing-calculator__comparison { grid-template-columns: 1fr; gap: 1.5rem; }
+	.financing-calculator__result { padding: 1.5rem; }
+	.financing-calculator__payment { font-size: 2rem; }
+}
+@media (max-width: 29.9375em) {
+	.financing-calculator__input--manual { padding-inline: .75rem; }
+	.financing-calculator__input--manual input { font-size: 1.375rem; }
+	.financing-calculator__field-heading { gap: .5rem; }
+	.financing-calculator__field-heading > label { flex-basis: 8rem; }
+	.financing-calculator__input--duration:not(.financing-calculator__input--manual) { padding-inline: 0; }
+	.financing-calculator__breakdown > div[data-total] { grid-template-columns: minmax(0, 1fr); gap: .375rem; }
+	.financing-calculator__breakdown > div[data-total] dd { text-align: left; font-size: 1rem; }
+}
+@media (max-width: 25em) {
+	.financing-calculator__result { padding: 1.25rem; }
+}
+@media (max-width: 22.4375em) {
+	.financing-calculator__input--manual { padding-inline: .5rem; }
+	.financing-calculator__input--manual input { font-size: 1.125rem; }
+	.financing-calculator__field--secondary .financing-calculator__input--manual input { font-size: 1rem; }
+	.financing-calculator__result { padding: 1rem; }
+	.financing-calculator__breakdown > div { grid-template-columns: minmax(0, 1fr); }
+	.financing-calculator__breakdown dd { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) {
+ .financing-calculator__input, .financing-calculator__segments span { transition: none; }
+}

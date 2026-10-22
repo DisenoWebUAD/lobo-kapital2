@@ -1,0 +1,30 @@
+---
+import { financingProducts, financingInformationNote, type FinancingProductId } from '../data/financing-products';
+
+interface Props { product: FinancingProductId }
+const { product: productId } = Astro.props;
+const product = financingProducts[productId];
+---
+
+<section class="financing-details" id="condiciones" aria-labelledby="financing-details-title">
+	<div class="financing-container financing-details__grid" data-page-reveal-group>
+		<div class="financing-requirements" id="requisitos" data-page-reveal>
+			<h2 id="financing-details-title">¿Puede ser para <span>tu empresa?</span></h2>
+			<p>{product.intro}</p>
+			<ul>{product.requirements.map((requirement) => <li><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>{requirement}</li>)}</ul>
+			<p class="financing-small">No adjuntes documentos ni facturas al pedir información. Si decides iniciar el trámite, un asesor te indicará el canal correspondiente.</p>
+		</div>
+		<div class="financing-conditions" data-page-reveal="fade">
+			<h3>Condiciones a considerar</h3>
+			<dl>{product.conditions.map((condition) => <div><dt>{condition.label}</dt><dd>{condition.value}</dd></div>)}
+				<div><dt>Tasa, comisiones y seguros</dt><dd>{product.contractualPricing.status}</dd></div>
+			</dl>
+			<p class="financing-small">{product.contractNote}</p>
+			<details class="financing-cat">
+				<summary>{productId === 'lease' ? product.cat : `CAT informativo ${product.cat}`}<small>{product.catModality}</small></summary>
+				<p>{product.catDisclosure}</p>
+			</details>
+			<p class="financing-small">{financingInformationNote}</p>
+		</div>
+	</div>
+</section>

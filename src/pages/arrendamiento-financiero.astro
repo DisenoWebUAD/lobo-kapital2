@@ -1,0 +1,49 @@
+---
+import FontHead from '../components/FontHead.astro';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageReveals from '../components/PageReveals.astro';
+import FinancingHero from '../components/FinancingHero.astro';
+import FinancingOverview from '../components/FinancingOverview.astro';
+import FinancingDetails from '../components/FinancingDetails.astro';
+import FinancingCalculator from '../components/FinancingCalculator.astro';
+import LeaseAssets from '../components/LeaseAssets.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { financingProducts } from '../data/financing-products';
+import logoMark from '../assets/home/logo-mark.svg';
+import '../styles/global.css';
+import '../styles/lease.css';
+import '../styles/financing-products.css';
+
+const product = financingProducts['finance-lease'];
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={product.summary} />
+		<meta name="theme-color" content="#c10230" />
+		<link rel="icon" type="image/svg+xml" href={logoMark.src} />
+		<title>{product.title} | Lobo Kapital</title>
+		<FontHead />
+		<ClientRouter />
+	</head>
+	<body class="financing-page">
+		<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+		<Header />
+		<main id="main-content" tabindex="-1" transition:name="page-main" transition:animate="fade">
+			<FinancingHero product="finance-lease" />
+			<FinancingOverview product="finance-lease" />
+			<FinancingDetails product="finance-lease" />
+			<FinancingCalculator product="finance-lease" />
+			<LeaseAssets product="finance-lease" />
+			<LeadForm product="finance-lease" sectionId="solicitud" />
+		</main>
+		<Footer />
+		<PageReveals />
+	</body>
+</html>

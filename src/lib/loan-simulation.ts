@@ -6,6 +6,7 @@ export const loanSimulations = {
     annualRate: 0.48,
     openingFeeRate: 0.03,
     vatRate: 0.16,
+    insurance: { initial: 0, max: 1_000_000_000_000 },
   },
   business: {
     // The source calculator models only a simple loan with a mortgage guarantee.
@@ -14,6 +15,7 @@ export const loanSimulations = {
     annualRate: 0.30,
     openingFeeRate: 0.025,
     vatRate: 0.16,
+    insurance: { initial: 0, max: 1_000_000_000_000 },
   },
 } as const;
 

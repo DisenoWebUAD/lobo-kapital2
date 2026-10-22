@@ -1,0 +1,194 @@
+---
+import { Image } from 'astro:assets';
+import workshopImage from '../assets/editorial/equipo.jpg';
+import { financingProducts } from '../data/financing-products';
+
+const products = [
+	{ id: 'revolving', description: 'Liquidez para inventario, proveedores y gastos de operación.' },
+	{ id: 'finance-lease', description: 'Equipo y vehículos con alternativas al final del contrato.' },
+	{ id: 'lease', description: 'Utiliza los activos que necesitas y planea su renovación.' },
+	{ id: 'factoring', description: 'Anticipa facturas elegibles para mover tu capital de trabajo.' },
+] as const;
+---
+
+<section class="business-solutions solutions__additional" aria-labelledby="business-solutions-title">
+	<div class="business-solutions__story">
+		<header class="business-solutions__intro" data-reveal>
+			<h3 id="business-solutions-title">Para tu<br />{' '}empresa</h3>
+			<p>Liquidez y activos para dar el siguiente paso de tu negocio.</p>
+		</header>
+		<div class="business-solutions__media" data-reveal="right">
+			<Image
+				src={workshopImage}
+				alt="Un profesional operando una máquina en un taller de manufactura"
+				width={960}
+				height={640}
+				widths={[384, 640, 960]}
+				sizes="(max-width: 47.9375em) calc(100vw - 2.5rem), (max-width: 56.25em) 50vw, (max-width: 85.75em) 40vw, 32.625rem"
+				format="webp"
+				quality={85}
+				loading="lazy"
+				decoding="async"
+			/>
+		</div>
+	</div>
+	<ul class="business-solutions__products" data-reveal-group="70">
+		{products.map(({ id, description }) => (
+			<li data-reveal>
+				<a class="business-solutions__link" href={financingProducts[id].href}>
+					<div>
+						<h4>{financingProducts[id].title}</h4>
+						<p>{description}</p>
+					</div>
+					<span class="business-solutions__arrow" aria-hidden="true">
+						<svg viewBox="0 0 24 24" width="24" height="24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</section>
+
+<style>
+	.business-solutions {
+		display: grid;
+		grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+		width: min(calc(100% - 6rem), 79.75rem);
+		margin: 4.5rem auto 0;
+		overflow: hidden;
+		border-radius: 1.5rem;
+		background: var(--color-surface);
+	}
+	.business-solutions__story {
+		display: grid;
+		grid-template-rows: auto minmax(14rem, 1fr);
+		min-width: 0;
+		background: var(--color-primary);
+	}
+	.business-solutions__intro {
+		padding: clamp(2rem, 3.2vw, 3rem);
+		color: var(--color-white);
+	}
+	h3 {
+		color: inherit;
+		font-size: clamp(2.75rem, 4vw, 3.75rem);
+		font-weight: 650;
+		line-height: .99;
+		letter-spacing: -.045em;
+	}
+	.business-solutions__intro p {
+		max-width: 27ch;
+		margin-top: 1.25rem;
+		font-size: 1.125rem;
+		line-height: 1.5;
+	}
+	.business-solutions__media {
+		min-height: 0;
+		overflow: hidden;
+	}
+	.business-solutions__media img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		min-height: 14rem;
+		object-fit: cover;
+		object-position: 46% center;
+	}
+	.business-solutions__products {
+		display: grid;
+		grid-template-rows: repeat(4, 1fr);
+		gap: .25rem;
+		min-width: 0;
+		margin: 0;
+		padding: 1rem;
+		list-style: none;
+	}
+	.business-solutions__products li { min-width: 0; }
+	.business-solutions__link {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.75rem;
+		height: 100%;
+		min-height: 7.75rem;
+		padding: 1.5rem clamp(1.25rem, 2.25vw, 2rem);
+		border-radius: 1rem;
+		color: var(--color-ink);
+		text-decoration: none;
+		transition: background-color 180ms ease;
+	}
+	.business-solutions__link > div { min-width: 0; }
+	h4 {
+		margin: 0;
+		font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+		font-weight: 650;
+		line-height: 1.15;
+		letter-spacing: -.025em;
+		transition: color 180ms ease;
+	}
+	.business-solutions__link p {
+		max-width: 39ch;
+		margin-top: .625rem;
+		color: var(--color-muted);
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+	.business-solutions__arrow {
+		display: grid;
+		flex: 0 0 2.75rem;
+		width: 2.75rem;
+		height: 2.75rem;
+		place-items: center;
+		border-radius: 50%;
+		color: var(--color-primary);
+		background: var(--color-white);
+		transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+	}
+	.business-solutions__link:hover,
+	.business-solutions__link:focus-visible { background: var(--color-white); }
+	.business-solutions__link:hover h4,
+	.business-solutions__link:focus-visible h4 { color: var(--color-primary); }
+	.business-solutions__link:hover .business-solutions__arrow,
+	.business-solutions__link:focus-visible .business-solutions__arrow {
+		color: var(--color-white);
+		background: var(--color-primary);
+		transform: translateX(.1875rem);
+	}
+	.business-solutions__link:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+	@media (max-width: 74.9375em) {
+		.business-solutions { width: 100%; }
+		.business-solutions__link { gap: 1rem; padding-inline: 1.25rem; }
+	}
+	@media (max-width: 56.25em) {
+		.business-solutions { grid-template-columns: 1fr; }
+		.business-solutions__story { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+		.business-solutions__intro { align-self: center; }
+		.business-solutions__media img { min-height: 100%; aspect-ratio: 1; }
+		.business-solutions__products { padding: .75rem; }
+		.business-solutions__link { min-height: 7.5rem; padding: 1.5rem; }
+		h4 { font-size: 1.5rem; }
+	}
+	@media (max-width: 47.9375em) {
+		.business-solutions { margin-top: 2.75rem; border-radius: 1.125rem; }
+		.business-solutions__story { grid-template-columns: 1fr; }
+		.business-solutions__intro { padding: 1.75rem; }
+		h3 { font-size: clamp(2.625rem, 11vw, 3.5rem); }
+		.business-solutions__intro p { max-width: 27ch; margin-top: 1rem; font-size: 1.0625rem; }
+		.business-solutions__media img { height: auto; min-height: 0; aspect-ratio: 16 / 9; }
+		.business-solutions__products { gap: .25rem; padding: .5rem; }
+		.business-solutions__link { gap: 1rem; min-height: 8rem; padding: 1.25rem; }
+		h4 { font-size: 1.375rem; }
+		.business-solutions__link p { font-size: 1rem; }
+		.business-solutions__arrow { flex-basis: 2.5rem; width: 2.5rem; height: 2.5rem; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.business-solutions__link,
+		.business-solutions__link h4,
+		.business-solutions__arrow { transition: none; }
+		.business-solutions__link:hover .business-solutions__arrow,
+		.business-solutions__link:focus-visible .business-solutions__arrow { transform: none; }
+	}
+</style>

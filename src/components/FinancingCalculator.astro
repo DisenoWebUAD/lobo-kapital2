@@ -1,0 +1,177 @@
+---
+import { formatCurrencyInput } from '../lib/currency-input';
+import { contactEmail } from '../data/contact';
+import { financingProducts } from '../data/financing-products';
+import { revolvingEstimateAssumptions } from '../lib/financing-estimates';
+import { revolvingDefaults, getLeaseDefaults, factoringDefaults, financingAssumptions } from '../lib/financing-simulation';
+import '../styles/financing-calculator.css';
+
+interface Props {
+	product: 'revolving' | 'finance-lease' | 'lease' | 'factoring';
+}
+interface Field {
+	name: string;
+	label: string;
+	type: 'money' | 'number' | 'segmented';
+	value: number | string;
+	hint?: string;
+	min?: number;
+	max?: number;
+	options?: { value: string; label: string }[];
+	range?: boolean;
+}
+const { product } = Astro.props;
+const prefix = `financing-${product}`;
+const isLease = product === 'lease' || product === 'finance-lease';
+const initialLease = getLeaseDefaults(product === 'lease' ? 'pure' : 'finance');
+const percent = (value: number) => new Intl.NumberFormat('es-MX', { style: 'percent', maximumFractionDigits: 2 }).format(value);
+const durationUnit = (value: number, field: string) => field === 'days' ? value === 1 ? 'día' : 'días' : value === 1 ? 'mes' : 'meses';
+const duration = (value: number, field: string) => `${value} ${durationUnit(value, field)}`;
+const vat = percent(financingAssumptions.vatRate);
+const revolving = financingAssumptions.revolving;
+const lease = financingAssumptions.lease;
+const factoring = financingAssumptions.factoring;
+const headings = {
+	revolving: ['Simula tu', 'disposición'],
+	'finance-lease': ['Simula tu', 'arrendamiento'],
+	lease: ['Simula tu', 'arrendamiento'],
+	factoring: ['Estima tu', 'liquidez'],
+};
+const introductions = {
+	revolving: 'Indica cuánto necesitas y por cuántos días para estimar tu pago mensual de referencia y el pago final.',
+	'finance-lease': 'Elige el activo, su valor y el plazo para estimar tu renta y la compra opcional al terminar.',
+	lease: 'Indica el valor del activo y el plazo para estimar tu renta mensual.',
+	factoring: 'Indica el valor de tus facturas y los días para cobrarlas. Compara la liquidez estimada de ambas modalidades.',
+};
+const fields: Field[] = product === 'revolving' ? [
+	{ name: 'amount', label: '¿Cuánto necesitas?', type: 'money', value: revolvingDefaults.amount, min: 1 },
+	{ name: 'days', label: '¿Por cuántos días?', type: 'number', value: revolvingDefaults.days, min: 60, max: 360, range: true },
+] : isLease ? [
+	...(product === 'finance-lease' ? [{ name: 'asset', label: 'Tipo de activo', type: 'segmented' as const, value: initialLease.asset, options: [{ value: 'vehicle', label: 'Vehículo' }, { value: 'machinery', label: 'Maquinaria o equipo' }] }] : []),
+	{ name: 'assetValue', label: 'Valor del activo sin IVA', type: 'money', value: initialLease.value, min: 1 },
+	{ name: 'termMonths', label: 'Plazo en meses', type: 'number', value: initialLease.months, min: product === 'lease' ? 18 : 1, max: product === 'lease' ? 36 : 120, range: true, hint: product === 'finance-lease' ? '* El plazo de contratación depende del activo y la evaluación.' : undefined },
+] : [
+	{ name: 'invoiceAmount', label: 'Valor de tus facturas', type: 'money', value: factoringDefaults.amount, min: 1 },
+	{ name: 'days', label: 'Días que faltan para cobrarlas', type: 'number', value: factoringDefaults.days, min: 1, max: factoring.maxDays },
+];
+const assumptions = product === 'revolving' ? [
+	`Tasa anual ilustrativa del ${percent(revolving.annualRate)}. Interés simple: monto × tasa × días / 360, más IVA del ${vat}.`,
+	`Se modela una nueva línea por el monto capturado y una sola disposición completa. Apertura del ${percent(revolving.openingFeeRate)} y disposición del ${percent(revolving.drawFeeRate)} sobre ese importe, más IVA, por separado al inicio. No se estima una línea autorizada ni disposiciones posteriores.`,
+	`El pago mensual es una referencia de ${revolvingEstimateAssumptions.paymentPeriodDays} días con IVA, sin amortizar capital. El último pago devuelve el capital completo y cubre los intereses de los días restantes. No es una mensualidad fija ni un calendario contractual; los importes reales dependen de las fechas y los movimientos de la línea.`,
+] : isLease ? [
+	`Tasa anual ilustrativa del ${percent(lease.annualRate)}; renta calculada como anualidad con residual. Apertura del ${percent(lease.openingFeeRate)} del valor del activo sin IVA, más IVA, por separado al inicio.`,
+	product === 'finance-lease' ? `Residual de referencia: ${percent(getLeaseDefaults('finance', 'vehicle').residualPercent / 100)} en vehículo y ${percent(getLeaseDefaults('finance', 'machinery').residualPercent / 100)} en maquinaria. La compra opcional es ese residual más IVA. El anticipo reduce el principal; no se estima otro tratamiento fiscal del anticipo.` : `Residual de referencia: ${percent(initialLease.residualPercent / 100)}. No se incluye un anticipo ni una compra al terminar. El depósito contractual está pendiente y queda excluido.`,
+	product === 'finance-lease' ? `Maquinaria: administración de ${formatCurrencyInput(lease.annualAdministration)} más IVA al inicio y en cada aniversario anterior al vencimiento. Límites del modelo: vehículo 1–120 meses; maquinaria 1–60 meses. No representan plazos autorizados.` : `IVA del ${vat} sobre la renta. El modelo utiliza rentas mensuales y plazos de 18 a 36 meses.`,
+] : [
+	`Anticipo ilustrativo del ${percent(factoringDefaults.advancePercent / 100)} de las facturas. Se compara una misma operación con tasa anual del ${percent(factoring.annualRate['with-recourse'])} con recurso y del ${percent(factoring.annualRate['without-recourse'])} sin recurso; descuento sobre el anticipo, base de 360 días.`,
+	`Se modela una nueva línea igual al valor de las facturas: apertura del ${percent(factoring.openingFeeRate)} sobre ese importe, operación del ${percent(factoring.operationFeeRate)} y ${factoringDefaults.administrationCount} cargo${factoringDefaults.administrationCount === 1 ? '' : 's'} de administración de ${formatCurrencyInput(factoring.administration)}. IVA del ${vat} sobre descuento y comisiones. No se confirma una línea ni un porcentaje de anticipo autorizado.`,
+	'La reserva no anticipada está sujeta al cobro de las facturas y al contrato. El alcance de las obligaciones del cedente y la modalidad disponible dependen de la evaluación y de la propuesta.',
+];
+const exclusions = product === 'factoring'
+	? 'No incluye gastos externos pendientes de cotizar. La reserva depende del cobro y del contrato.'
+	: product === 'lease' ? 'No incluye seguros, servicios ni depósito contractual; sus importes están pendientes de cotizar.'
+	: product === 'finance-lease' ? 'No incluye seguros ni servicios; sus importes están pendientes de cotizar.'
+	: 'No incluye seguros; su aplicación y costo están pendientes de confirmar.';
+---
+
+<section id="simulador" class="financing-calculator" aria-labelledby={`${prefix}-title`}>
+	<lobo-financing-calculator class="financing-calculator__panel" data-product={product} data-ui>
+		<div class="financing-calculator__grid">
+			<div class="financing-calculator__controls">
+				<header class="financing-calculator__heading">
+					<h2 id={`${prefix}-title`}>{headings[product][0]} <span>{headings[product][1]}</span></h2>
+					<p>{introductions[product]}</p>
+				</header>
+				<form novalidate aria-labelledby={`${prefix}-title`}>
+					<fieldset disabled data-controls>
+						<legend class="visually-hidden">Datos de la estimación</legend>
+						<div class="financing-calculator__fields">
+							{fields.map(field => (
+								<div class:list={['financing-calculator__field', { 'financing-calculator__field--manual': field.type !== 'segmented' && !field.range, 'financing-calculator__field--secondary': field.type === 'number' && !field.range }]}>
+									{field.type === 'segmented' ? <fieldset class="financing-calculator__choice">
+										<legend>{field.label}</legend>
+										<div class="financing-calculator__segments">{field.options?.map(option => <label>
+											<input type="radio" class="visually-hidden" name={field.name} value={option.value} checked={option.value === String(field.value)} required aria-describedby={`${prefix}-${field.name}-error`} />
+											<span>{option.label}</span>
+										</label>)}</div>
+									</fieldset> : <>
+										<div class="financing-calculator__field-heading">
+											<label id={`${prefix}-${field.name}-label`} for={`${prefix}-${field.name}`}>{field.label}</label>
+											<div class:list={['financing-calculator__input', field.type === 'money' ? 'financing-calculator__input--money' : 'financing-calculator__input--duration', { 'financing-calculator__input--manual': !field.range }]}>
+												<input id={`${prefix}-${field.name}`} name={field.name} type={field.type === 'number' ? 'number' : 'text'} value={field.type === 'money' ? formatCurrencyInput(Number(field.value)) : String(field.value)} min={field.min} max={field.type === 'money' ? financingAssumptions.maxAmount : field.max} step="1" data-money={field.type === 'money' || undefined} inputmode={field.type === 'money' ? 'numeric' : undefined} autocomplete="off" required aria-describedby={`${prefix}-${field.name}-hint ${prefix}-${field.name}-error`} />
+												<span aria-hidden="true" data-value-unit={field.type === 'number' ? field.name : undefined}>{field.type === 'money' ? 'MXN' : durationUnit(Number(field.value), field.name)}</span>
+											</div>
+										</div>
+										{field.range && <div class="financing-calculator__range-wrap">
+											<input class="financing-calculator__range" type="range" min={field.min} max={field.max} step="1" value={Number(field.value)} data-range-for={field.name} aria-labelledby={`${prefix}-${field.name}-label`} aria-describedby={`${prefix}-${field.name}-hint ${prefix}-${field.name}-error`} aria-valuetext={duration(Number(field.value), field.name)} style={`--range-progress: ${((Number(field.value) - Number(field.min)) / (Number(field.max) - Number(field.min))) * 100}%`} />
+											<div class="financing-calculator__bounds" aria-hidden="true"><span>{duration(Number(field.min), field.name)}</span><span data-range-bound={field.name}>{duration(Number(field.max), field.name)}</span></div>
+										</div>}
+										<p id={`${prefix}-${field.name}-hint`} class="financing-calculator__hint">{field.hint}</p>
+									</>}
+									<p id={`${prefix}-${field.name}-error`} class="financing-calculator__error" data-field-error={field.name} hidden></p>
+								</div>
+							))}
+							{product === 'finance-lease' && <div class="financing-calculator__field financing-calculator__field--manual financing-calculator__field--secondary" data-advance>
+								<div class="financing-calculator__field-heading">
+									<label for={`${prefix}-advance`}>Anticipo (opcional)</label>
+									<div class="financing-calculator__input financing-calculator__input--money financing-calculator__input--manual">
+										<input id={`${prefix}-advance`} name="advance" type="text" value={formatCurrencyInput(initialLease.advance)} data-money inputmode="numeric" autocomplete="off" min="0" max={financingAssumptions.maxAmount} aria-describedby={`${prefix}-advance-hint ${prefix}-advance-error`} />
+										<span aria-hidden="true">MXN</span>
+									</div>
+								</div>
+								<p id={`${prefix}-advance-error`} class="financing-calculator__error" data-field-error="advance" hidden></p>
+							</div>}
+						</div>
+					</fieldset>
+					<p class="financing-calculator__error" data-form-error role="alert" hidden></p>
+					<noscript><p class="financing-calculator__hint">Activa JavaScript para usar el simulador o <a href={`mailto:${contactEmail}`}>prepara un correo para solicitar orientación</a>. El correo no se envía automáticamente.</p></noscript>
+				</form>
+			</div>
+			<div class="financing-calculator__result" aria-labelledby={`${prefix}-result-title`}>
+				<div data-empty>
+					<p class="financing-calculator__empty-title">Tu estimación aparecerá aquí.</p>
+					<p>Completa los datos para consultar los importes estimados y su desglose.</p>
+				</div>
+				<div data-result hidden>
+					<h3 class="financing-calculator__result-label" id={`${prefix}-result-title`} data-result-label></h3>
+					{product === 'factoring' ? <>
+						<p class="financing-calculator__context" data-context></p>
+						<div class="financing-calculator__comparison">
+							{(['without-recourse', 'with-recourse'] as const).map(mode => <div class="financing-calculator__modality" data-modality={mode}>
+								<h4>{mode === 'without-recourse' ? 'Sin recurso' : 'Con recurso'}</h4>
+								<p class="financing-calculator__payment"><span data-payment></span><small>MXN</small></p>
+								<p class="financing-calculator__context" data-deduction></p>
+							</div>)}
+						</div>
+					</> : <>
+						<p class="financing-calculator__payment"><span data-payment></span><small>MXN</small></p>
+						<p class="financing-calculator__context" data-context></p>
+					</>}
+					<dl class="financing-calculator__breakdown" data-breakdown></dl>
+					<details class="financing-calculator__costs" data-costs>
+						<summary>Ver desglose de costos</summary>
+						<div data-cost-breakdown></div>
+					</details>
+				</div>
+			</div>
+		</div>
+		<footer class="financing-calculator__reference">
+			<p class="financing-calculator__result-note" data-result-note hidden></p>
+			<p class="financing-calculator__exclusion">{exclusions}</p>
+			<div>
+				<p>El monto y las condiciones definitivas están sujetas a evaluación.</p>
+				<details>
+					<summary>Consultar supuestos del cálculo</summary>
+					{assumptions.map(text => <p>{text}</p>)}
+					<p>{financingProducts[product].catDisclosure}</p>
+				</details>
+			</div>
+		</footer>
+		<p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-status></p>
+	</lobo-financing-calculator>
+</section>
+
+<script>
+	import { registerFinancingCalculator } from '../lib/financing-calculator-client';
+	registerFinancingCalculator();
+</script>
