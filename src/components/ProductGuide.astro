@@ -1,0 +1,873 @@
+---
+import FormSelect from "./FormSelect.astro";
+import {
+	guideObjectives,
+	guideProducts,
+	guideProductOrder,
+	guideTermOptions,
+	guideHistoryOptions,
+} from "../data/product-guide";
+const termOptions = guideTermOptions.map((months) => ({
+	value: String(months),
+	label: `${months} meses`,
+}));
+---
+
+<section
+	class="product-guide"
+	id="elige-tu-financiamiento"
+	aria-labelledby="guide-title"
+>
+	<lobo-product-guide>
+		<header class="product-guide__heading">
+			<h2 id="guide-title">
+				¿No sabes qué <span>producto elegir?</span>
+			</h2>
+			<p>
+				Empieza por lo que quieres lograr. Te mostramos una alternativa
+				para conocerla y conversar con un asesor.
+			</p>
+		</header>
+		<div class="product-guide__layout">
+			<form data-guide-form novalidate hidden>
+				<fieldset disabled data-guide-fields>
+					<legend class="product-guide__sr-only"
+						>Tu objetivo y datos opcionales</legend
+					>
+					<div
+						class="product-guide__field product-guide__field--objective"
+					>
+						<label id="guide-objective-label" for="guide-objective"
+							>¿Qué quieres lograr?</label
+						>
+						<FormSelect
+							id="guide-objective"
+							name="objective"
+							labelId="guide-objective-label"
+							options={guideObjectives}
+							placeholder="Elige tu objetivo"
+							required
+							describedBy="guide-objective-error"
+						/>
+						<p
+							class="product-guide__error"
+							id="guide-objective-error"
+							data-guide-error="objective"
+						>
+						</p>
+					</div>
+					<div class="product-guide__optional">
+						<div class="product-guide__field">
+							<label for="guide-amount"
+								>Monto <span>(opcional)</span></label
+							>
+							<div class="product-guide__amount">
+								<input
+									id="guide-amount"
+									name="amount"
+									type="text"
+									inputmode="numeric"
+									autocomplete="off"
+									placeholder="$0"
+									maxlength="24"
+									aria-describedby="guide-amount-error"
+								/>
+								<span aria-hidden="true">MXN</span>
+							</div>
+							<p
+								class="product-guide__error"
+								id="guide-amount-error"
+								data-guide-error="amount"
+							>
+							</p>
+						</div>
+						<div class="product-guide__field">
+							<label
+								id="guide-termMonths-label"
+								for="guide-termMonths"
+								>Plazo <span>(opcional)</span></label
+							>
+							<FormSelect
+								id="guide-termMonths"
+								name="termMonths"
+								labelId="guide-termMonths-label"
+								options={termOptions}
+								placeholder="Aún no lo sé"
+								describedBy="guide-termMonths-error"
+							/>
+							<p
+								class="product-guide__error"
+								id="guide-termMonths-error"
+								data-guide-error="termMonths"
+							>
+							</p>
+						</div>
+						<div
+							class="product-guide__field product-guide__field--history"
+						>
+							<label
+								id="guide-operatingHistory-label"
+								for="guide-operatingHistory"
+								>Antigüedad de tu empresa <span>(opcional)</span
+								></label
+							>
+							<FormSelect
+								id="guide-operatingHistory"
+								name="operatingHistory"
+								labelId="guide-operatingHistory-label"
+								options={guideHistoryOptions}
+								placeholder="Prefiero revisarlo con un asesor"
+								describedBy="guide-operatingHistory-error"
+							/>
+							<p
+								class="product-guide__error"
+								id="guide-operatingHistory-error"
+								data-guide-error="operatingHistory"
+							>
+							</p>
+						</div>
+					</div>
+					<button class="product-guide__submit" type="submit"
+						>Ver opciones para mi negocio <span aria-hidden="true"
+							>→</span
+						></button
+					>
+				</fieldset>
+			</form>
+			<div class="product-guide__output" data-guide-output hidden>
+				<div class="product-guide__empty" data-guide-empty>
+					<h3>Tus opciones, aquí</h3>
+					<p>
+						Elige qué quieres lograr y pulsa “Ver opciones para mi
+						negocio” para conocer una alternativa.
+					</p>
+				</div>
+				<div
+					class="product-guide__results"
+					data-guide-results
+					role="region"
+					aria-labelledby="guide-results-title"
+					tabindex="-1"
+					hidden
+				>
+					<h3 id="guide-results-title">Opciones para explorar</h3>
+					<ul data-guide-recommendations></ul>
+				</div>
+			</div>
+			<noscript>
+				<div class="product-guide__fallback">
+					<p>
+						Explora estas opciones y consulta cuál corresponde a tu
+						objetivo:
+					</p>
+					<ul>
+						{
+							guideProductOrder.map((id) => (
+								<li>
+									<a href={guideProducts[id].href}>
+										{guideProducts[id].title}{" "}
+										<span aria-hidden="true">→</span>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</noscript>
+		</div>
+		<p
+			class="product-guide__sr-only"
+			data-guide-status
+			role="status"
+			aria-atomic="true"
+		>
+		</p>
+		<p class="product-guide__scope">
+			Esta guía orienta tu búsqueda; la disponibilidad y las condiciones
+			dependen de la evaluación de tu caso. No representa una autorización
+			ni una oferta. Consulta requisitos y condiciones en cada producto.
+		</p>
+	</lobo-product-guide>
+</section>
+
+<script>
+	import {
+		getProductRecommendations,
+		validateProductGuide,
+		type ProductGuideFields,
+	} from "../lib/product-guide";
+	import { formatCurrencyEdit } from "../lib/currency-input";
+
+	class LoboProductGuide extends HTMLElement {
+		private controller?: AbortController;
+		private animations = new Set<Animation>();
+
+		private stopAnimations() {
+			this.animations.forEach((animation) => animation.cancel());
+			this.animations.clear();
+		}
+
+		initialize() {
+			this.controller?.abort();
+			this.stopAnimations();
+			this.controller = new AbortController();
+			const { signal } = this.controller;
+			const form =
+				this.querySelector<HTMLFormElement>("[data-guide-form]");
+			const fieldset = this.querySelector<HTMLFieldSetElement>(
+				"[data-guide-fields]",
+			);
+			const results = this.querySelector<HTMLElement>(
+				"[data-guide-results]",
+			);
+			const list = this.querySelector<HTMLElement>(
+				"[data-guide-recommendations]",
+			);
+			const status = this.querySelector<HTMLElement>(
+				"[data-guide-status]",
+			);
+			const output = this.querySelector<HTMLElement>(
+				"[data-guide-output]",
+			);
+			const empty = this.querySelector<HTMLElement>("[data-guide-empty]");
+			if (
+				!form ||
+				!fieldset ||
+				!results ||
+				!list ||
+				!status ||
+				!output ||
+				!empty
+			)
+				return;
+			const reducedMotion = window.matchMedia(
+				"(prefers-reduced-motion: reduce)",
+			);
+			reducedMotion.addEventListener(
+				"change",
+				() => {
+					if (reducedMotion.matches) this.stopAnimations();
+				},
+				{ signal },
+			);
+			const keys: (keyof ProductGuideFields)[] = [
+				"objective",
+				"amount",
+				"termMonths",
+				"operatingHistory",
+			];
+			const fields = Object.fromEntries(
+				keys.map((key) => [key, form.elements.namedItem(key)]),
+			) as Record<
+				keyof ProductGuideFields,
+				HTMLInputElement | HTMLSelectElement
+			>;
+			if (keys.some((key) => !fields[key])) return;
+			const errors = Object.fromEntries(
+				keys.map((key) => [
+					key,
+					this.querySelector<HTMLElement>(
+						`[data-guide-error="${key}"]`,
+					),
+				]),
+			);
+			const amount = fields.amount as HTMLInputElement;
+			const clearResult = () => {
+				this.stopAnimations();
+				results.hidden = true;
+				empty.hidden = false;
+				list.replaceChildren();
+				status.textContent = "";
+			};
+			const clearError = (key: keyof ProductGuideFields) => {
+				fields[key].removeAttribute("aria-invalid");
+				if (errors[key]) errors[key].textContent = "";
+			};
+			const formatAmount = () => {
+				const edit = formatCurrencyEdit(
+					amount.value,
+					amount.selectionStart ?? amount.value.length,
+					amount.selectionEnd ?? amount.value.length,
+				);
+				if (edit) {
+					const direction = amount.selectionDirection ?? "none";
+					amount.value = edit.text;
+					amount.setSelectionRange(
+						edit.selectionStart,
+						edit.selectionEnd,
+						direction,
+					);
+				}
+			};
+			amount.addEventListener(
+				"beforeinput",
+				(event) => {
+					if (event.isComposing) return;
+					const start = amount.selectionStart ?? 0;
+					const end = amount.selectionEnd ?? start;
+					if (
+						start === 0 &&
+						end === 0 &&
+						amount.value.startsWith("$") &&
+						event.inputType === "insertText" &&
+						event.data !== null
+					) {
+						event.preventDefault();
+						if (
+							formatCurrencyEdit(
+								`$${event.data}${amount.value.slice(1)}`,
+							)
+						) {
+							amount.setRangeText(event.data, 1, 1, "end");
+							formatAmount();
+							clearResult();
+							clearError("amount");
+						}
+						return;
+					}
+					if (
+						event.inputType === "insertText" &&
+						event.data !== null &&
+						!formatCurrencyEdit(
+							amount.value.slice(0, start) +
+								event.data +
+								amount.value.slice(end),
+						)
+					)
+						event.preventDefault();
+					if (
+						start === end &&
+						event.inputType === "deleteContentBackward" &&
+						amount.value[start - 1] === ","
+					) {
+						event.preventDefault();
+						amount.setRangeText("", start - 2, start, "end");
+						formatAmount();
+						clearResult();
+						clearError("amount");
+					} else if (
+						start === end &&
+						event.inputType === "deleteContentForward" &&
+						amount.value[start] === ","
+					) {
+						event.preventDefault();
+						amount.setRangeText("", start, start + 2, "start");
+						formatAmount();
+						clearResult();
+						clearError("amount");
+					}
+				},
+				{ signal },
+			);
+			form.addEventListener(
+				"input",
+				(event) => {
+					clearResult();
+					const field = event.target as
+						HTMLInputElement | HTMLSelectElement;
+					const key = field.name as keyof ProductGuideFields;
+					if (keys.includes(key)) clearError(key);
+					if (
+						field === amount &&
+						(!(event instanceof InputEvent) || !event.isComposing)
+					)
+						formatAmount();
+				},
+				{ signal },
+			);
+			amount.addEventListener("compositionend", formatAmount, { signal });
+			form.addEventListener("change", clearResult, { signal });
+			amount.addEventListener(
+				"focus",
+				() => {
+					if (!amount.value) amount.value = "$";
+				},
+				{ signal },
+			);
+			amount.addEventListener(
+				"blur",
+				() => {
+					if (amount.value === "$") amount.value = "";
+				},
+				{ signal },
+			);
+			form.addEventListener(
+				"submit",
+				(event) => {
+					event.preventDefault();
+					clearResult();
+					keys.forEach(clearError);
+					const values = Object.fromEntries(
+						keys.map((key) => [key, fields[key].value]),
+					) as unknown as ProductGuideFields;
+					const validation = validateProductGuide(values);
+					if (!validation.valid) {
+						for (const key of keys) {
+							const message = validation.errors[key];
+							if (!message) continue;
+							fields[key].setAttribute("aria-invalid", "true");
+							if (errors[key]) errors[key].textContent = message;
+						}
+						status.textContent =
+							"Revisa los campos señalados para continuar.";
+						const first = keys.find(
+							(key) => validation.errors[key],
+						);
+						if (first) fields[first].focus();
+						return;
+					}
+					const recommendations = getProductRecommendations(
+						validation.value,
+					);
+					for (const recommendation of recommendations) {
+						const item = document.createElement("li");
+						item.dataset.guideProduct = recommendation.id;
+						const link = document.createElement("a");
+						link.href = recommendation.href;
+						const title = document.createElement("h4");
+						title.textContent = recommendation.title;
+						const arrow = document.createElement("span");
+						arrow.textContent = "→";
+						arrow.setAttribute("aria-hidden", "true");
+						link.append(title, arrow);
+						const description = document.createElement("p");
+						description.textContent = recommendation.description;
+						item.append(link, description);
+						if (recommendation.warnings.length) {
+							const warnings = document.createElement("ul");
+							warnings.className = "product-guide__warnings";
+							for (const warning of recommendation.warnings) {
+								const message = document.createElement("li");
+								message.dataset.guideWarning = warning.code;
+								message.textContent = warning.text;
+								warnings.append(message);
+							}
+							item.append(warnings);
+						}
+						list.append(item);
+					}
+					results.hidden = false;
+					empty.hidden = true;
+					status.textContent =
+						recommendations.length === 1
+							? "Una opción para explorar."
+							: `${recommendations.length} opciones para explorar.`;
+					if (!reducedMotion.matches) {
+						const elements = [
+							results.querySelector("h3"),
+							...list.children,
+						];
+						elements.forEach((element, index) => {
+							if (!element) return;
+							const animation = element.animate(
+								[
+									{
+										opacity: 0,
+										transform: "translateY(12px)",
+									},
+									{ opacity: 1, transform: "translateY(0)" },
+								],
+								{
+									duration: 360,
+									delay: index * 45,
+									easing: "cubic-bezier(.22, 1, .36, 1)",
+									fill: "backwards",
+								},
+							);
+							this.animations.add(animation);
+							animation.finished.then(
+								() => this.animations.delete(animation),
+								() => this.animations.delete(animation),
+							);
+						});
+					}
+					results.focus({ preventScroll: true });
+					if (window.matchMedia("(max-width: 63.9375em)").matches) {
+						results.scrollIntoView({
+							block: "start",
+							behavior: reducedMotion.matches
+								? "instant"
+								: "smooth",
+						});
+					}
+				},
+				{ signal },
+			);
+			form.hidden = false;
+			fieldset.disabled = false;
+			output.hidden = false;
+		}
+
+		disconnectedCallback() {
+			this.controller?.abort();
+			this.stopAnimations();
+		}
+	}
+
+	if (!customElements.get("lobo-product-guide"))
+		customElements.define("lobo-product-guide", LoboProductGuide);
+	document.addEventListener("astro:page-load", () => {
+		document
+			.querySelectorAll<LoboProductGuide>("lobo-product-guide")
+			.forEach((guide) => guide.initialize());
+	});
+</script>
+
+<style>
+	.product-guide {
+		width: min(calc(100% - 6rem), 79.75rem);
+		margin: 0 auto 6rem;
+		padding: clamp(2rem, 4vw, 3.5rem);
+		border-radius: 1.5rem;
+		background: var(--color-surface);
+		scroll-margin-top: 7rem;
+	}
+	lobo-product-guide {
+		display: block;
+	}
+	.product-guide__heading {
+		margin-bottom: clamp(2rem, 3vw, 2.75rem);
+	}
+	.product-guide__layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		align-items: start;
+		gap: clamp(2rem, 4vw, 3.5rem);
+	}
+	h2 {
+		color: var(--color-ink);
+		font-size: clamp(2.25rem, 3.8vw, 3.5rem);
+		font-weight: 650;
+		line-height: 1.08;
+		letter-spacing: -0.04em;
+	}
+	h2 span {
+		color: var(--color-primary);
+	}
+	.product-guide__heading > p {
+		max-width: 76ch;
+		margin-top: 1.25rem;
+		font-size: 1.0625rem;
+		line-height: 1.6;
+	}
+	form[hidden],
+	.product-guide__output[hidden],
+	.product-guide__empty[hidden],
+	.product-guide__results[hidden] {
+		display: none;
+	}
+	form {
+		min-width: 0;
+	}
+	fieldset {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.product-guide__field {
+		min-width: 0;
+	}
+	.product-guide__field label {
+		display: block;
+		margin-bottom: 0.625rem;
+		color: var(--color-ink);
+		font-size: 1rem;
+		font-weight: 550;
+		line-height: 1.5;
+	}
+	.product-guide__field label span {
+		color: var(--color-muted);
+		font-size: 0.875rem;
+		font-weight: 400;
+	}
+	.product-guide__optional {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem 1rem;
+		margin-top: 1.5rem;
+	}
+	.product-guide__field--history {
+		grid-column: 1 / -1;
+	}
+	.product-guide__amount {
+		position: relative;
+	}
+	.product-guide__amount input {
+		display: block;
+		width: 100%;
+		min-width: 0;
+		min-height: 3.5rem;
+		padding: 0.875rem 3.5rem 0.875rem 1rem;
+		border: 1px solid #858581;
+		border-radius: 0.625rem;
+		color: var(--color-ink);
+		background: var(--color-white);
+		font-size: 1rem;
+		font-variant-numeric: tabular-nums;
+	}
+	.product-guide__amount > span {
+		position: absolute;
+		top: 50%;
+		right: 1rem;
+		color: var(--color-muted);
+		font-size: 0.8125rem;
+		transform: translateY(-50%);
+		pointer-events: none;
+	}
+	.product-guide :global(.form-select__native),
+	.product-guide :global(.form-select__trigger) {
+		min-height: 3.5rem;
+		padding: 0.875rem 1rem;
+		border: 1px solid #858581;
+		border-radius: 0.625rem;
+		color: var(--color-ink);
+		background: var(--color-white);
+		line-height: 1.5;
+		box-shadow: none;
+	}
+	.product-guide :global(.form-select__native) {
+		width: 100%;
+		font: inherit;
+	}
+	.product-guide :global(.form-select[data-enhanced] .form-select__native) {
+		width: 1px;
+		min-height: 0;
+		padding: 0;
+		border: 0;
+	}
+	.product-guide :global(.form-select__trigger[data-placeholder]) {
+		color: var(--color-muted);
+	}
+	.product-guide :global(.form-select__trigger > span) {
+		min-width: 0;
+	}
+	.product-guide :global(.form-select__trigger:hover),
+	.product-guide :global(.form-select__trigger:focus-visible),
+	.product-guide :global(.form-select__trigger[aria-expanded="true"]),
+	.product-guide__amount input:focus-visible {
+		border-color: var(--color-primary);
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+		box-shadow: none;
+	}
+	.product-guide :global(.form-select__options) {
+		border-color: #d4d4d1;
+		color: var(--color-ink);
+		background: var(--color-white);
+		box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+	}
+	.product-guide :global(.form-select__option[data-active]),
+	.product-guide :global(.form-select__option:hover) {
+		background: var(--color-surface);
+	}
+	.product-guide :global(.form-select__option[aria-selected="true"]) {
+		background: #fae8ed;
+	}
+	.product-guide :global(.form-select__option svg) {
+		color: var(--color-primary);
+	}
+	.product-guide :global(.form-select__trigger[aria-invalid="true"]),
+	.product-guide__amount input[aria-invalid="true"] {
+		border-color: var(--color-primary);
+	}
+	.product-guide__error {
+		margin-top: 0.5rem;
+		color: #a30029;
+		font-size: 0.875rem;
+		line-height: 1.5;
+	}
+	.product-guide__error:empty {
+		display: none;
+	}
+	.product-guide__submit {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		min-height: 3rem;
+		margin-top: 1.75rem;
+		padding: 0.75rem 1.5rem;
+		border: 1px solid var(--color-primary);
+		border-radius: 99rem;
+		color: var(--color-white);
+		background: var(--color-primary);
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.5;
+		cursor: pointer;
+		transition: background-color 160ms ease;
+	}
+	.product-guide__submit:hover {
+		background: #9f0026;
+	}
+	.product-guide__submit span {
+		font-size: 1.25rem;
+	}
+	.product-guide__output {
+		display: grid;
+		align-content: center;
+		align-self: stretch;
+		min-width: 0;
+		min-height: 24rem;
+		padding: clamp(1.5rem, 2.5vw, 2rem);
+		border-radius: 1rem;
+		background: var(--color-white);
+	}
+	.product-guide__empty > p {
+		max-width: 36ch;
+		margin-top: 1rem;
+		color: var(--color-muted);
+		font-size: 1rem;
+		line-height: 1.6;
+	}
+	.product-guide__results {
+		min-width: 0;
+		scroll-margin-top: 7rem;
+	}
+	h3 {
+		color: var(--color-ink);
+		font-size: 1.625rem;
+		font-weight: 650;
+		line-height: 1.2;
+		letter-spacing: -0.025em;
+	}
+	.product-guide__results > ul {
+		display: grid;
+		gap: 1.75rem;
+		margin-top: 1.5rem;
+		padding: 0;
+		list-style: none;
+	}
+	.product-guide__results :global([data-guide-product]) {
+		min-width: 0;
+	}
+	.product-guide__results :global([data-guide-product] > a) {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 2.75rem;
+		color: var(--color-primary);
+	}
+	.product-guide__results :global(h4) {
+		margin: 0;
+		font-size: 1.375rem;
+		font-weight: 650;
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+	}
+	.product-guide__results :global([data-guide-product] > a > span) {
+		flex: 0 0 auto;
+		font-size: 1.5rem;
+	}
+	.product-guide__results :global([data-guide-product] > a:hover h4) {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+	.product-guide__results :global([data-guide-product] > p) {
+		max-width: 72ch;
+		margin-top: 0.375rem;
+		font-size: 1rem;
+		line-height: 1.6;
+	}
+	.product-guide__results :global(.product-guide__warnings) {
+		display: grid;
+		gap: 0.5rem;
+		margin-top: 0.875rem;
+		padding-left: 1.125rem;
+		color: var(--color-muted);
+		font-size: 0.875rem;
+		line-height: 1.6;
+	}
+	.product-guide__scope {
+		margin-top: 2rem;
+		color: var(--color-muted);
+		font-size: 0.875rem;
+		line-height: 1.6;
+	}
+	.product-guide__layout > noscript {
+		grid-column: 1 / -1;
+	}
+	.product-guide__fallback p {
+		font-size: 1.0625rem;
+		line-height: 1.6;
+	}
+	.product-guide__fallback ul {
+		display: grid;
+		gap: 0.5rem;
+		margin-top: 1.25rem;
+		padding: 0;
+		list-style: none;
+	}
+	.product-guide__fallback a {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 2.75rem;
+		padding-block: 0.5rem;
+		color: var(--color-primary);
+		font-weight: 600;
+	}
+	.product-guide__fallback a:hover {
+		text-decoration: underline;
+	}
+	.product-guide__sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+	@media (max-width: 63.9375em) {
+		.product-guide {
+			width: calc(100% - 4rem);
+			margin-bottom: 4.5rem;
+			padding: 2rem;
+		}
+		.product-guide__layout {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+		.product-guide__output {
+			min-height: 0;
+		}
+	}
+	@media (max-width: 47.9375em) {
+		.product-guide {
+			width: calc(100% - 2.5rem);
+			margin-bottom: 3.5rem;
+			padding: 1.5rem;
+			border-radius: 1.125rem;
+		}
+		h2 {
+			font-size: clamp(1.75rem, 7.6vw, 2.5rem);
+		}
+		.product-guide__optional {
+			grid-template-columns: 1fr;
+			gap: 1.25rem;
+		}
+		.product-guide__field--history {
+			grid-column: auto;
+		}
+		.product-guide__submit {
+			width: 100%;
+			padding-inline: 1rem;
+		}
+		.product-guide__output {
+			padding: 1.25rem;
+		}
+		.product-guide__results :global(h4) {
+			font-size: 1.25rem;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.product-guide__submit {
+			transition: none;
+		}
+	}
+</style>

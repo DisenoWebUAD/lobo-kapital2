@@ -12,9 +12,20 @@ const isFinanceLeasePage = pathname === "/arrendamiento-financiero";
 const isFactoringPage = Astro.url.pathname.startsWith("/factoraje");
 const isFaqPage = Astro.url.pathname.startsWith("/faq");
 const isAboutPage = Astro.url.pathname.startsWith("/nosotros");
-const isPymesSection = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLeasePage || isFactoringPage;
-const hasContactSection = Astro.url.pathname === "/" || isPersonalSection || isFactoringPage;
-const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLeasePage ? "#solicitud" : hasContactSection ? "#contacto" : "/#contacto";
+const isPymesSection =
+	isPymesPage ||
+	isRevolvingPage ||
+	isLeasePage ||
+	isFinanceLeasePage ||
+	isFactoringPage;
+const hasContactSection =
+	Astro.url.pathname === "/" || isPersonalSection || isFactoringPage;
+const clientHref =
+	isPymesPage || isRevolvingPage || isLeasePage || isFinanceLeasePage
+		? "#solicitud"
+		: hasContactSection
+			? "#contacto"
+			: "/#contacto";
 ---
 
 <header
@@ -44,37 +55,6 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 		<div
 			class="site-nav__pymes"
 			data-nav-dropdown
-			data-active={isPersonalSection ? "" : undefined}
-		>
-			<button
-				class="site-nav__pymes-trigger"
-				type="button"
-				aria-controls="personal-navigation"
-				aria-expanded="false"
-				aria-current={isPersonalSection ? "page" : undefined}
-			>
-				Personal
-			</button>
-			<div
-				class="site-nav__pymes-menu"
-				id="personal-navigation"
-				aria-label="Productos personales"
-				aria-hidden="true"
-			>
-				<a
-					href="/credito-personal/"
-					aria-current={isPersonalPage ? "page" : undefined}
-					>Crédito personal</a
-				>
-				<a
-					href="/tarjetas/"
-					aria-current={isCardsPage ? "page" : undefined}>Tarjetas</a
-				>
-			</div>
-		</div>
-		<div
-			class="site-nav__pymes"
-			data-nav-dropdown
 			data-active={isPymesSection ? "" : undefined}
 		>
 			<button
@@ -95,7 +75,7 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 				<a
 					href="/creditos-pymes/"
 					aria-current={isPymesPage ? "page" : undefined}
-					>Créditos PyMEs</a
+					>Crédito simple</a
 				>
 				<a
 					href="/credito-en-cuenta-corriente/"
@@ -103,30 +83,72 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 					>Crédito en cuenta corriente</a
 				>
 				<a
-					href="/arrendamiento/"
-					aria-current={isLeasePage ? "page" : undefined}
-					>Arrendamiento puro</a
-				>
-				<a
 					href="/arrendamiento-financiero/"
 					aria-current={isFinanceLeasePage ? "page" : undefined}
 					>Arrendamiento financiero</a
+				>
+				<a
+					href="/arrendamiento/"
+					aria-current={isLeasePage ? "page" : undefined}
+					>Arrendamiento puro</a
 				>
 				<a
 					href="/factoraje/"
 					aria-current={isFactoringPage ? "page" : undefined}
 					>Factoraje</a
 				>
+				<a class="site-nav__guide" href="/#elige-tu-financiamiento"
+					>¿Cómo elijo el que necesito?</a
+				>
 			</div>
 		</div>
-		<a class="site-nav__section-link" href="/nosotros/" aria-current={isAboutPage ? "page" : undefined}>Conócenos</a>
+		<div
+			class="site-nav__pymes"
+			data-nav-dropdown
+			data-active={isPersonalSection ? "" : undefined}
+		>
+			<button
+				class="site-nav__pymes-trigger"
+				type="button"
+				aria-controls="personal-navigation"
+				aria-expanded="false"
+				aria-current={isPersonalSection ? "page" : undefined}
+			>
+				Personas
+			</button>
+			<div
+				class="site-nav__pymes-menu"
+				id="personal-navigation"
+				aria-label="Productos para personas"
+				aria-hidden="true"
+			>
+				<a
+					href="/credito-personal/"
+					aria-current={isPersonalPage ? "page" : undefined}
+					>Crédito personal</a
+				>
+				<a
+					href="/tarjetas/"
+					aria-current={isCardsPage ? "page" : undefined}>Tarjetas</a
+				>
+			</div>
+		</div>
+		<a
+			class="site-nav__section-link"
+			href={pathname === "/" ? "#proceso" : "/#proceso"}>Cómo funciona</a
+		>
+		<a
+			class="site-nav__section-link"
+			href="/nosotros/"
+			aria-current={isAboutPage ? "page" : undefined}>Conócenos</a
+		>
 		<a
 			class="site-nav__faq"
 			href="/faq/"
 			aria-label="Preguntas frecuentes"
 			aria-current={isFaqPage ? "page" : undefined}>FAQ</a
 		>
-		<a class="site-nav__client" href={clientHref}>Ponte en contacto</a>
+		<a class="site-nav__client" href={clientHref}>Contáctanos</a>
 	</nav>
 
 	<button
@@ -181,14 +203,23 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 		let direction = 0;
 		let directionalDistance = 0;
 		// Clamp Safari's rubber-band positions before detecting direction.
-		const getScrollY = (scrollY = window.scrollY) => Math.max(0, Math.min(
-			scrollY,
-			Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
-		));
+		const getScrollY = (scrollY = window.scrollY) =>
+			Math.max(
+				0,
+				Math.min(
+					scrollY,
+					Math.max(
+						0,
+						document.documentElement.scrollHeight -
+							window.innerHeight,
+					),
+				),
+			);
 		let lastScrollY = getScrollY();
 		const restoredScrollY: unknown = history.state?.scrollY;
 		// Astro's history restoration can still be scrolling when page-load fires.
-		let restoringScroll = typeof restoredScrollY === "number" &&
+		let restoringScroll =
+			typeof restoredScrollY === "number" &&
 			Math.abs(lastScrollY - getScrollY(restoredScrollY)) > 1;
 		const updateHeaderSurface = (scrollY: number) => {
 			header.toggleAttribute("data-scrolled", isHomePage && scrollY > 24);
@@ -206,7 +237,8 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 			resetScrollTracking();
 		};
 		const measureHeader = () => {
-			scrollThreshold = header.offsetHeight + parseFloat(getComputedStyle(header).top);
+			scrollThreshold =
+				header.offsetHeight + parseFloat(getComputedStyle(header).top);
 		};
 		const navigationIsEngaged = () =>
 			navigation?.hasAttribute("data-open") ||
@@ -225,7 +257,10 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 			lastScrollY = scrollY;
 			updateHeaderSurface(scrollY);
 			if (restoringScroll) {
-				if (typeof restoredScrollY === "number" && Math.abs(scrollY - getScrollY(restoredScrollY)) <= 1)
+				if (
+					typeof restoredScrollY === "number" &&
+					Math.abs(scrollY - getScrollY(restoredScrollY)) <= 1
+				)
 					restoringScroll = false;
 				resetScrollTracking();
 				return;
@@ -242,7 +277,10 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 				direction = nextDirection;
 				directionalDistance = 0;
 			}
-			directionalDistance = Math.min(scrollTolerance, directionalDistance + Math.abs(delta));
+			directionalDistance = Math.min(
+				scrollTolerance,
+				directionalDistance + Math.abs(delta),
+			);
 			if (directionalDistance >= scrollTolerance) {
 				const shouldHide = direction > 0;
 				if (header.hasAttribute("data-scroll-hidden") !== shouldHide)
@@ -260,13 +298,25 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 		measureHeader();
 		if (previousTransition) header.style.transition = previousTransition;
 		else header.style.removeProperty("transition");
-		window.addEventListener("scroll", scheduleScrollUpdate, { passive: true, signal });
-		window.addEventListener("scrollend", finishScrollRestoration, { signal });
-		window.addEventListener("wheel", finishScrollRestoration, { passive: true, signal });
-		window.addEventListener("resize", () => {
-			measureOnNextFrame = true;
-			scheduleScrollUpdate();
-		}, { passive: true, signal });
+		window.addEventListener("scroll", scheduleScrollUpdate, {
+			passive: true,
+			signal,
+		});
+		window.addEventListener("scrollend", finishScrollRestoration, {
+			signal,
+		});
+		window.addEventListener("wheel", finishScrollRestoration, {
+			passive: true,
+			signal,
+		});
+		window.addEventListener(
+			"resize",
+			() => {
+				measureOnNextFrame = true;
+				scheduleScrollUpdate();
+			},
+			{ passive: true, signal },
+		);
 		header.addEventListener("focusin", resetScrollTracking, { signal });
 		header.addEventListener("focusout", resetScrollTracking, { signal });
 
@@ -305,7 +355,8 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 		signal.addEventListener(
 			"abort",
 			() => {
-				if (scrollFrame !== undefined) window.cancelAnimationFrame(scrollFrame);
+				if (scrollFrame !== undefined)
+					window.cancelAnimationFrame(scrollFrame);
 				dropdowns.forEach((dropdown) =>
 					window.clearTimeout(dropdown.closeTimer),
 				);
@@ -354,7 +405,9 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 					if (
 						dropdown.trigger?.getAttribute("aria-expanded") ===
 							"true" &&
-						(!desktopNavigation.matches || !dropdown.openedByHover || event.detail === 0)
+						(!desktopNavigation.matches ||
+							!dropdown.openedByHover ||
+							event.detail === 0)
 					)
 						setDropdownOpen(dropdown, false);
 					else openDropdown(dropdown);
@@ -385,7 +438,10 @@ const clientHref = isPymesPage || isRevolvingPage || isLeasePage || isFinanceLea
 						dropdown.openedByHover = false;
 						return;
 					}
-					if (desktopNavigation.matches && !dropdown.group.hasAttribute("data-open"))
+					if (
+						desktopNavigation.matches &&
+						!dropdown.group.hasAttribute("data-open")
+					)
 						openDropdown(dropdown, true);
 				},
 				{ signal },

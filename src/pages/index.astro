@@ -4,8 +4,9 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Solutions from '../components/Solutions.astro';
-import CreditCardPromo from '../components/CreditCardPromo.astro';
 import Trust from '../components/Trust.astro';
+import FinancingProcess from '../components/FinancingProcess.astro';
+import ProductGuide from '../components/ProductGuide.astro';
 import LeadForm from '../components/LeadForm.astro';
 import Footer from '../components/Footer.astro';
 import HomeMotion from '../components/HomeMotion.astro';
@@ -35,7 +36,8 @@ const description = 'Créditos, arrendamiento y soluciones financieras diseñada
 		<main id="main-content" tabindex="-1" transition:name="page-main" transition:animate="fade">
 			<Hero />
 			<Solutions />
-			<!-- <CreditCardPromo /> -->
+			<FinancingProcess />
+			<ProductGuide />
 			<Trust />
 			<LeadForm />
 		</main>

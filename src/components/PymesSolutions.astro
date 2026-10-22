@@ -1,32 +1,7 @@
 ---
-import EditorialCard from './EditorialCard.astro';
-import workCapitalImage from '../assets/editorial/capital.jpg';
-import equipmentImage from '../assets/editorial/equipo.jpg';
-import inventoryImage from '../assets/editorial/inventario.jpg';
+import { credits } from "../data/credits";
 
-const solutions = [
-	{
-		title: "Capital de trabajo",
-		description:
-			"Mantén la liquidez de tu operación diaria, cubre nóminas, proveedores o aprovecha oportunidades inmediatas en el mercado.",
-		image: workCapitalImage,
-		alt: 'Un equipo preparando pedidos en una panadería',
-	},
-	{
-		title: "Equipo para tu negocio",
-		description:
-			"Moderniza tu maquinaria, tecnología o flotilla vehicular para aumentar tu capacidad productiva y competitividad.",
-		image: equipmentImage,
-		alt: 'Un operador trabajando con maquinaria en un taller',
-	},
-	{
-		title: "Inventario",
-		description:
-			"Asegura el stock necesario para temporadas altas sin comprometer tu flujo de efectivo operativo.",
-		image: inventoryImage,
-		alt: 'Dos personas organizando el inventario de un negocio',
-	},
-];
+const { overview } = credits.business;
 ---
 
 <section
@@ -34,16 +9,64 @@ const solutions = [
 	id="soluciones"
 	aria-labelledby="pymes-solutions-title"
 >
-	<header class="pymes-solutions__heading" data-page-reveal>
-		<h2 id="pymes-solutions-title">Impulsa tu <span>Crecimiento</span></h2>
-		<p>Soluciones financieras adaptadas a cada etapa de tu negocio.</p>
-	</header>
-
-	<div class="pymes-solutions__grid" data-page-reveal-group>
-		{
-			solutions.map((solution) => (
-				<EditorialCard {...solution} />
-			))
-		}
+	<div class="pymes-solutions__inner">
+		<div class="pymes-solutions__grid" data-page-reveal-group>
+			<div data-page-reveal>
+				<h2 id="pymes-solutions-title">
+					¿Para qué puedes <span>utilizarlo?</span>
+				</h2>
+				<ul class="pymes-solutions__list">
+					{
+						overview.uses.map((use) => (
+							<li>
+								<>
+									<span aria-hidden="true">↗</span>
+									<span>{use}</span>
+								</>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+			<div data-page-reveal>
+				<h2>Beneficios para <span>tu operación.</span></h2>
+				<ul class="pymes-solutions__list">
+					{
+						overview.benefits.map((benefit) => (
+							<li>
+								<>
+									<svg
+										viewBox="0 0 24 24"
+										width="18"
+										height="18"
+										fill="none"
+										aria-hidden="true"
+									>
+										<path
+											d="m5 12 4 4L19 6"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+									</svg>
+									<span>{benefit}</span>
+								</>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+		<div class="pymes-solutions__context" data-page-reveal-group>
+			<div data-page-reveal>
+				<h3>¿Para quién?</h3>
+				<p>{overview.audience}</p>
+			</div>
+			<div data-page-reveal>
+				<h3>¿Cómo funciona?</h3>
+				<p>{overview.operation}</p>
+			</div>
+		</div>
 	</div>
 </section>
