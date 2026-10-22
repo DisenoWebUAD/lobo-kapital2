@@ -1,5 +1,6 @@
 ---
 import { financingProducts } from '../data/financing-products';
+import FinancingProcessGraphic from './FinancingProcessGraphic.astro';
 
 interface Props { product: 'revolving' | 'finance-lease' }
 const { product: productId } = Astro.props;
@@ -8,19 +9,31 @@ const product = financingProducts[productId];
 
 <section class="financing-overview" aria-labelledby="financing-overview-title">
 	<div class="financing-container">
-		<div class="financing-overview__intro" data-page-reveal-group>
-			<header data-page-reveal>
-				<h2 id="financing-overview-title">{productId === 'revolving' ? <>Un respaldo para tu <span>capital de trabajo.</span></> : <>Activos que acompañan tu <span>crecimiento.</span></>}</h2>
-				<p>{product.intro}</p>
-			</header>
-			<div class="financing-overview__uses" data-page-reveal="fade">
-				<h3>{productId === 'revolving' ? '¿En qué puedes utilizarlo?' : '¿Qué puedes financiar?'}</h3>
-				<ul>{product.uses.map((use) => <li><span aria-hidden="true">↗</span>{use}</li>)}</ul>
-			</div>
-		</div>
-		<header class="financing-process-heading" data-page-reveal><h2>Así <span>funciona</span></h2></header>
-		<ol class="financing-process" data-page-reveal-group>
-			{product.process.map((step) => <li data-page-reveal><h3>{step.title}</h3><p>{step.description}</p></li>)}
+		<header class="financing-overview__heading" data-page-reveal>
+			<h2 id="financing-overview-title">Así funciona</h2>
+		</header>
+		<ol class="financing-overview__flow" role="list" data-page-reveal-group>
+			{product.process.map((step, index) => (
+				<li class="financing-overview__stage" data-page-reveal>
+					<div class="financing-overview__graphic">
+						<FinancingProcessGraphic product={productId} stage={index} />
+					</div>
+					<div class="financing-overview__step-copy">
+						<h3>{step.title}</h3>
+						<p>{step.description}</p>
+					</div>
+					{index < product.process.length - 1 && (
+						<>
+							<svg class="financing-overview__connector financing-overview__connector--horizontal" viewBox="0 0 100 20" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+								<path d="M0 10h96m-8-6 8 6-8 6" />
+							</svg>
+							<svg class="financing-overview__connector financing-overview__connector--vertical" viewBox="0 0 20 100" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+								<path d="M10 0v96m-6-8 6 8 6-8" />
+							</svg>
+						</>
+					)}
+				</li>
+			))}
 		</ol>
 	</div>
 </section>

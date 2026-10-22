@@ -1,16 +1,29 @@
 import { credits } from './credits.ts';
 import { financingProducts } from './financing-products.ts';
 
-export const guideObjectives = [
-	{ value: 'project', label: 'Invertir en un proyecto o expansión' },
-	{ value: 'liquidity', label: 'Cubrir necesidades recurrentes de liquidez' },
-	{ value: 'purchase', label: 'Usar equipo con opción de compra' },
-	{ value: 'use', label: 'Utilizar activos sin comprarlos' },
-	{ value: 'invoices', label: 'Anticipar facturas por cobrar' },
-	{ value: 'undecided', label: 'Aún no lo tengo definido' },
+export const guideNeeds = [
+	{ value: 'capital', label: 'Operar o invertir' },
+	{ value: 'equipment', label: 'Equipo o vehículos' },
+	{ value: 'invoices', label: 'Anticipar facturas' },
+	{ value: 'undecided', label: 'Aún no lo sé' },
 ] as const;
 
-export type GuideObjective = typeof guideObjectives[number]['value'];
+export const guideCapitalUses = [
+	{ value: 'one-time', label: 'Una inversión o necesidad puntual' },
+	{ value: 'recurring', label: 'Necesidades recurrentes de liquidez' },
+	{ value: 'undecided', label: 'Aún no lo sé' },
+] as const;
+
+export const guideEquipmentUses = [
+	{ value: 'buy-now', label: 'Comprar el activo desde el inicio' },
+	{ value: 'lease-buy', label: 'Usarlo con opción de compra al terminar' },
+	{ value: 'use-only', label: 'Utilizarlo sin comprarlo' },
+	{ value: 'undecided', label: 'Aún no lo sé' },
+] as const;
+
+export type GuideNeed = typeof guideNeeds[number]['value'];
+export type GuideCapitalUse = typeof guideCapitalUses[number]['value'];
+export type GuideEquipmentUse = typeof guideEquipmentUses[number]['value'];
 export type GuideProduct = 'business' | 'revolving' | 'finance-lease' | 'lease' | 'factoring';
 
 export const guideProducts = {
@@ -42,9 +55,4 @@ export const guideProducts = {
 } as const;
 
 export const guideProductOrder: readonly GuideProduct[] = ['business', 'revolving', 'finance-lease', 'lease', 'factoring'];
-export const guideTermOptions = [3, 6, 12, 18, 24, 36, 48, 60] as const;
-export const guideHistoryOptions = [
-	{ value: 'under-24', label: 'Menos de 24 meses' },
-	{ value: '24-or-more', label: '24 meses o más' },
-] as const;
 export const guideMaxAmount = 999_999_999;

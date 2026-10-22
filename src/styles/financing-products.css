@@ -1,72 +1,177 @@
 .financing-page { background: var(--color-white); }
 .financing-container { width: min(calc(100% - 6rem), 79.75rem); margin-inline: auto; }
-.financing-hero { padding: clamp(8rem, 11vw, 11rem) 0 5.5rem; }
-.financing-hero__inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .95fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; width: min(calc(100% - 6rem), 79.75rem); margin-inline: auto; }
-.financing-hero h1 { color: var(--color-ink); font-size: clamp(2.75rem, 4.25vw, 4.875rem); font-weight: 700; line-height: .99; letter-spacing: -.065em; }
-.financing-hero h1 span, .financing-overview h2 span, .financing-details h2 span { color: var(--color-primary); }
-.financing-hero__lead { max-width: 29ch; margin-top: 1.75rem; color: var(--color-ink); font-size: clamp(1.375rem, 1.7vw, 1.75rem); font-weight: 600; line-height: 1.25; letter-spacing: -.025em; }
-.financing-hero__description { max-width: 48ch; margin-top: 1rem; color: var(--color-muted); font-size: 1.0625rem; line-height: 1.6; }
-.financing-hero__actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
-.financing-hero__actions .button { padding-inline: 1.25rem; font-size: .9375rem; }
-.financing-text-link { display: inline-flex; gap: .75rem; align-items: center; min-height: 2.75rem; margin-top: 1rem; color: var(--color-text); font-size: .875rem; text-decoration: underline; text-underline-offset: .25em; }
+/* Account credit follows personal credit; financial leasing follows the PyMEs hero. */
+.credit-hero.financing-hero { --hero-summary-measure: 42ch; }
+.credit-hero__copy > .financing-hero__lead { color: var(--color-ink); font-weight: 600; }
+.credit-hero__copy > .financing-hero__description { margin-top: .75rem; }
+.pymes-hero.financing-hero--panoramic { height: auto; min-height: 0; }
+.financing-hero--panoramic .financing-hero__lead { color: var(--color-ink); font-weight: 600; }
+.financing-hero--panoramic .financing-hero__description {
+	max-width: 84ch;
+	margin: .75rem auto 0;
+	line-height: 1.5;
+}
+.financing-hero--panoramic .financing-hero__actions { gap: .75rem 1rem; margin-top: 1.5rem; }
+.financing-hero--panoramic .financing-hero__actions .button { margin-top: 0; }
+.financing-hero--panoramic .financing-hero__visual {
+	display: block;
+	overflow: hidden;
+	margin-top: 3rem;
+	border-radius: min(14.592vw, 17.51rem) min(14.592vw, 17.51rem) 0 0;
+}
+.financing-hero--panoramic .financing-hero__image {
+	position: static;
+	width: 100%;
+	height: auto;
+	margin: 0;
+	aspect-ratio: 1920 / 532.39;
+	object-fit: cover;
+	object-position: center;
+}
+.financing-details h2 span { color: var(--color-primary); }
+.financing-text-link { display: inline-flex; gap: .75rem; align-items: center; min-height: 2.75rem; margin-top: .5rem; color: var(--color-text); font-size: .875rem; text-decoration: underline; text-underline-offset: .25em; }
 .financing-text-link span { color: var(--color-primary); }
-.financing-hero__visual { min-width: 0; }
-.financing-hero__visual img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1.05; object-fit: cover; border-radius: 9rem 1.5rem 1.5rem 1.5rem; }
-.financing-hero__visual > p { margin-top: .625rem; color: var(--color-muted); font-size: .8125rem; text-align: right; }
-.financing-overview { padding-block: 5.5rem; background: var(--color-soft); }
-.financing-overview__intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); gap: clamp(2.5rem, 7vw, 7rem); align-items: center; }
-.financing-overview h2, .financing-details h2 { color: var(--color-ink); font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; letter-spacing: -.04em; }
-.financing-overview__intro h2 { max-width: 20ch; }
-.financing-overview__intro header > p:last-child { max-width: 49ch; margin-top: 1.25rem; color: var(--color-muted); font-size: 1.0625rem; line-height: 1.65; }
-.financing-overview__uses h3 { font-size: 1.375rem; letter-spacing: -.02em; }
-.financing-overview__uses ul, .financing-requirements ul { display: grid; gap: 1rem; margin-top: 1.5rem; padding: 0; list-style: none; }
-.financing-overview__uses li, .financing-requirements li { display: flex; gap: .875rem; align-items: baseline; color: var(--color-text); font-size: 1rem; line-height: 1.6; }
-.financing-overview__uses li span, .financing-requirements li span { flex-shrink: 0; color: var(--color-primary); font-weight: 600; }
+.financing-overview {
+	--flow-gap: clamp(2rem, 4vw, 4rem);
+	--flow-graphic: 10.5rem;
+	--color-process-accent: color-mix(in srgb, var(--color-primary), var(--color-white) 40%);
+	padding-block: 4.5rem;
+	color: var(--color-white);
+	background: var(--color-dark);
+}
+.financing-overview > .financing-container { container: financing-flow / inline-size; }
+.financing-overview h2 {
+	color: var(--color-white);
+	font-size: clamp(2rem, 3.5vw, 3.5rem);
+	font-weight: 650;
+	line-height: 1.08;
+	letter-spacing: -.04em;
+}
+.financing-overview__flow {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--flow-gap);
+	margin: 3rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+.financing-overview__stage {
+	position: relative;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	gap: 1.75rem;
+	min-width: 0;
+}
+.financing-overview__graphic {
+	width: var(--flow-graphic);
+	max-width: 100%;
+	justify-self: center;
+	align-self: start;
+}
+.financing-overview__step-copy h3 {
+	color: var(--color-white);
+	font-size: clamp(1.125rem, 1.65vw, 1.5rem);
+	font-weight: 600;
+	line-height: 1.3;
+	letter-spacing: -.02em;
+}
+.financing-overview__step-copy p {
+	max-width: 39ch;
+	margin-top: .75rem;
+	color: var(--color-soft);
+	font-size: clamp(1rem, 1.2vw, 1.0625rem);
+	line-height: 1.65;
+}
+.financing-overview__connector {
+	position: absolute;
+	max-width: none;
+	color: var(--color-soft);
+	opacity: .55;
+	pointer-events: none;
+}
+.financing-overview__connector path {
+	stroke: currentColor;
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	vector-effect: non-scaling-stroke;
+}
+.financing-overview__connector--horizontal {
+	top: calc(var(--flow-graphic) * .36 - .625rem);
+	left: calc(50% + var(--flow-graphic) * .5);
+	width: calc(100% + var(--flow-gap) - var(--flow-graphic));
+	height: 1.25rem;
+}
+.financing-overview__connector--vertical { display: none; }
+.financing-details h2 { color: var(--color-ink); font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; letter-spacing: -.04em; }
+.financing-requirements ul { display: grid; gap: 1rem; margin-top: 1.5rem; padding: 0; list-style: none; }
+.financing-requirements li { display: flex; gap: .875rem; align-items: baseline; color: var(--color-text); font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
+.financing-requirements li span { flex-shrink: 0; color: var(--color-primary); font-weight: 600; }
 .financing-requirements li svg { flex-shrink: 0; align-self: flex-start; margin-top: .25rem; color: var(--color-primary); }
-.financing-process-heading { margin-top: 5rem; }
-.financing-process { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin: 2rem 0 0; padding: 0; list-style: none; }
-.financing-process li { padding-top: 1rem; }
-.financing-process h3 { font-size: 1.375rem; line-height: 1.25; letter-spacing: -.02em; }
-.financing-process p { margin-top: .75rem; color: var(--color-muted); font-size: 1rem; line-height: 1.6; }
 .financing-details { padding-block: 6rem; }
 .financing-details__grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
-.financing-requirements { padding-top: 1.5rem; }
+.financing-requirements { min-width: 0; padding-top: 1.5rem; }
 .financing-requirements > p { margin-top: 1.25rem; color: var(--color-muted); font-size: 1rem; line-height: 1.65; }
 .financing-requirements > p.financing-small { margin-top: 1.5rem; font-size: .8125rem; }
 .financing-conditions { min-width: 0; padding: 2rem; border-radius: 1rem; background: var(--color-surface); }
 .financing-conditions h3 { color: var(--color-ink); font-size: 1.75rem; line-height: 1.2; letter-spacing: -.035em; }
-.financing-conditions dl { margin: 1.5rem 0 0; }
-.financing-conditions dl > div { display: grid; grid-template-columns: .7fr 1.3fr; gap: 1.25rem; padding-block: 1rem; border-bottom: 1px solid #e0e0de; }
-.financing-conditions dt { color: var(--color-muted); font-size: .8125rem; line-height: 1.6; }
-.financing-conditions dd { margin: 0; color: var(--color-text); font-size: .9375rem; line-height: 1.6; }
+.financing-conditions__list { display: grid; gap: 1rem; margin-top: 1.5rem; padding-left: 1.25rem; color: var(--color-text); font-size: 1rem; line-height: 1.6; }
+.financing-conditions__list li { min-width: 0; padding-left: .25rem; overflow-wrap: anywhere; }
+.financing-conditions__list li::marker { color: var(--color-primary); }
+.financing-conditions__references { display: grid; gap: 1rem; margin: 1.5rem 0 0; font-size: .875rem; line-height: 1.6; }
+.financing-conditions__references dt { color: var(--color-ink); font-weight: 600; }
+.financing-conditions__references dd { margin: .25rem 0 0; color: var(--color-text); }
+.financing-conditions__note { margin-top: 1.5rem; color: var(--color-muted); font-size: .875rem; line-height: 1.65; }
 .financing-small, .financing-cat p { margin-top: 1rem; color: var(--color-muted); font-size: .8125rem; line-height: 1.65; }
-.financing-cat { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid #d9d9d6; }
-.financing-cat summary { min-height: 2.75rem; color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; cursor: pointer; }
-.financing-cat summary small { display: block; margin: .25rem 0 0 1rem; color: var(--color-muted); font-size: .75rem; font-weight: 400; }
+.financing-cat { margin-top: 1.5rem; padding-top: 1.25rem; }
+.financing-cat summary { min-height: 2.75rem; color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; overflow-wrap: anywhere; cursor: pointer; }
+.financing-cat summary small { display: block; margin: .25rem 0 0 1rem; color: var(--color-muted); font-size: .8125rem; font-weight: 400; }
+.financing-cat--static { color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; }
+.financing-cat__modalities { display: grid; gap: 1.25rem; margin-top: 1rem; }
+.financing-cat__modalities h4 { margin: 0; color: var(--color-ink); font-size: .875rem; font-weight: 600; line-height: 1.6; }
+.financing-cat__modalities p { margin-top: .5rem; }
+@media (max-width: 56.1875em) and (orientation: portrait) {
+	/* Keep hands and the productive activity visible in the new portrait scenes. */
+	.credit-hero.financing-hero { --hero-photo-min-height: var(--hero-photo-height); }
+}
+@container financing-flow (max-width: 55rem) {
+	.financing-overview__flow { --flow-gap: 2.75rem; --flow-graphic: 7rem; grid-template-columns: 1fr; }
+	.financing-overview__stage {
+		grid-template-columns: var(--flow-graphic) minmax(0, 1fr);
+		grid-template-rows: auto;
+		gap: 2rem;
+	}
+	.financing-overview__step-copy p { max-width: 54ch; }
+	.financing-overview__connector--horizontal { display: none; }
+	.financing-overview__connector--vertical {
+		display: block;
+		top: calc(var(--flow-graphic) * .72 + .75rem);
+		left: calc(var(--flow-graphic) * .5 - .625rem);
+		width: 1.25rem;
+		height: calc(100% + var(--flow-gap) - var(--flow-graphic) * .72 - 1.5rem);
+	}
+}
 @media (max-width: 56.25em) {
-	.financing-hero__inner, .financing-overview__intro, .financing-details__grid { grid-template-columns: 1fr; }
-	.financing-hero__inner { gap: 2.5rem; }
-	.financing-hero h1 { font-size: clamp(3rem, 7vw, 4.5rem); }
-	.financing-hero__visual img { max-height: 31rem; aspect-ratio: 3 / 2; border-top-left-radius: 6rem; }
-	.financing-process { gap: 1.25rem; }
+	.financing-details__grid { grid-template-columns: minmax(0, 1fr); }
 	.financing-requirements { padding-top: 0; }
 }
 @media (max-width: 47.9375em) {
-	.financing-container, .financing-hero__inner { width: calc(100% - 2.5rem); }
-	.financing-hero { padding: 7rem 0 3.5rem; }
-	.financing-hero h1 { font-size: clamp(2.5rem, 10.25vw, 3.5rem); letter-spacing: -.055em; }
-	.financing-hero__lead { margin-top: 1.25rem; font-size: 1.375rem; }
-	.financing-hero__description { font-size: 1rem; }
-	.financing-hero__actions { gap: .625rem; }
-	.financing-hero__actions .button { min-height: 2.75rem; padding-inline: 1rem; font-size: .875rem; }
-	.financing-hero__visual img { aspect-ratio: 4 / 3; border-top-left-radius: 4.5rem; }
-	.financing-overview, .financing-details { padding-block: 4rem; }
-	.financing-process-heading { margin-top: 3rem; }
-	.financing-process { grid-template-columns: 1fr; gap: 1.75rem; }
+	.financing-container { width: calc(100% - 2.5rem); }
+	.financing-hero--panoramic .financing-hero__visual {
+		margin-top: 2.25rem;
+		border-radius: clamp(2.5rem, 12vw, 5.625rem) clamp(2.5rem, 12vw, 5.625rem) 0 0;
+	}
+	.financing-hero--panoramic .financing-hero__image { aspect-ratio: 3 / 2; }
+	.financing-overview { padding-block: 3.5rem; }
+	.financing-overview__flow { --flow-gap: 2.5rem; --flow-graphic: 4.5rem; margin-top: 2.5rem; }
+	.financing-overview__stage { gap: 1rem; }
+	.financing-details { padding-block: 4rem; }
 	.financing-conditions { padding: 1.5rem; }
 	.financing-conditions h3 { font-size: 1.5rem; }
-	.financing-conditions dl > div { grid-template-columns: .7fr 1.3fr; gap: 1rem; }
 }
-@media (max-width: 23em) {
-	.financing-conditions dl > div { grid-template-columns: 1fr; gap: .375rem; }
+@container financing-flow (max-width: 16rem) {
+	/* Enlarged type gets the full reading width instead of a narrow icon column. */
+	.financing-overview__stage { grid-template-columns: 1fr; gap: 1.25rem; }
+	.financing-overview__graphic { width: min(7rem, 40%); justify-self: start; }
+	.financing-overview__connector--vertical { display: none; }
 }

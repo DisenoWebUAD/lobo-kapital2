@@ -1,8 +1,10 @@
 ---
 import { Picture } from 'astro:assets';
+import '../styles/credit-heroes.css';
+import '../styles/pymes-hero.css';
 import { financingProducts } from '../data/financing-products';
-import capitalImage from '../assets/editorial/capital.jpg';
-import equipmentImage from '../assets/editorial/equipo.jpg';
+import capitalImage from '../assets/financing-heroes/cuenta-corriente.jpg';
+import equipmentImage from '../assets/financing-heroes/arrendamiento-financiero-panoramico.jpg';
 
 interface Props { product: 'revolving' | 'finance-lease' }
 const { product: productId } = Astro.props;
@@ -10,30 +12,31 @@ const product = financingProducts[productId];
 const revolving = productId === 'revolving';
 ---
 
-<section class="financing-hero" id="inicio" aria-labelledby="financing-hero-title">
-	<div class="financing-hero__inner">
-		<div class="financing-hero__copy">
-			<h1 id="financing-hero-title">{revolving ? <>Crédito en<br />cuenta <span>corriente</span></> : <>Arrendamiento<br /><span>financiero</span></>}</h1>
+<section class:list={['financing-hero', revolving ? 'credit-hero' : 'pymes-hero financing-hero--panoramic']} id="inicio" aria-labelledby="financing-hero-title">
+	<div class:list={['financing-hero__inner', { 'credit-hero__inner': revolving }]}>
+		<div class:list={['financing-hero__copy', revolving ? 'credit-hero__copy' : 'pymes-hero__copy']}>
+			<h1 id="financing-hero-title">
+				{revolving ? <><span>Crédito en</span>{' '}<span>cuenta corriente</span></> : <>Arrendamiento <span>financiero</span></>}
+			</h1>
 			<p class="financing-hero__lead">{product.heroLead} {product.heroAccent}</p>
 			<p class="financing-hero__description">{product.heroDescription}</p>
-			<div class="financing-hero__actions">
+			<div class:list={['financing-hero__actions', revolving ? 'credit-hero__actions' : 'pymes-hero__actions']}>
 				<a class="button button--primary" href="#simulador">{revolving ? 'Simula una disposición' : 'Simula tu arrendamiento'}</a>
 				<a class="button button--outline" href="#solicitud">Pedir información</a>
 			</div>
-			<a class="financing-text-link" href="#requisitos">Conoce los requisitos <span aria-hidden="true">↓</span></a>
 		</div>
-		<div class="financing-hero__visual">
+		<div class:list={['financing-hero__visual', revolving ? 'credit-hero__visual' : 'pymes-hero__media-frame']}>
 			<Picture
+				class:list={['financing-hero__image', revolving ? 'credit-hero__image' : 'pymes-hero__media']}
 				src={revolving ? capitalImage : equipmentImage}
-				formats={['webp']}
+				formats={['avif', 'webp']}
 				fallbackFormat="jpeg"
-				widths={[480, 768, 1024]}
-				sizes="(max-width: 56.25em) calc(100vw - 2.5rem), (max-width: 90em) 45vw, 37.5rem"
-				alt={revolving ? 'Dos personas preparando y entregando pedidos en una panadería' : 'Personal trabajando con equipo productivo en una empresa'}
+				widths={revolving ? [420, 646, 960, 1024] : [640, 960, 1440, 1920, 2172]}
+				sizes={revolving ? '(max-width: 29.9375em) calc(100vw - 2.5rem), (max-width: 56.1875em) min(37.5rem, calc(100vw - clamp(2.5rem, 8vw, 4rem))), min(33.85vw, 40.625rem)' : '(max-width: 47.9375em) 200vw, 100vw'}
+				alt={revolving ? 'Escena ilustrativa de un empresario preparando pedidos en su distribuidora' : 'Escena ilustrativa de una camioneta de reparto junto a una empresaria en el patio de su negocio'}
 				loading="eager"
 				fetchpriority="high"
 			/>
-			<p>Imagen ilustrativa de uso empresarial</p>
 		</div>
 	</div>
 </section>
