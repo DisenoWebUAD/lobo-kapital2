@@ -14,6 +14,7 @@ const factoringCat = {
 
 export const financingProducts = {
 	revolving: {
+		lineMonths: { min: 12, max: 36 },
 		title: 'Crédito en cuenta corriente',
 		href: '/credito-en-cuenta-corriente/',
 		summary: 'Una línea revolvente para las necesidades recurrentes de tu operación.',
@@ -70,6 +71,7 @@ export const financingProducts = {
 		catDisclosure: financeLeaseCat,
 	},
 	lease: {
+		termMonths: { min: 18, max: 36 },
 		title: 'Arrendamiento puro',
 		href: '/arrendamiento/',
 		summary: 'Utiliza y renueva los activos de tu negocio mediante rentas.',
@@ -89,6 +91,7 @@ export const financingProducts = {
 		catDisclosure: 'CAT no aplicable, al tratarse de una operación de arrendamiento puro. Solicita rentas, cargos, seguros, depósito y calendario completos antes de contratar.',
 	},
 	factoring: {
+		minimumOperatingMonths: 24,
 		title: 'Factoraje',
 		href: '/factoraje/',
 		summary: 'Anticipa cuentas por cobrar elegibles y planea tu liquidez.',

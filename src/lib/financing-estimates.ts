@@ -1,3 +1,4 @@
+/** Compatibility adapters for the earlier simplified interfaces; current public forms use the detailed engines. */
 import {
   calculateFactoring,
   calculateLease,

@@ -62,6 +62,16 @@
 .financing-calculator__field--secondary .financing-calculator__input--manual input { min-height: 2.75rem; font-size: 1.25rem; font-weight: 500; }
 .financing-calculator__field--secondary .financing-calculator__input--money input { font-size: 1.125rem; }
 .financing-calculator__field--secondary .financing-calculator__input--duration { max-width: 11rem; }
+.financing-calculator__input--date input { min-width: 0; width: 100%; font-size: 1rem; }
+.financing-calculator__adjustments { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid #d9d9d7; }
+.financing-calculator__adjustments > summary { min-height: 2.75rem; padding-block: .625rem; color: var(--color-primary); }
+.financing-calculator__adjustments > .financing-calculator__hint { margin-top: .25rem; }
+.financing-calculator__adjustments > .financing-calculator__fields { margin-top: 1.25rem; gap: 1.25rem; }
+.financing-calculator__segments--terms { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.financing-calculator__segments--terms span { padding-inline: .25rem; font-size: .8125rem; }
+.financing-calculator__field .financing-calculator__checkbox { display: flex; min-height: 2.75rem; align-items: center; gap: .75rem; margin-bottom: 0; cursor: pointer; font-size: .9375rem; line-height: 1.5; font-weight: 500; }
+.financing-calculator__checkbox input { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; margin: 0; accent-color: var(--color-primary); }
+.financing-calculator__checkbox input:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
 .financing-calculator__range-wrap { min-width: 0; margin-top: .375rem; }
 .financing-calculator__range { appearance: none; display: block; width: 100%; height: 2.75rem; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; }
 .financing-calculator__range::-webkit-slider-runnable-track { height: .25rem; border-radius: 62.4375rem; background: linear-gradient(to right, var(--color-primary) 0% var(--range-progress), #d9d9d7 var(--range-progress) 100%); }

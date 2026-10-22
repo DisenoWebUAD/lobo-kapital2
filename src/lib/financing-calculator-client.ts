@@ -1,11 +1,13 @@
-import { estimateRevolvingDraw, estimateLease, estimateFactoringOperation } from './financing-estimates';
-import { factoringDefaults, getLeaseDefaults, type LeaseAsset, type FactoringMode } from './financing-simulation';
+import { calculateRevolvingCredit, calculateLease, calculateFactoring, financingAssumptions, getLeaseDefaults, type LeaseAsset, type FactoringMode } from './financing-simulation';
 import { formatCurrencyEdit, formatCurrencyInput, parseCurrencyInput } from './currency-input';
 
 type FinancingProduct = 'revolving' | 'finance-lease' | 'lease' | 'factoring';
 type BreakdownRow = [label: string, value: number, total?: boolean];
 const money = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const list = new Intl.ListFormat('es-MX', { type: 'conjunction' });
+const percentage = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 });
+const monthLabel = (month: string) => new Intl.DateTimeFormat('es-MX', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${month}-01T00:00:00Z`));
+const dateLabel = (date: string) => new Intl.DateTimeFormat('es-MX', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));
 const durationUnit = (value: number, field: string) => field === 'days' ? value === 1 ? 'día' : 'días' : value === 1 ? 'mes' : 'meses';
 const duration = (value: number, field: string) => `${value} ${durationUnit(value, field)}`;
 
@@ -49,9 +51,10 @@ function bindCurrency(input: HTMLInputElement, signal: AbortSignal, edited: () =
 	input.addEventListener('blur', () => {
 		const value = parseCurrencyInput(input.value);
 		if (Number.isSafeInteger(value)) input.value = formatCurrencyInput(value);
-		else if (input.name === 'advance' && (!input.value.trim() || input.value === '$')) input.value = formatCurrencyInput(0);
+		else if (input.hasAttribute('data-empty-zero') && (!input.value.trim() || input.value === '$')) input.value = formatCurrencyInput(0);
 		previous = input.value;
 	}, { signal });
+	return () => { previous = input.value; };
 }
 
 function renderBreakdown(target: HTMLElement, rows: BreakdownRow[]) {
@@ -71,10 +74,13 @@ class FinancingCalculator extends HTMLElement {
 	private initialized = false;
 	private product?: FinancingProduct;
 	private statusTimer?: ReturnType<typeof setTimeout>;
+	private lineEdited = false;
+	private currencySync = new Map<string, () => void>();
 
 	connectedCallback() { this.initialize(); }
 	disconnectedCallback() {
 		this.controller?.abort();
+		this.currencySync.clear();
 		clearTimeout(this.statusTimer);
 		this.initialized = false;
 	}
@@ -90,7 +96,12 @@ class FinancingCalculator extends HTMLElement {
 		this.controller?.abort();
 		this.controller = new AbortController();
 		const { signal } = this.controller;
-		this.form.querySelectorAll<HTMLInputElement>('[data-money]').forEach(input => bindCurrency(input, signal, () => this.calculate()));
+		this.form.querySelectorAll<HTMLInputElement>('[data-money]').forEach(input => {
+			this.currencySync.set(input.name, bindCurrency(input, signal, () => {
+				if (input.name === 'line') this.lineEdited = true;
+				this.calculate();
+			}));
+		});
 		this.form.addEventListener('input', event => {
 			const input = event.target;
 			if (!(input instanceof HTMLInputElement) || input.hasAttribute('data-money') || input.name === 'asset') return;
@@ -99,7 +110,15 @@ class FinancingCalculator extends HTMLElement {
 		}, { signal });
 		this.form.addEventListener('change', event => {
 			if (!(event.target instanceof HTMLInputElement)) return;
-			if (event.target.name === 'asset') this.control('termMonths').max = event.target.value === 'machinery' ? '60' : '120';
+			if (event.target.name === 'asset') {
+				const kind = this.product === 'lease' ? 'pure' : 'finance';
+				const asset = event.target.value as LeaseAsset;
+				this.control('termMonths').max = kind === 'pure' ? '36' : asset === 'machinery' ? '60' : '120';
+				this.control('residualPercent').value = String(getLeaseDefaults(kind, asset).residualPercent);
+				const finalExtras = kind === 'finance' && asset === 'machinery';
+				this.element('[data-adjustment-label="insurance"]').textContent = finalExtras ? 'Seguro mensual, importe final' : 'Seguro mensual antes de IVA';
+				this.element('[data-adjustment-label="services"]').textContent = finalExtras ? 'Servicios mensuales, importe final' : 'Servicios mensuales antes de IVA';
+			}
 			this.calculate(event.target.name === 'asset' ? 'all' : undefined);
 		}, { signal });
 		this.form.addEventListener('blur', event => {
@@ -123,7 +142,7 @@ class FinancingCalculator extends HTMLElement {
 	}
 	private number(name: string) {
 		const input = this.control(name);
-		if (name === 'advance' && (!input.value.trim() || input.value === '$')) return 0;
+		if (input.hasAttribute('data-empty-zero') && (!input.value.trim() || input.value === '$')) return 0;
 		return input.hasAttribute('data-money') ? parseCurrencyInput(input.value) : Number(input.value);
 	}
 	private setError(name: string, message: string) {
@@ -158,37 +177,71 @@ class FinancingCalculator extends HTMLElement {
 			this.element(`[data-range-bound="${name}"]`).textContent = duration(Number(range.max), name);
 		});
 	}
+	private syncLine() {
+		if (this.product !== 'revolving' && this.product !== 'factoring') return;
+		const name = this.product === 'revolving' ? 'amount' : 'invoiceAmount';
+		const amount = this.number(name);
+		if (!this.lineEdited && Number.isSafeInteger(amount) && amount > 0 && amount <= financingAssumptions.maxAmount) {
+			this.control('line').value = formatCurrencyInput(amount);
+			this.currencySync.get('line')?.();
+		}
+		this.element('[data-line-note]').textContent = this.lineEdited
+			? 'Usamos la línea de referencia que capturaste; ya no cambia al editar el monto. No es un límite autorizado.'
+			: this.product === 'revolving' ? 'La línea sigue el monto a disponer hasta que la edites. No es un límite autorizado.' : 'La línea sigue el valor de las facturas hasta que la edites. Sólo determina la apertura cuando la incluyes.';
+	}
 	private validate(reveal?: string, focus = false) {
 		let first: HTMLInputElement | undefined;
 		const errors = new Map<string, string>();
+		const related = new Set<string>();
 		for (const input of this.form!.querySelectorAll<HTMLInputElement>('input[name]')) {
 			if (errors.has(input.name)) continue;
 			let error = '';
-			if (input.type === 'radio') {
+			if (input.type === 'checkbox') {
+				// The unchecked state is an explicit scenario, not a missing value.
+			} else if (input.type === 'radio') {
 				if (!this.form!.querySelector(`input[name="${input.name}"]:checked`)) error = 'Selecciona una opción.';
-			} else if (input.name === 'advance' && (!input.value.trim() || input.value === '$')) {
-				// An omitted optional advance means the explicitly disclosed zero-advance scenario.
+			} else if (input.type === 'date') {
+				if (!input.value) error = 'Indica la fecha estimada de disposición.';
+				else if (!input.validity.valid) error = 'Indica una fecha válida entre los años 0001 y 9996.';
+			} else if (input.hasAttribute('data-empty-zero') && (!input.value.trim() || input.value === '$')) {
+				// Omitted optional currency amounts exclude that concept from the scenario.
 			} else if (!input.value.trim() || input.value === '$') error = 'Completa este dato para calcular.';
 			else {
 				const value = this.number(input.name);
-				if (!Number.isSafeInteger(value)) error = input.hasAttribute('data-money') ? 'Ingresa un monto válido en pesos enteros.' : 'Ingresa un número entero.';
+				const decimal = input.step === '0.01';
+				if (!Number.isFinite(value) || (!decimal && !Number.isSafeInteger(value))) error = input.hasAttribute('data-money') ? 'Ingresa un monto válido en pesos enteros.' : decimal ? 'Ingresa un porcentaje válido.' : 'Ingresa un número entero.';
 				else if (input.min && value < Number(input.min)) error = `El valor mínimo es ${input.hasAttribute('data-money') ? money.format(Number(input.min)) : input.min}.`;
 				else if (input.max && value > Number(input.max)) error = `El valor máximo es ${input.hasAttribute('data-money') ? money.format(Number(input.max)) : input.max}.`;
+				else if (decimal && input.validity.stepMismatch) error = 'Usa como máximo dos decimales en el porcentaje.';
 			}
 			errors.set(input.name, error);
 			if (error) first ??= input;
 		}
+		if (!first && this.product === 'revolving' && this.number('amount') > this.number('line')) {
+			errors.set('line', 'La línea debe ser igual o mayor que el monto a disponer.');
+			related.add('line');
+			first = this.control('line');
+		}
+		if (!first && this.product === 'factoring' && this.control('includeOpening').checked && this.number('line') < 1) {
+			errors.set('line', 'Captura una línea de referencia mayor que cero para incluir la apertura.');
+			related.add('line');
+			first = this.control('line');
+		}
 		if (!first && this.product === 'finance-lease') {
 			const value = this.number('assetValue');
-			const residualPercent = getLeaseDefaults('finance', this.control('asset').value as LeaseAsset).residualPercent;
-			const maxAdvance = value - value * residualPercent / 100;
-			if (this.number('advance') > maxAdvance) {
-				errors.set('advance', `Con este activo, el anticipo no puede superar ${money.format(maxAdvance)} para conservar el residual de referencia.`);
+			const advance = this.number('advance');
+			if (advance >= value) {
+				errors.set('advance', 'El anticipo debe ser menor que el valor del activo.');
+				related.add('advance');
 				first = this.control('advance');
+			} else if (value * this.number('residualPercent') / 100 > value - advance) {
+				errors.set('residualPercent', 'El residual no puede superar el principal después del anticipo. Reduce el residual o el anticipo.');
+				related.add('residualPercent');
+				first = this.control('residualPercent');
 			}
 		}
 		for (const [name, error] of errors) {
-			if (!error || reveal === 'all' || reveal === name || (reveal && name === 'advance')) this.setError(name, error);
+			if (!error || reveal === 'all' || reveal === name || (reveal && related.has(name)) || this.control(name).hasAttribute('aria-invalid')) this.setError(name, error);
 		}
 		if (first && focus) first.focus();
 		return !first;
@@ -212,6 +265,7 @@ class FinancingCalculator extends HTMLElement {
 		this.announce(`${label}: ${money.format(payment)}. ${context}`);
 	}
 	private calculate(reveal?: string, focus = false) {
+		this.syncLine();
 		this.syncRanges();
 		this.querySelectorAll<HTMLElement>('[data-value-unit]').forEach(unit => {
 			const name = unit.dataset.valueUnit!;
@@ -228,41 +282,45 @@ class FinancingCalculator extends HTMLElement {
 			this.clearResult();
 			const output = this.element('[data-form-error]');
 			output.textContent = error instanceof Error ? error.message : 'Revisa los datos para calcular este escenario.';
-			output.hidden = !reveal;
+			output.hidden = false;
 		}
 	}
 	private calculateProduct() {
 		if (this.product === 'revolving') {
-			const result = estimateRevolvingDraw({ amount: this.number('amount'), days: this.number('days') });
-			this.showResult('Pago mensual estimado con IVA', result.monthlyPayment, `${result.regularPaymentCount} ${result.regularPaymentCount === 1 ? 'pago de referencia' : 'pagos de referencia'} de ${result.paymentPeriodDays} días y un pago final al día ${result.days}.`, [
-				['Al inicio · apertura y disposición con IVA', result.initialCharges],
-				['Pago final · capital e intereses con IVA', result.finalPayment],
+			const amount = this.number('amount');
+			const result = calculateRevolvingCredit({ amount, line: this.number('line'), days: this.number('days'), startDate: this.control('startDate').value, lineMonths: this.number('lineMonths'), annualInsurance: this.number('annualInsurance') });
+			const first = result.monthlyPayments[0];
+			const final = result.monthlyPayments.find(row => row.principal > 0)!;
+			this.showResult('Pago estimado del primer mes', first.total, `${monthLabel(first.month)}. El pago varía según los días de cada periodo.`, [
+				['Al inicio · apertura y disposición con IVA', result.initialPayment],
+				[`Pago de ${monthLabel(final.month)} · incluye devolución del capital`, final.total],
 				['Total del escenario modelado', result.total, true],
-			], `El pago final incluye ${money.format(result.amount)} de capital y ${result.finalPeriodDays} ${result.finalPeriodDays === 1 ? 'día' : 'días'} de intereses. Los pagos reales dependen de las fechas y de los movimientos de la línea.`, [
+			], `Se modela una sola disposición y la devolución de ${money.format(amount)} de capital al vencimiento, el ${dateLabel(result.maturityDate)}. No es una mensualidad fija. ${result.monthlyInsurance > 0 ? `El seguro de ${money.format(result.monthlyInsurance)} al mes continúa durante los ${this.number('lineMonths')} meses de vigencia, incluso después de devolver el capital.` : 'El escenario excluye el seguro porque el importe capturado es cero.'}`, [
 				['Intereses totales sin IVA', result.interest], ['IVA de los intereses', result.interestVat],
-				['Intereses totales con IVA', result.interestWithVat, true],
+				['Intereses totales con IVA', result.interest + result.interestVat, true],
 				['Apertura con IVA · inicial', result.openingFee], ['Disposición con IVA · inicial', result.drawFee],
+				['Seguro mensual · toda la vigencia', result.monthlyInsurance], ['Seguro total · toda la vigencia', result.insurance],
 			]);
 			return;
 		}
 		if (this.product === 'finance-lease' || this.product === 'lease') {
 			const kind = this.product === 'lease' ? 'pure' : 'finance';
-			const asset = kind === 'finance' ? this.control('asset').value as LeaseAsset : 'vehicle';
+			const asset = this.control('asset').value as LeaseAsset;
 			const months = this.number('termMonths');
 			const advance = kind === 'finance' ? this.number('advance') : 0;
-			const result = estimateLease({ kind, asset, value: this.number('assetValue'), months, advance });
+			const residualPercent = this.number('residualPercent');
+			const result = calculateLease({ kind, asset, value: this.number('assetValue'), months, advance, residualPercent, insurance: this.number('insurance'), services: this.number('services') });
 			const rows: BreakdownRow[] = [[kind === 'finance' ? 'Pago inicial estimado' : 'Al inicio · apertura con IVA', result.initialPayment]];
 			if (kind === 'finance') rows.push(['Compra al terminar · opcional, con IVA', result.terminalPayment]);
 			rows.push([kind === 'finance' ? 'Total del escenario modelado sin compra' : 'Total del escenario modelado', result.totalWithoutPurchase, true]);
 			if (kind === 'finance') rows.push(['Total del escenario modelado con compra', result.totalWithPurchase, true]);
-			const costs: BreakdownRow[] = [['Renta mensual sin IVA', result.baseRent], ['IVA mensual', result.monthlyVat], ['Apertura con IVA · inicial', result.openingFee]];
+			const costs: BreakdownRow[] = [['Renta mensual sin IVA', result.baseRent], ['Seguro mensual capturado', result.monthlyInsurance], ['Servicios mensuales capturados', result.monthlyServices], ['IVA mensual', result.monthlyVat], ['Apertura con IVA · inicial', result.openingFee]];
 			if (advance > 0) costs.push(['Anticipo · inicial', advance]);
 			if (result.administrationTotal > 0) costs.push(['Administración con IVA · todo el plazo', result.administrationTotal]);
 			const anniversaries = result.schedule.filter(row => row.month > 0 && row.administration > 0);
 			const administration = anniversaries.length ? ` Además de la renta, administración de ${money.format(anniversaries[0].administration)} en ${anniversaries.length === 1 ? 'el mes' : 'los meses'} ${list.format(anniversaries.map(row => String(row.month)))}.` : '';
-			const residual = getLeaseDefaults(kind, asset).residualPercent;
-			this.showResult('Renta mensual estimada con IVA', result.monthlyPayment, `${months} ${months === 1 ? 'renta mensual' : 'rentas mensuales'}${kind === 'finance' ? ` de ${asset === 'vehicle' ? 'vehículo' : 'maquinaria o equipo'}` : ''}.`, rows,
-				kind === 'finance' ? `Residual de referencia: ${residual}%. La compra es opcional y se paga por separado.${administration}` : 'El resumen contempla las rentas y la apertura. No se incluye una compra al terminar.', costs);
+			this.showResult('Renta mensual estimada con IVA', result.monthlyPayment, `${months} ${months === 1 ? 'renta mensual' : 'rentas mensuales'} de ${asset === 'vehicle' ? 'vehículo' : 'maquinaria o equipo'}.`, rows,
+				kind === 'finance' ? `Residual capturado: ${percentage.format(residualPercent)}%. La compra es opcional y se paga por separado.${administration}` : `Residual capturado: ${percentage.format(residualPercent)}%, como supuesto para calcular la renta. El resumen contempla las rentas, los importes de seguro y servicios capturados y la apertura; no incluye depósito ni compra al terminar.`, costs);
 			return;
 		}
 		this.calculateFactoring();
@@ -280,7 +338,7 @@ class FinancingCalculator extends HTMLElement {
 			const deduction = panel.querySelector<HTMLElement>('[data-deduction]')!;
 			const label = mode === 'without-recourse' ? 'Sin recurso' : 'Con recurso';
 			try {
-				const result = estimateFactoringOperation({ amount, days, mode });
+				const result = calculateFactoring({ amount, days, mode, line: this.number('line'), includeOpening: this.control('includeOpening').checked, advancePercent: this.number('advancePercent'), administrationCount: this.number('administrationCount'), expenses: this.number('expenses') });
 				reserve = result.reserve;
 				payment.textContent = money.format(result.netLiquidity);
 				currency.hidden = false;
@@ -290,7 +348,7 @@ class FinancingCalculator extends HTMLElement {
 				const breakdown = document.createElement('dl'); breakdown.className = 'financing-calculator__breakdown';
 				renderBreakdown(breakdown, [
 					['Descuento sin IVA', result.discount], ['Apertura sin IVA', result.openingFee], ['Operación sin IVA', result.operationFee],
-					['Administración sin IVA', result.administrationFee], ['IVA de las deducciones', result.vat],
+					['Administración sin IVA', result.administrationFee], ['Gastos externos sin IVA', result.expenses], ['IVA de las deducciones', result.vat],
 				]);
 				costs.append(heading, breakdown);
 				announcements.push(`${label}: ${money.format(result.netLiquidity)}.`);
@@ -303,11 +361,11 @@ class FinancingCalculator extends HTMLElement {
 				announcements.push(`${label}: sin liquidez positiva en este escenario.`);
 			}
 		}
-		const advancePercent = factoringDefaults.advancePercent;
+		const advancePercent = this.number('advancePercent');
 		this.element('[data-result-label]').textContent = 'Liquidez inicial estimada';
-		this.element('[data-context]').textContent = `Anticipo ilustrativo del ${advancePercent}%: ${money.format(amount * advancePercent / 100)}. Facturas a ${duration(days, 'days')}.`;
+		this.element('[data-context]').textContent = `Anticipo capturado del ${percentage.format(advancePercent)}%: ${money.format(amount * advancePercent / 100)}. Facturas a ${duration(days, 'days')}.`;
 		renderBreakdown(this.element('[data-breakdown]'), reserve === undefined ? [] : [['Reserva al cobrar las facturas · sujeta a contrato', reserve]]);
-		this.element('[data-result-note]').textContent = 'La apertura se estima sobre una nueva línea igual al valor de las facturas. La línea, el anticipo y la modalidad definitivos dependen de la evaluación y la propuesta.';
+		this.element('[data-result-note]').textContent = `${this.control('includeOpening').checked ? `La apertura se estima sobre la línea de referencia capturada de ${money.format(this.number('line'))}.` : 'El escenario excluye la apertura de la línea.'} La reserva no se entrega al inicio; su liberación depende del cobro y del contrato. La línea, el anticipo y la modalidad definitivos dependen de la evaluación y la propuesta.`;
 		this.element('[data-result-note]').hidden = false;
 		this.element('[data-costs]').hidden = reserve === undefined;
 		this.element('[data-empty]').hidden = true;

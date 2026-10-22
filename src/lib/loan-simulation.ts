@@ -24,7 +24,7 @@ export type LoanProduct = keyof typeof loanSimulations;
 export interface LoanInput {
   amount: number;
   termMonths: number;
-  /** Excluded by default. Explicit values are retained only to audit source examples. */
+  /** Total premium supplied by the visitor; zero excludes unconfirmed insurance. */
   totalInsurance?: number;
 }
 
